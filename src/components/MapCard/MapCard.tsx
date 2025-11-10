@@ -16,8 +16,8 @@ const MapCard = ({
   headerText,
   value,
   percentage,
-  chartData = [30, 50, 40, 60, 45, 70, 55],
-  color = "teal",
+  // chartData = [30, 50, 40, 60, 45, 70, 55],
+  // color = "teal",
   colorClass = {
     text: "text-teal-600",
     border: "border-teal-600",
@@ -28,21 +28,6 @@ const MapCard = ({
   const isPositive = Number(percentage) >= 0;
   const arrow = isPositive ? "↗" : "→";
   const percentageText = `${isPositive ? "+" : ""}${percentage}%`;
-
-  // Chart values (used only if image not provided)
-  const maxValue = Math.max(...chartData);
-  const minValue = Math.min(...chartData);
-  const range = maxValue - minValue || 1;
-  const width = 240;
-  const height = 60;
-  const padding = 8;
-  const pointSpacing = (width - 2 * padding) / (chartData.length - 1);
-  const points = chartData.map((value, index) => {
-    const x = padding + index * pointSpacing;
-    const y =
-      height - padding - ((value - minValue) / range) * (height - 2 * padding);
-    return `${x},${y}`;
-  });
 
   return (
     <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-full">

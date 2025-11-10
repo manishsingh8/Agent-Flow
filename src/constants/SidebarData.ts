@@ -10,7 +10,6 @@ import {
   Settings2,
   House,
 } from "lucide-react";
-import UnreconcileIcon from "@/assets/icons/money-send.svg?react";
 
 export const SIDEBAR_DATA = {
   user: {
@@ -22,7 +21,7 @@ export const SIDEBAR_DATA = {
     {
       name: "Innoclique",
       logo: GalleryVerticalEnd,
-      // plan: "Enterprise",
+      plan: "Enterprise",
     },
     {
       name: "Acme Corp.",
@@ -44,7 +43,7 @@ export const SIDEBAR_DATA = {
     {
       title: "Unreconciled Payments",
       url: "#",
-      icon: UnreconcileIcon,
+      icon: PieChart,
       isActive: true,
       items: [
         {
