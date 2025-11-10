@@ -16,8 +16,6 @@ const MapCard = ({
   headerText,
   value,
   percentage,
-  // chartData = [30, 50, 40, 60, 45, 70, 55],
-  // color = "teal",
   colorClass = {
     text: "text-teal-600",
     border: "border-teal-600",
