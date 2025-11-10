@@ -33,7 +33,7 @@ const MapCard = ({
     <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-full">
       {/* Header with percentage badge */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-md font-medium text-gray-700">{headerText}</h3>
+        <h3 className="text-s font-medium text-gray-700">{headerText}</h3>
         <div
           className={`flex items-center gap-1 px-2.5 py-1 rounded-full border ${colorClass.border} ${colorClass.text}`}
         >
