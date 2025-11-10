@@ -1,0 +1,264 @@
+import React from "react";
+import { INTAKE_ORCHESTRATOR_DATA } from "@/constants/DashboardData";
+import { MapCard } from "@/components";
+import WorkflowPage from "./Workflow/WorkFlow";
+import { type Node, type Edge } from "reactflow";
+
+const initialNodes: Node[] = [
+  // ---------------- Group 1 ----------------
+  {
+    id: "config",
+    type: "integration",
+    position: { x: 16, y: 100 },
+    data: { label: "Config", icon: "config" },
+  },
+
+  // ---------------- Group 2 ----------------
+  // ---------------- Center Agents ----------------
+  {
+    id: "intake-orch",
+    type: "agent",
+    position: { x: 500, y: 50 },
+    data: {
+      label: "Intake Orchestrator Agent",
+      showLogo: true,
+      showAddButton: true,
+      handles: ["bottom"],
+    },
+  },
+  {
+    id: "bai",
+    type: "agent",
+    position: { x: 200, y: 300 },
+    data: {
+      label: "BAI Agent",
+      showLogo: false,
+      showAddButton: true,
+      handles: ["left", "bottom"],
+    },
+  },
+  {
+    id: "edi",
+    type: "agent",
+    position: { x: 530, y: 300 },
+    data: { label: "EDI Parser Agent", showAddButton: true, showLogo: false },
+  },
+  {
+    id: "correspond",
+    type: "agent",
+    position: { x: 870, y: 300 },
+    data: {
+      label: "Correspondence Agent",
+      showAddButton: true,
+      showLogo: false,
+    },
+  },
+  {
+    id: "cp",
+    type: "agent",
+    position: { x: 1200, y: 300 },
+    data: { label: "CP for EMR1", showAddButton: true, showLogo: false },
+  },
+
+  // ---------------- Agent Tools Group ----------------
+  {
+    id: "group-agent-tools",
+    type: "group",
+    position: { x: 300, y: 500 },
+    style: {
+      width: 970,
+      height: 170,
+      background: "#f9fafb",
+      border: "1px solid #d1d5db",
+      borderRadius: 32,
+      padding: 10,
+    },
+    data: { label: "Agent Tools" },
+  },
+  {
+    id: "tool-db",
+    type: "agentTool",
+    position: { x: 30, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "DB", icon: "db" },
+  },
+  {
+    id: "tool-api",
+    type: "agentTool",
+    position: { x: 150, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "API", icon: "api" },
+  },
+  {
+    id: "tool-audit",
+    type: "agentTool",
+    position: { x: 270, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "Audit Log", icon: "audit" },
+  },
+  {
+    id: "tool-logs",
+    type: "agentTool",
+    position: { x: 400, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "Agent Logs", icon: "logs" },
+  },
+  {
+    id: "tool-search",
+    type: "agentTool",
+    position: { x: 540, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "Elastic Search", icon: "search" },
+  },
+  {
+    id: "tool-services",
+    type: "agentTool",
+    position: { x: 700, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "Services", icon: "services" },
+  },
+  {
+    id: "tool-vault",
+    type: "agentTool",
+    position: { x: 830, y: 50 },
+    parentId: "group-agent-tools",
+    extent: "parent",
+    data: { label: "Vault", icon: "vault" },
+  },
+
+  {
+    id: "insight-agent",
+    type: "agent",
+    position: { x: 800, y: 700 },
+    data: {
+      label: "Insight Agent",
+      showAddButton: true,
+      handles: ["top", "bottom"],
+    },
+  },
+
+  // ---------------- EMR Group ----------------
+];
+
+const initialEdges: Edge[] = [
+  {
+    id: "config-rcm",
+    source: "config",
+    target: "intake-orch",
+    type: "bezier",
+    style: { stroke: "#0D74CE", strokeWidth: 2 },
+  },
+  {
+    id: "intake-bai",
+    source: "intake-orch",
+    target: "bai",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "intake-bai",
+    source: "intake-orch",
+    target: "edi",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "intake-corr",
+    source: "intake-orch",
+    target: "correspond",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+
+  {
+    id: "intake-cp",
+    source: "intake-orch",
+    target: "cp",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "recon-log",
+    source: "reconciliation",
+    target: "tool-logs",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "cash-vault",
+    source: "cash-posting",
+    target: "tool-vault",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+
+  // edge from center to agent tools
+  {
+    id: "bai-tools",
+    source: "bai",
+    target: "tool-db",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "edi-agent",
+    source: "edi",
+    target: "tool-logs",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "cor-services",
+    source: "correspond",
+    target: "tool-services",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+  {
+    id: "cp-vault",
+    source: "cp",
+    target: "tool-vault",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+
+  // Agent Tools to Insight Agent connections
+
+  {
+    id: "tool-logs-insight",
+    source: "tool-search",
+    target: "insight-agent",
+    type: "smoothstep",
+    style: { stroke: "#859598", strokeWidth: 2 },
+  },
+];
+
+const IntakeOrchestratorAgent = () => {
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-3 mt-3">
+        {INTAKE_ORCHESTRATOR_DATA.map((item, index) => (
+          <MapCard
+            key={index}
+            headerText={item.headerText}
+            percentage={item.percentage}
+            value={item.value}
+            colorClass={item.colorClass}
+            image={item.image} // ✅ added
+          />
+        ))}
+      </div>
+      <div className="flex justify-between gap-2 p-8 mt-4 bg-[#E6EEF4] rounded-3xl">
+        <WorkflowPage initialNodes={initialNodes} initialEdges={initialEdges} />
+      </div>
+    </div>
+  );
+};
+
+export default IntakeOrchestratorAgent;
