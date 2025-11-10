@@ -1,4 +1,4 @@
-import React from "react";
+
 import { CASH_POSTING_DATA } from "@/constants/DashboardData";
 import { MapCard } from "@/components";
 import WorkflowPage from "./Workflow/WorkFlow";

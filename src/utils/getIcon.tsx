@@ -1,5 +1,3 @@
-import React from "react";
-
 import DB from "@/assets/icons/database.svg";
 import Api from "@/assets/icons/api.svg";
 import Audit from "@/assets/icons/audit.svg";
