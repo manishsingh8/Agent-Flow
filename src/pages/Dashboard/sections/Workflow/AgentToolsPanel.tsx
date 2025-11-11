@@ -1,4 +1,3 @@
-
 import { Handle, Position } from "reactflow";
 import { getIcon } from "@/utils/getIcon";
 
@@ -12,7 +11,7 @@ interface AgentToolNodeProps {
 export default function AgentToolNode({ data }: AgentToolNodeProps) {
   return (
     <div
-      className="bg-white rounded-2xl shadow-md border-2 border-gray-200 px-4 py-3 min-w-[100px] text-center hover:shadow-lg transition-shadow cursor-none"
+      className="bg-white rounded-2xl shadow-md border-2 border-gray-200 px-4 py-3 min-w-[110px] text-center hover:shadow-lg transition-shadow cursor-none"
       style={{ cursor: "none" }}
     >
       <Handle

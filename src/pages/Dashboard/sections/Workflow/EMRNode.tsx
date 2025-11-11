@@ -4,6 +4,8 @@ import EMRIcon from "@/assets/icons/emr.svg";
 interface EMRNodeProps {
   data: {
     label: string;
+    isLeftHandle?: boolean;
+    isRightHandle?: boolean;
   };
 }
 
@@ -21,16 +23,15 @@ export default function EMRNode({ data }: EMRNodeProps) {
           {data.label}
         </span>
       </div>
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="w-2 h-2 !bg-primary"
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-2 h-2 !bg-primary"
-      />
+      {data.handles?.map((handle: any, index: number) => (
+        <Handle
+          key={handle.id || index}
+          type={handle.type}
+          position={Position[handle.position]}
+          id={handle.id}
+          className={`w-2 h-2 !bg-primary`}
+        />
+      ))}
     </div>
   );
 }

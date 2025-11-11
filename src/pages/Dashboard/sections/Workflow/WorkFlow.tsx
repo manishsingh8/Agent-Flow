@@ -1,4 +1,4 @@
-import  { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import ReactFlow, {
   Background,
   ConnectionMode,
@@ -13,6 +13,7 @@ import EMRNode from "./EMRNode";
 import AgentToolNode from "./AgentToolsPanel";
 import { type Node, type Edge } from "reactflow";
 import GroupNode from "./GroupNode";
+import SubAgentNode from "./SubAgentNode";
 
 interface WorkFlowProps {
   initialNodes: Node[];
@@ -25,6 +26,7 @@ const nodeTypes = {
   emr: EMRNode,
   agentTool: AgentToolNode,
   group: GroupNode,
+  subAgent: SubAgentNode,
 };
 
 export default function WorkflowPage({

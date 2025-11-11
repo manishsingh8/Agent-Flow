@@ -21,7 +21,7 @@ export default function IntegrationNode({ data }: IntegrationNodeProps) {
   return (
     <div className="bg-card border border-card-border rounded-lg p-3 shadow-sm hover-elevate min-w-[120px]">
       <div className="flex flex-col items-center gap-2">
-        <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+        <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center">
           <div className="text-3xl">{getIcon(data.icon)}</div>
         </div>
         <span

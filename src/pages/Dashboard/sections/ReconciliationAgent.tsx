@@ -1,4 +1,3 @@
-
 import { RECONCILIATION_DATA } from "@/constants/DashboardData";
 import { MapCard } from "@/components";
 import WorkflowPage from "./Workflow/WorkFlow";
@@ -9,7 +8,7 @@ const initialNodes: Node[] = [
   {
     id: "config",
     type: "integration",
-    position: { x: 16, y: 100 },
+    position: { x: 16, y: 57 },
     data: { label: "Config", icon: "config" },
   },
 
@@ -23,45 +22,70 @@ const initialNodes: Node[] = [
       label: "Reconciliation Agent",
       showLogo: true,
       showAddButton: true,
-      handles: ["bottom"],
+      handles: [
+        { position: "Left", type: "target", id: "left" },
+        { position: "Bottom", type: "source", id: "bottom-1" },
+        { position: "Bottom", type: "source", id: "bottom-2" },
+        { position: "Bottom", type: "source", id: "bottom-3" },
+        { position: "Bottom", type: "source", id: "bottom-4" },
+      ],
     },
   },
   {
     id: "bai",
-    type: "agent",
+    type: "subAgent",
     position: { x: 200, y: 300 },
     data: {
       label: "Smart Matcher Agent",
       showLogo: false,
       showAddButton: true,
-      handles: ["left", "bottom"],
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
     },
   },
   {
     id: "edi",
-    type: "agent",
+    type: "subAgent",
     position: { x: 530, y: 300 },
     data: {
       label: "Exception Finder Agent",
       showAddButton: true,
       showLogo: false,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
     },
   },
   {
     id: "correspond",
-    type: "agent",
+    type: "subAgent",
     position: { x: 870, y: 300 },
     data: {
       label: "Posting Queue Generator Agent",
       showAddButton: true,
       showLogo: false,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
     },
   },
   {
     id: "cp",
-    type: "agent",
+    type: "subAgent",
     position: { x: 1200, y: 300 },
-    data: { label: "Validator Agent", showAddButton: true, showLogo: false },
+    data: {
+      label: "Validator Agent",
+      showAddButton: true,
+      showLogo: false,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
+    },
   },
 
   // ---------------- Agent Tools Group ----------------
@@ -138,12 +162,12 @@ const initialNodes: Node[] = [
 
   {
     id: "insight-agent",
-    type: "agent",
-    position: { x: 800, y: 700 },
+    type: "subAgent",
+    position: { x: 700, y: 770 },
     data: {
       label: "Insight Agent",
       showAddButton: true,
-      handles: ["top", "bottom"],
+      handles: [{ position: "Top", type: "target", id: "top" }],
     },
   },
 
@@ -155,8 +179,16 @@ const initialEdges: Edge[] = [
     id: "config-rcm",
     source: "config",
     target: "intake-orch",
-    type: "bezier",
+    type: "smoothstep",
     style: { stroke: "#0D74CE", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#0D74CE", // 👈 arrow color
+    },
+    targetHandle: "left",
   },
   {
     id: "intake-bai",
@@ -164,6 +196,15 @@ const initialEdges: Edge[] = [
     target: "bai",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-1",
+    targetHandle: "top",
   },
   {
     id: "intake-bai",
@@ -171,6 +212,15 @@ const initialEdges: Edge[] = [
     target: "edi",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-2",
+    targetHandle: "top",
   },
   {
     id: "intake-corr",
@@ -178,6 +228,15 @@ const initialEdges: Edge[] = [
     target: "correspond",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-3",
+    targetHandle: "top",
   },
 
   {
@@ -186,6 +245,15 @@ const initialEdges: Edge[] = [
     target: "cp",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-4",
+    targetHandle: "top",
   },
   {
     id: "recon-log",
@@ -193,6 +261,14 @@ const initialEdges: Edge[] = [
     target: "tool-logs",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "cash-vault",
@@ -200,6 +276,13 @@ const initialEdges: Edge[] = [
     target: "tool-vault",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
 
   // edge from center to agent tools
@@ -209,6 +292,14 @@ const initialEdges: Edge[] = [
     target: "tool-db",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "edi-agent",
@@ -216,6 +307,14 @@ const initialEdges: Edge[] = [
     target: "tool-logs",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "cor-services",
@@ -223,6 +322,14 @@ const initialEdges: Edge[] = [
     target: "tool-services",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "cp-vault",
@@ -230,6 +337,14 @@ const initialEdges: Edge[] = [
     target: "tool-vault",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
 
   // Agent Tools to Insight Agent connections
@@ -240,6 +355,14 @@ const initialEdges: Edge[] = [
     target: "insight-agent",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    targetHandle: "top",
   },
 ];
 
@@ -255,6 +378,7 @@ const ReconciliationAgent = () => {
             value={item.value}
             colorClass={item.colorClass}
             image={item.image} // ✅ added
+            status={item.status}
           />
         ))}
       </div>

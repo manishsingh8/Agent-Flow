@@ -1,31 +1,34 @@
-import MapImage from "@/assets/icons/map-positive.svg";
-import MapMediumImg from "@/assets/icons/map-medium.svg";
-import MapNegative from "@/assets/icons/map-negative.svg";
+import MapImage from "@/assets/icons/trading-positive.svg";
+import MapMediumImg from "@/assets/icons/trading-med.svg";
+import MapNegative from "@/assets/icons/trading-negative.svg";
 export const RCM_MAESTRO_AGENT_DATA = [
   {
     headerText: "Files Ingested",
     percentage: 5,
     value: 126,
+    status: "positive",
     colorClass: {
       text: "text-teal-600",
       border: "border-teal-600",
       chart: "stroke-teal-600",
     },
-    image: MapImage, // ✅ example image path
+    image: MapImage,
   },
   {
     headerText: "Docs Parsed",
     percentage: 8,
+    status: "positive",
     value: 118,
     colorClass: {
       text: "text-teal-600",
       border: "border-teal-600",
       chart: "stroke-teal-600",
     },
-    image: MapImage, // ✅ example image path
+    image: MapImage,
   },
   {
     headerText: "BAI",
+    status: "",
     percentage: -1,
     value: "12",
     colorClass: {
@@ -45,6 +48,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "EOB",
@@ -55,6 +59,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
       border: "border-teal-600",
       chart: "stroke-teal-600",
     },
+    status: "positive",
     image: MapImage,
   },
   {
@@ -66,6 +71,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
       border: "border-rose-500",
       chart: "stroke-rose-500",
     },
+    status: "negative",
     image: MapNegative,
   },
 ];
@@ -81,6 +87,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Claims Processed",
@@ -92,6 +99,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Pending Claims",
@@ -103,6 +111,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
       chart: "stroke-amber-500",
     },
     image: MapMediumImg,
+    status: "",
   },
   {
     headerText: "Rejected Claims",
@@ -114,6 +123,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
       chart: "stroke-amber-500",
     },
     image: MapMediumImg,
+    status: "",
   },
   {
     headerText: "Reprocessed Claims",
@@ -125,6 +135,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Claims Approved",
@@ -136,6 +147,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
       chart: "stroke-rose-500",
     },
     image: MapNegative,
+    status: "negative",
   },
 ];
 
@@ -150,6 +162,7 @@ export const RECONCILIATION_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Reconciled Count",
@@ -161,6 +174,7 @@ export const RECONCILIATION_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Matched Amount",
@@ -172,6 +186,7 @@ export const RECONCILIATION_DATA = [
       chart: "stroke-amber-500",
     },
     image: MapMediumImg,
+    status: "",
   },
   {
     headerText: "Unmatched Amount",
@@ -183,6 +198,7 @@ export const RECONCILIATION_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Partial Match",
@@ -194,6 +210,7 @@ export const RECONCILIATION_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Variance ABS",
@@ -205,6 +222,7 @@ export const RECONCILIATION_DATA = [
       chart: "stroke-rose-500",
     },
     image: MapNegative,
+    status: "negative",
   },
 ];
 
@@ -219,6 +237,7 @@ export const CASH_POSTING_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Post Ready Count",
@@ -230,6 +249,7 @@ export const CASH_POSTING_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Posted Amount",
@@ -241,6 +261,7 @@ export const CASH_POSTING_DATA = [
       chart: "stroke-amber-500",
     },
     image: MapMediumImg,
+    status: "",
   },
   {
     headerText: "Posted Count ",
@@ -252,6 +273,7 @@ export const CASH_POSTING_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
   {
     headerText: "Failures",
@@ -263,5 +285,6 @@ export const CASH_POSTING_DATA = [
       chart: "stroke-teal-600",
     },
     image: MapImage,
+    status: "positive",
   },
 ];

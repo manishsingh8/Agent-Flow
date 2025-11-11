@@ -1,4 +1,3 @@
-
 import { CASH_POSTING_DATA } from "@/constants/DashboardData";
 import { MapCard } from "@/components";
 import WorkflowPage from "./Workflow/WorkFlow";
@@ -9,7 +8,7 @@ const initialNodes: Node[] = [
   {
     id: "config",
     type: "integration",
-    position: { x: 16, y: 100 },
+    position: { x: 16, y: 57 },
     data: { label: "Config", icon: "config" },
   },
   // ---------------- Group 2 ----------------
@@ -18,53 +17,86 @@ const initialNodes: Node[] = [
   {
     id: "rcm-maestro",
     type: "agent",
-    position: { x: 600, y: 50 },
+    position: { x: 500, y: 50 },
     data: {
       label: "Cash Posting Agent",
       showLogo: true,
       showAddButton: true,
-      handles: ["bottom"],
+      handles: [
+        { position: "Left", type: "target", id: "left" },
+        { position: "Bottom", type: "source", id: "bottom-1" },
+        { position: "Bottom", type: "source", id: "bottom-2" },
+        { position: "Bottom", type: "source", id: "bottom-3" },
+        { position: "Bottom", type: "source", id: "bottom-4" },
+      ],
     },
   },
   {
     id: "intake-orchestrator",
-    type: "agent",
+    type: "subAgent",
     position: { x: 200, y: 300 },
     data: {
       label: "CP for EMR1",
       showLogo: false,
       showAddButton: true,
-      handles: ["left", "bottom"],
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+        { position: "Left", type: "target", id: "left" },
+      ],
+      // isSecondHandle: true,
     },
   },
   {
     id: "reconciliation",
-    type: "agent",
+    type: "subAgent",
     position: { x: 530, y: 300 },
     data: {
       label: "CP for EMR2",
       showAddButton: true,
       showLogo: false,
+      isSecondHandle: true,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
     },
   },
   {
     id: "cash-posting",
-    type: "agent",
+    type: "subAgent",
     position: { x: 870, y: 300 },
-    data: { label: "CP for EMR3", showAddButton: true, showLogo: false },
+    data: {
+      label: "CP for EMR3",
+      showAddButton: true,
+      showLogo: false,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
+    },
   },
   {
     id: "cpn",
-    type: "agent",
+    type: "subAgent",
     position: { x: 1200, y: 300 },
-    data: { label: "CP for EMRn", showAddButton: true, showLogo: false },
+    data: {
+      label: "CP for EMRn",
+      showAddButton: true,
+      showLogo: false,
+      isSecondHandle: true,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
+    },
   },
 
   // ---------------- Agent Tools Group ----------------
   {
     id: "group-agent-tools",
     type: "group",
-    position: { x: 350, y: 500 },
+    position: { x: 350, y: 600 },
     style: {
       width: 1000,
       height: 170,
@@ -134,12 +166,12 @@ const initialNodes: Node[] = [
 
   {
     id: "insight-agent",
-    type: "agent",
-    position: { x: 800, y: 700 },
+    type: "subAgent",
+    position: { x: 700, y: 850 },
     data: {
       label: "Insight Agent",
       showAddButton: true,
-      handles: ["top", "bottom"],
+      handles: [{ position: "Top", type: "target", id: "top" }],
     },
   },
 
@@ -165,7 +197,11 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 25 },
     parentId: "group-emr",
     extent: "parent",
-    data: { label: "EMR 1" },
+    data: {
+      label: "EMR 1",
+      isRightHandle: true,
+      handles: [{ position: "Right", type: "source", id: "right" }],
+    },
   },
   {
     id: "emr2",
@@ -173,7 +209,11 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 130 },
     parentId: "group-emr",
     extent: "parent",
-    data: { label: "EMR 2" },
+    data: {
+      label: "EMR 2",
+      isRightHandle: true,
+      handles: [{ position: "Right", type: "source", id: "right" }],
+    },
   },
   {
     id: "emr3",
@@ -181,24 +221,29 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 230 },
     parentId: "group-emr",
     extent: "parent",
-    data: { label: "EMR n" },
+    data: {
+      label: "EMR n",
+      isRightHandle: true,
+      handles: [{ position: "Right", type: "source", id: "right" }],
+    },
   },
 ];
 
 const initialEdges: Edge[] = [
   {
-    id: "scheduler-rcm",
-    source: "scheduler",
-    target: "rcm-maestro",
-    type: "bezier",
-    style: { stroke: "#0D74CE", strokeWidth: 2 },
-  },
-  {
     id: "config-rcm",
     source: "config",
     target: "rcm-maestro",
-    type: "bezier",
+    type: "smoothstep",
     style: { stroke: "#0D74CE", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#0D74CE", // 👈 arrow color
+    },
+    targetHandle: "left",
   },
   {
     id: "rcm-recon",
@@ -206,6 +251,15 @@ const initialEdges: Edge[] = [
     target: "reconciliation",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-2",
+    targetHandle: "top",
   },
   {
     id: "rcm-intake",
@@ -213,6 +267,15 @@ const initialEdges: Edge[] = [
     target: "intake-orchestrator",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-1",
+    targetHandle: "top",
   },
   {
     id: "rcm-cash",
@@ -220,6 +283,15 @@ const initialEdges: Edge[] = [
     target: "cash-posting",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-3",
+    targetHandle: "top",
   },
   {
     id: "rcm-cpn",
@@ -227,6 +299,15 @@ const initialEdges: Edge[] = [
     target: "cpn",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom-4",
+    targetHandle: "top",
   },
 
   {
@@ -235,6 +316,14 @@ const initialEdges: Edge[] = [
     target: "tool-api",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "recon-log",
@@ -242,6 +331,14 @@ const initialEdges: Edge[] = [
     target: "tool-logs",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "cash-vault",
@@ -249,6 +346,14 @@ const initialEdges: Edge[] = [
     target: "tool-services",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
   {
     id: "cash-vault",
@@ -256,6 +361,14 @@ const initialEdges: Edge[] = [
     target: "tool-vault",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    sourceHandle: "bottom",
   },
 
   // emr connection
@@ -263,22 +376,46 @@ const initialEdges: Edge[] = [
     id: "emr1-cp1",
     source: "emr1",
     target: "intake-orchestrator",
-    type: "bezier",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    targetHandle: "left",
   },
   {
     id: "emr2-cp2",
     source: "emr2",
     target: "reconciliation",
-    type: "customCurve",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    targetHandle: "bottom-2",
   },
   {
     id: "emr3-cp3",
     source: "emr3",
     target: "cpn",
-    type: "customCurve",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    targetHandle: "bottom-2",
   },
 
   // Agent Tools to Insight Agent connections
@@ -289,48 +426,98 @@ const initialEdges: Edge[] = [
     target: "insight-agent",
     type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    targetHandle: "top",
   },
   {
     id: "inbox-intake",
     source: "inbox",
     target: "intake-orchestrator",
-    type: "customCurve",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "sftp-intake",
     source: "sftp",
     target: "intake-orchestrator",
-    type: "customCurve",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "s3-intake",
     source: "amazon-s3",
     target: "intake-orchestrator",
-    type: "customCurve",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "cash-emr1",
     source: "cash-posting",
     target: "emr-1",
-    type: "bezier",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "cash-emr2",
     source: "cash-posting",
     target: "emr-2",
-    type: "bezier",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "cash-emrn",
     source: "cash-posting",
     target: "emr-n",
-    type: "bezier",
+    type: "smoothstep",
     style: { stroke: "#859598", strokeWidth: 2 },
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
 ];
 
@@ -346,6 +533,7 @@ const CashPostingAgent = () => {
             value={item.value}
             colorClass={item.colorClass}
             image={item.image} // ✅ added
+            status={item.status}
           />
         ))}
       </div>

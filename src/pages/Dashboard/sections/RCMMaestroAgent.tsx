@@ -1,4 +1,3 @@
-
 import MapCard from "@/components/MapCard/MapCard";
 import { RCM_MAESTRO_AGENT_DATA } from "@/constants/DashboardData";
 import WorkflowPage from "./Workflow/WorkFlow";
@@ -9,11 +8,11 @@ const initialNodes: Node[] = [
   {
     id: "group-integration",
     type: "group",
-    position: { x: 50, y: 10 },
+    position: { x: 50, y: 0 },
     style: {
       display: "flex",
       width: 150,
-      height: 250,
+      height: 300,
       zIndex: -1,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
@@ -33,7 +32,7 @@ const initialNodes: Node[] = [
   {
     id: "config",
     type: "integration",
-    position: { x: 16, y: 130 },
+    position: { x: 16, y: 160 },
     parentId: "group-integration",
     extent: "parent",
     data: { label: "Config", icon: "config" },
@@ -43,10 +42,10 @@ const initialNodes: Node[] = [
   {
     id: "group-intake",
     type: "group",
-    position: { x: 50, y: 300 },
+    position: { x: 50, y: 340 },
     style: {
       width: 150,
-      height: 350,
+      height: 400,
       zIndex: -1,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
@@ -66,7 +65,7 @@ const initialNodes: Node[] = [
   {
     id: "sftp",
     type: "integration",
-    position: { x: 16, y: 130 },
+    position: { x: 16, y: 150 },
     parentId: "group-intake",
     extent: "parent",
     data: { label: "SFTP", icon: "sftp" },
@@ -74,7 +73,7 @@ const initialNodes: Node[] = [
   {
     id: "amazon-s3",
     type: "integration",
-    position: { x: 16, y: 230 },
+    position: { x: 16, y: 265 },
     parentId: "group-intake",
     extent: "parent",
     data: { label: "Amazon S3", icon: "amazon" },
@@ -84,48 +83,74 @@ const initialNodes: Node[] = [
   {
     id: "rcm-maestro",
     type: "agent",
-    position: { x: 600, y: 50 },
+    position: { x: 640, y: 50 },
     data: {
       label: "RCM Maestro Agent",
       showAddButton: true,
       showLogo: true,
-      handles: ["bottom"],
+      isSecondLeftHandle: "true",
+      handles: [
+        { position: "Left", type: "target", id: "left" },
+        { position: "Left", type: "target", id: "left-2" },
+        { position: "Bottom", type: "source", id: "bottom-1" },
+        { position: "Bottom", type: "source", id: "bottom-2" },
+        { position: "Bottom", type: "source", id: "bottom-3" },
+      ],
     },
   },
   {
     id: "intake-orchestrator",
-    type: "agent",
+    type: "subAgent",
     position: { x: 400, y: 300 },
     data: {
       label: "Intake Orchestrator Agent",
       showLogo: false,
       showAddButton: true,
-      handles: ["left", "bottom"],
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Left", type: "target", id: "left" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
+      isTwoLeftHandle: true,
     },
   },
   {
     id: "reconciliation",
-    type: "agent",
+    type: "subAgent",
     position: { x: 800, y: 300 },
     data: {
       label: "Reconciliation Agent",
       showAddButton: true,
       showLogo: false,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
     },
   },
   {
     id: "cash-posting",
-    type: "agent",
+    type: "subAgent",
     position: { x: 1200, y: 300 },
-    data: { label: "Cash Posting Agent", showAddButton: true, showLogo: false },
+    data: {
+      label: "Cash Posting Agent",
+      showAddButton: true,
+      showLogo: false,
+      handles: [
+        { position: "Top", type: "target", id: "top" },
+        { position: "Right", type: "Source", id: "right" },
+        { position: "Bottom", type: "source", id: "bottom" },
+      ],
+    },
   },
 
   // ---------------- Agent Tools Group ----------------
   {
     id: "group-agent-tools",
     type: "group",
-    position: { x: 350, y: 500 },
+    position: { x: 410, y: 500 },
     style: {
+      // zIndex:-1,
       width: 1000,
       height: 170,
       background: "#f9fafb",
@@ -194,12 +219,12 @@ const initialNodes: Node[] = [
 
   {
     id: "insight-agent",
-    type: "agent",
-    position: { x: 800, y: 700 },
+    type: "subAgent",
+    position: { x: 800, y: 770 },
     data: {
       label: "Insight Agent",
       showAddButton: true,
-      handles: ["top", "bottom"],
+      handles: [{ position: "Top", type: "target", id: "top" }],
     },
   },
 
@@ -207,7 +232,7 @@ const initialNodes: Node[] = [
   {
     id: "group-emr",
     type: "group",
-    position: { x: 1600, y: 200 },
+    position: { x: 1600, y: 175 },
     style: {
       zIndex: -1,
       width: 150,
@@ -225,7 +250,11 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 25 },
     parentId: "group-emr",
     extent: "parent",
-    data: { label: "EMR 1" },
+    data: {
+      label: "EMR 1",
+      isLeftHandle: true,
+      handles: [{ position: "Left", type: "target", id: "left" }],
+    },
   },
   {
     id: "emr-2",
@@ -233,7 +262,11 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 130 },
     parentId: "group-emr",
     extent: "parent",
-    data: { label: "EMR 2" },
+    data: {
+      label: "EMR 2",
+      isLeftHandle: true,
+      handles: [{ position: "Left", type: "target", id: "left" }],
+    },
   },
   {
     id: "emr-n",
@@ -241,7 +274,11 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 230 },
     parentId: "group-emr",
     extent: "parent",
-    data: { label: "EMR n" },
+    data: {
+      label: "EMR n",
+      isLeftHandle: true,
+      handles: [{ position: "Left", type: "target", id: "left" }],
+    },
   },
 ];
 
@@ -250,7 +287,14 @@ const initialEdges: Edge[] = [
     id: "scheduler-rcm",
     source: "scheduler",
     target: "rcm-maestro",
-    type: "bezier",
+    type: "beizier",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#0D74CE", // 👈 arrow color
+    },
     style: { stroke: "#0D74CE", strokeWidth: 2 },
   },
   {
@@ -258,28 +302,108 @@ const initialEdges: Edge[] = [
     source: "config",
     target: "rcm-maestro",
     type: "bezier",
+    // animated: true,
     style: { stroke: "#0D74CE", strokeWidth: 2 },
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#0D74CE", // 👈 arrow color
+    },
+    targetHandle: "left-2",
   },
   {
-    id: "rcm-recon",
-    source: "rcm-maestro",
-    target: "reconciliation",
+    id: "inbox-intake",
+    source: "inbox",
+    target: "intake-orchestrator",
     type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
     style: { stroke: "#859598", strokeWidth: 2 },
+    targetHandle: "left-2",
+  },
+  {
+    id: "sftp-intake",
+    source: "sftp",
+    target: "intake-orchestrator",
+    type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    style: { stroke: "#859598", strokeWidth: 2 },
+    targetHandle: "left",
+  },
+  {
+    id: "s3-intake",
+    source: "amazon-s3",
+    target: "intake-orchestrator",
+    type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+    style: { stroke: "#859598", strokeWidth: 2 },
+    targetHandle: "left-3",
   },
   {
     id: "rcm-intake",
     source: "rcm-maestro",
     target: "intake-orchestrator",
     type: "smoothstep",
+    // animated: true,
     style: { stroke: "#859598", strokeWidth: 2 },
+    sourceHandle: "bottom-1",
+    targetHandle: "top",
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
+  },
+  {
+    id: "rcm-recon",
+    source: "rcm-maestro",
+    target: "reconciliation",
+    type: "smoothstep",
+    // animated: true,
+    style: { stroke: "#859598", strokeWidth: 2 },
+    sourceHandle: "bottom-2",
+    targetHandle: "top",
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "rcm-cash",
     source: "rcm-maestro",
     target: "cash-posting",
     type: "smoothstep",
+    // animated: true,
     style: { stroke: "#859598", strokeWidth: 2 },
+    sourceHandle: "bottom-3",
+    targetHandle: "top",
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
 
   {
@@ -287,21 +411,45 @@ const initialEdges: Edge[] = [
     source: "intake-orchestrator",
     target: "tool-api",
     type: "smoothstep",
+    // animated: true,
     style: { stroke: "#859598", strokeWidth: 2 },
+    sourceHandle: "bottom",
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "recon-log",
     source: "reconciliation",
     target: "tool-logs",
     type: "smoothstep",
+    // animated: true,
     style: { stroke: "#859598", strokeWidth: 2 },
+    sourceHandle: "bottom",
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
   {
     id: "cash-vault",
     source: "cash-posting",
     target: "tool-vault",
     type: "smoothstep",
+    // animated: true,
     style: { stroke: "#859598", strokeWidth: 2 },
+    sourceHandle: "bottom",
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
   },
 
   // Agent Tools to Insight Agent connections
@@ -311,48 +459,57 @@ const initialEdges: Edge[] = [
     source: "tool-search",
     target: "insight-agent",
     type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
     style: { stroke: "#859598", strokeWidth: 2 },
+    targetHandle: "top",
   },
-  {
-    id: "inbox-intake",
-    source: "inbox",
-    target: "intake-orchestrator",
-    type: "customCurve",
-    style: { stroke: "#859598", strokeWidth: 2 },
-  },
-  {
-    id: "sftp-intake",
-    source: "sftp",
-    target: "intake-orchestrator",
-    type: "customCurve",
-    style: { stroke: "#859598", strokeWidth: 2 },
-  },
-  {
-    id: "s3-intake",
-    source: "amazon-s3",
-    target: "intake-orchestrator",
-    type: "customCurve",
-    style: { stroke: "#859598", strokeWidth: 2 },
-  },
+
   {
     id: "cash-emr1",
     source: "cash-posting",
     target: "emr-1",
-    type: "bezier",
+    type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
     style: { stroke: "#859598", strokeWidth: 2 },
   },
   {
     id: "cash-emr2",
     source: "cash-posting",
     target: "emr-2",
-    type: "bezier",
+    type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
     style: { stroke: "#859598", strokeWidth: 2 },
   },
   {
     id: "cash-emrn",
     source: "cash-posting",
     target: "emr-n",
-    type: "bezier",
+    type: "smoothstep",
+    // animated: true,
+    markerEnd: {
+      type: "arrowclosed", // 👈 adds arrow
+      width: 20,
+      height: 20,
+      color: "#859598", // 👈 arrow color
+    },
     style: { stroke: "#859598", strokeWidth: 2 },
   },
 ];
@@ -369,6 +526,7 @@ const RCMMaestroAgent = () => {
             value={item.value}
             colorClass={item.colorClass}
             image={item.image} // ✅ added
+            status={item.status}
           />
         ))}
       </div>

@@ -1,19 +1,55 @@
-import { Handle, Position } from "reactflow";
+import { Handle, Position, type HandleType } from "reactflow";
 import { Button } from "@/components/ui/Button";
 import PlusIcon from "@/assets/icons/plus-icon.svg";
 import Logo from "@/assets/images/logo-icon.jpeg";
 
+type HandlePosition = keyof typeof Position; // 'Left' | 'Right' | 'Top' | 'Bottom'
+
+interface HandleConfig {
+  position: HandlePosition;
+  type: HandleType;
+  id?: string;
+}
+
+interface AgentNodeData {
+  label: string;
+  showAddButton?: boolean;
+  showLogo: boolean;
+  handles?: HandleConfig[]; // 👈 dynamic handle support
+}
+
 interface AgentNodeProps {
-  data: {
-    label: string;
-    showAddButton?: boolean;
-    showLogo: boolean;
-  };
+  data: AgentNodeData;
 }
 
 export default function AgentNode({ data }: AgentNodeProps) {
-  console.log("data", data);
   const sizeClasses = data.showLogo ? "w-150 h-30" : "w-70 h-25";
+
+  // Group handles by their position (Left, Right, Top, Bottom)
+  const groupedHandles =
+    data.handles?.reduce((acc, handle) => {
+      acc[handle.position] = acc[handle.position] || [];
+      acc[handle.position].push(handle);
+      return acc;
+    }, {} as Record<HandlePosition, HandleConfig[]>) || {};
+
+  // Auto position handles evenly based on count
+  const getOffsetStyle = (
+    position: HandlePosition,
+    index: number,
+    total: number
+  ): React.CSSProperties => {
+    const spacing = 100 / (total + 1);
+    const offset = spacing * (index + 1);
+
+    if (position === "Left" || position === "Right") {
+      return { top: `${offset}%`, transform: "translateY(-50%)" };
+    }
+    if (position === "Top" || position === "Bottom") {
+      return { left: `${offset}%`, transform: "translateX(-50%)" };
+    }
+    return {};
+  };
 
   return (
     <div
@@ -27,12 +63,8 @@ export default function AgentNode({ data }: AgentNodeProps) {
           >
             {data.label}
           </span>
-          {data.showLogo ? (
-            <span>
-              <img src={Logo} className="w-7 h-8  animate-spin" />
-            </span>
-          ) : (
-            ""
+          {data.showLogo && (
+            <img src={Logo} className="w-7 h-8 animate-spin" alt="logo" />
           )}
         </div>
       </div>
@@ -48,27 +80,23 @@ export default function AgentNode({ data }: AgentNodeProps) {
         </Button>
       )}
 
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="w-2 h-2 !bg-primary"
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-2 h-2 !bg-primary"
-      />
-      {/* <Handle
-        type="target"
-        position={Position.Bottom}
-        className="w-2 h-2 !bg-primary"
-        id="bottom"
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        className="w-2 h-2 !bg-primary"
-      /> */}
+      {/* Dynamic Handle Rendering */}
+      {Object.entries(groupedHandles).map(([position, handles]) =>
+        handles.map((handle, index) => (
+          <Handle
+            key={`${position}-${index}`}
+            type={handle.type}
+            id={handle.id}
+            position={Position[position as HandlePosition]}
+            className="w-2 h-2 !bg-primary absolute"
+            style={getOffsetStyle(
+              position as HandlePosition,
+              index,
+              handles.length
+            )}
+          />
+        ))
+      )}
     </div>
   );
 }
