@@ -1,7 +1,7 @@
 import MapCard from "@/components/MapCard/MapCard";
 import { RCM_MAESTRO_AGENT_DATA } from "@/constants/DashboardData";
 import WorkflowPage from "./Workflow/WorkFlow";
-import { type Node, type Edge } from "reactflow";
+import { type Node, type Edge, MarkerType } from "reactflow";
 
 const initialNodes: Node[] = [
   // ---------------- Group 1 ----------------
@@ -290,7 +290,7 @@ const initialEdges: Edge[] = [
     type: "beizier",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#0D74CE", // 👈 arrow color
@@ -305,7 +305,7 @@ const initialEdges: Edge[] = [
     // animated: true,
     style: { stroke: "#0D74CE", strokeWidth: 2 },
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#0D74CE", // 👈 arrow color
@@ -319,7 +319,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -334,7 +334,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -349,7 +349,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -367,7 +367,7 @@ const initialEdges: Edge[] = [
     sourceHandle: "bottom-1",
     targetHandle: "top",
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -383,7 +383,7 @@ const initialEdges: Edge[] = [
     sourceHandle: "bottom-2",
     targetHandle: "top",
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -399,7 +399,7 @@ const initialEdges: Edge[] = [
     sourceHandle: "bottom-3",
     targetHandle: "top",
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -415,7 +415,7 @@ const initialEdges: Edge[] = [
     style: { stroke: "#859598", strokeWidth: 2 },
     sourceHandle: "bottom",
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -430,7 +430,7 @@ const initialEdges: Edge[] = [
     style: { stroke: "#859598", strokeWidth: 2 },
     sourceHandle: "bottom",
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -445,7 +445,7 @@ const initialEdges: Edge[] = [
     style: { stroke: "#859598", strokeWidth: 2 },
     sourceHandle: "bottom",
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -461,7 +461,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -477,7 +477,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -491,7 +491,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
@@ -505,7 +505,7 @@ const initialEdges: Edge[] = [
     type: "smoothstep",
     // animated: true,
     markerEnd: {
-      type: "arrowclosed", // 👈 adds arrow
+      type: MarkerType.ArrowClosed, // 👈 adds arrow
       width: 20,
       height: 20,
       color: "#859598", // 👈 arrow color
