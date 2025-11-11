@@ -1,7 +1,15 @@
-import { Handle, Position } from "reactflow";
+import { Handle, Position, type HandleType } from "reactflow";
 import { Button } from "@/components/ui/Button";
 import PlusIcon from "@/assets/icons/plus-icon.svg";
 import Logo from "@/assets/images/logo-icon.jpeg";
+
+type HandlePosition = keyof typeof Position; // 'Left' | 'Right' | 'Top' | 'Bottom'
+
+interface HandleConfig {
+  position: HandlePosition;
+  type: HandleType;
+  id?: string;
+}
 
 interface SubAgentNodeProps {
   data: {
@@ -10,6 +18,7 @@ interface SubAgentNodeProps {
     showLogo: boolean;
     isSecondHandle?: boolean;
     isTwoLeftHandle?: boolean;
+    handles?: HandleConfig[];
   };
 }
 
@@ -77,7 +86,7 @@ export default function SubAgentNode({ data }: SubAgentNodeProps) {
       ) : (
         ""
       )}
-      {data.handles?.map((handle: any, index: number) => (
+      {data.handles?.map((handle: HandleConfig, index: number) => (
         <Handle
           key={handle.id || index}
           type={handle.type}

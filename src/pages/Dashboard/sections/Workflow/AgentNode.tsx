@@ -81,19 +81,17 @@ export default function AgentNode({ data }: AgentNodeProps) {
       )}
 
       {/* Dynamic Handle Rendering */}
-      {Object.entries(groupedHandles).map(([position, handles]) =>
+      {(
+        Object.entries(groupedHandles) as [HandlePosition, HandleConfig[]][]
+      ).map(([position, handles]) =>
         handles.map((handle, index) => (
           <Handle
             key={`${position}-${index}`}
             type={handle.type}
             id={handle.id}
-            position={Position[position as HandlePosition]}
+            position={Position[position]}
             className="w-2 h-2 !bg-primary absolute"
-            style={getOffsetStyle(
-              position as HandlePosition,
-              index,
-              handles.length
-            )}
+            style={getOffsetStyle(position, index, handles.length)}
           />
         ))
       )}

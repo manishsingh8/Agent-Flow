@@ -1,11 +1,20 @@
-import { Handle, Position } from "reactflow";
+import { Handle, Position, type HandleType } from "reactflow";
 import EMRIcon from "@/assets/icons/emr.svg";
+
+type HandlePosition = keyof typeof Position; // 'Left' | 'Right' | 'Top' | 'Bottom'
+
+interface HandleConfig {
+  position: HandlePosition;
+  type: HandleType;
+  id?: string;
+}
 
 interface EMRNodeProps {
   data: {
     label: string;
     isLeftHandle?: boolean;
     isRightHandle?: boolean;
+    handles?: HandleConfig[];
   };
 }
 
@@ -23,7 +32,7 @@ export default function EMRNode({ data }: EMRNodeProps) {
           {data.label}
         </span>
       </div>
-      {data.handles?.map((handle: any, index: number) => (
+      {data.handles?.map((handle: HandleConfig, index: number) => (
         <Handle
           key={handle.id || index}
           type={handle.type}
