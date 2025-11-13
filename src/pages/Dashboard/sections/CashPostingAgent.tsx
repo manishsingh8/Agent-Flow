@@ -17,7 +17,7 @@ const initialNodes: Node[] = [
   {
     id: "rcm-maestro",
     type: "agent",
-    position: { x: 500, y: 50 },
+    position: { x: 400, y: 50 },
     data: {
       label: "Cash Posting Agent",
       showLogo: true,
@@ -96,9 +96,9 @@ const initialNodes: Node[] = [
   {
     id: "group-agent-tools",
     type: "group",
-    position: { x: 350, y: 600 },
+    position: { x: 380, y: 600 },
     style: {
-      width: 1000,
+      width: 970,
       height: 170,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
@@ -179,14 +179,14 @@ const initialNodes: Node[] = [
   {
     id: "group-emr",
     type: "group",
-    position: { x: 16, y: 300 },
+    position: { x: 0, y: 300 },
     style: {
-      width: 150,
+      width: 140,
       height: 350,
       zIndex: -1,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
-      borderRadius: 32,
+      borderRadius: 24,
       padding: 10,
     },
     data: { label: "" },
@@ -194,7 +194,7 @@ const initialNodes: Node[] = [
   {
     id: "emr1",
     type: "emr",
-    position: { x: 16, y: 25 },
+    position: { x: 25, y: 25 },
     parentId: "group-emr",
     extent: "parent",
     data: {
@@ -206,7 +206,7 @@ const initialNodes: Node[] = [
   {
     id: "emr2",
     type: "emr",
-    position: { x: 16, y: 130 },
+    position: { x: 25, y: 130 },
     parentId: "group-emr",
     extent: "parent",
     data: {
@@ -218,7 +218,7 @@ const initialNodes: Node[] = [
   {
     id: "emr3",
     type: "emr",
-    position: { x: 16, y: 230 },
+    position: { x: 25, y: 235 },
     parentId: "group-emr",
     extent: "parent",
     data: {
@@ -537,7 +537,13 @@ const CashPostingAgent = () => {
           />
         ))}
       </div>
-      <div className="flex justify-between gap-2 p-8 mt-4 bg-[#E6EEF4] rounded-3xl">
+      <div
+        className="flex justify-between gap-2 p-0 mt-4 mb-4 bg-[#E6EEF4] rounded-3xl"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
+        }}
+      >
         <WorkflowPage initialNodes={initialNodes} initialEdges={initialEdges} />
       </div>
     </div>

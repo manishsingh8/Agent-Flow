@@ -11,12 +11,12 @@ const initialNodes: Node[] = [
     position: { x: 50, y: 0 },
     style: {
       display: "flex",
-      width: 150,
+      width: 170,
       height: 300,
       zIndex: -1,
-      background: "#f9fafb",
-      border: "1px solid #d1d5db",
-      borderRadius: 32,
+      background: "#F9FAFBFF",
+      border: "1px solid #E5E5E5",
+      borderRadius: 24,
       padding: 10,
     },
     data: { label: "" },
@@ -24,7 +24,7 @@ const initialNodes: Node[] = [
   {
     id: "scheduler",
     type: "integration",
-    position: { x: 16, y: 30 },
+    position: { x: 25, y: 30 },
     parentId: "group-integration",
     extent: "parent",
     data: { label: "Scheduler", icon: "scheduler" },
@@ -32,7 +32,7 @@ const initialNodes: Node[] = [
   {
     id: "config",
     type: "integration",
-    position: { x: 16, y: 160 },
+    position: { x: 25, y: 160 },
     parentId: "group-integration",
     extent: "parent",
     data: { label: "Config", icon: "config" },
@@ -44,12 +44,12 @@ const initialNodes: Node[] = [
     type: "group",
     position: { x: 50, y: 340 },
     style: {
-      width: 150,
+      width: 170,
       height: 400,
       zIndex: -1,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
-      borderRadius: 32,
+      borderRadius: 24,
       padding: 10,
     },
     data: { label: "" },
@@ -57,7 +57,7 @@ const initialNodes: Node[] = [
   {
     id: "inbox",
     type: "integration",
-    position: { x: 16, y: 25 },
+    position: { x: 25, y: 25 },
     parentId: "group-intake",
     extent: "parent",
     data: { label: "Inbox", icon: "inbox" },
@@ -65,7 +65,7 @@ const initialNodes: Node[] = [
   {
     id: "sftp",
     type: "integration",
-    position: { x: 16, y: 150 },
+    position: { x: 25, y: 145 },
     parentId: "group-intake",
     extent: "parent",
     data: { label: "SFTP", icon: "sftp" },
@@ -73,7 +73,7 @@ const initialNodes: Node[] = [
   {
     id: "amazon-s3",
     type: "integration",
-    position: { x: 16, y: 265 },
+    position: { x: 25, y: 265 },
     parentId: "group-intake",
     extent: "parent",
     data: { label: "Amazon S3", icon: "amazon" },
@@ -83,7 +83,7 @@ const initialNodes: Node[] = [
   {
     id: "rcm-maestro",
     type: "agent",
-    position: { x: 640, y: 50 },
+    position: { x: 490, y: 0 },
     data: {
       label: "RCM Maestro Agent",
       showAddButton: true,
@@ -148,14 +148,16 @@ const initialNodes: Node[] = [
   {
     id: "group-agent-tools",
     type: "group",
-    position: { x: 410, y: 500 },
+    position: { x: 481, y: 500 },
     style: {
       // zIndex:-1,
-      width: 1000,
+      width: 970,
       height: 170,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
-      borderRadius: 32,
+      backdropFilter: "blur(3.2908897399902344px)",
+      boxShadow: "0px 0px 20.57px 0px #0000001A",
+      borderRadius: 24,
       padding: 10,
     },
     data: { label: "Agent Tools" },
@@ -235,11 +237,11 @@ const initialNodes: Node[] = [
     position: { x: 1600, y: 175 },
     style: {
       zIndex: -1,
-      width: 150,
+      width: 140,
       height: 350,
       background: "#f9fafb",
       border: "1px solid #d1d5db",
-      borderRadius: 32,
+      borderRadius: 24,
       padding: 10,
     },
     data: { label: "" },
@@ -247,7 +249,7 @@ const initialNodes: Node[] = [
   {
     id: "emr-1",
     type: "emr",
-    position: { x: 16, y: 25 },
+    position: { x: 25, y: 25 },
     parentId: "group-emr",
     extent: "parent",
     data: {
@@ -259,7 +261,7 @@ const initialNodes: Node[] = [
   {
     id: "emr-2",
     type: "emr",
-    position: { x: 16, y: 130 },
+    position: { x: 25, y: 130 },
     parentId: "group-emr",
     extent: "parent",
     data: {
@@ -271,7 +273,7 @@ const initialNodes: Node[] = [
   {
     id: "emr-n",
     type: "emr",
-    position: { x: 16, y: 230 },
+    position: { x: 25, y: 235 },
     parentId: "group-emr",
     extent: "parent",
     data: {
@@ -409,7 +411,7 @@ const initialEdges: Edge[] = [
   {
     id: "intake-api",
     source: "intake-orchestrator",
-    target: "tool-api",
+    target: "tool-db",
     type: "smoothstep",
     // animated: true,
     style: { stroke: "#859598", strokeWidth: 2 },
@@ -530,7 +532,14 @@ const RCMMaestroAgent = () => {
           />
         ))}
       </div>
-      <div className="flex justify-between gap-2 p-8 mt-4 bg-[#E6EEF4] rounded-3xl">
+      <div
+        className="flex justify-center items-center gap-2 p-0 mt-4 mb-4 bg-[#E6EEF4] rounded-3xl"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
+          backdropFilter: "blur(15px)",
+        }}
+      >
         <WorkflowPage initialNodes={initialNodes} initialEdges={initialEdges} />
       </div>
     </div>

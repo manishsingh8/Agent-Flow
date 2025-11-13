@@ -20,7 +20,14 @@ interface EMRNodeProps {
 
 export default function EMRNode({ data }: EMRNodeProps) {
   return (
-    <div className="bg-card border border-card-border rounded-lg p-3 shadow-sm hover-elevate min-w-[120px]">
+    <div
+      className="bg-card border border-card-border rounded-lg p-3 shadow-sm hover-elevate min-w-[90px]"
+      style={{
+        backdropFilter: "blur(3.2908897399902344px)", // precise blur
+        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
+        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+      }}
+    >
       <div className="flex flex-col items-center gap-2">
         <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
           <img src={EMRIcon} alt="icon" className="w-12 h-12" />

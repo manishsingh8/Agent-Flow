@@ -7,7 +7,13 @@ import { ChevronDown } from "lucide-react";
 
 const Dashboard = () => {
   return (
-    <div className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto">
+    <div
+      className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto"
+      style={{
+        background:
+          "linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
+      }}
+    >
       <Tabs defaultValue="rcm" className="w-[100%]">
         <div className="flex justify-between w-[100%]">
           <TabsList className="bg-transparent gap-2 flex justify-center items-center w-[90%] ">

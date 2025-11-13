@@ -17,7 +17,7 @@ const initialNodes: Node[] = [
   {
     id: "intake-orch",
     type: "agent",
-    position: { x: 500, y: 50 },
+    position: { x: 380, y: 50 },
     data: {
       label: "Intake Orchestrator Agent",
       showLogo: true,
@@ -381,7 +381,13 @@ const IntakeOrchestratorAgent = () => {
           />
         ))}
       </div>
-      <div className="flex justify-between gap-2 p-8 mt-4 bg-[#E6EEF4] rounded-3xl">
+      <div
+        className="flex justify-between gap-2 p-0 mt-4 mb-4 bg-[#E6EEF4] rounded-3xl"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
+        }}
+      >
         <WorkflowPage initialNodes={initialNodes} initialEdges={initialEdges} />
       </div>
     </div>

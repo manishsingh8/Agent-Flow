@@ -27,6 +27,11 @@ export default function SubAgentNode({ data }: SubAgentNodeProps) {
   return (
     <div
       className={`pointer-events-none flex items-center justify-center bg-card border border-card-border rounded-3xl shadow-md hover-elevate min-w-[200px] relative ${sizeClasses}`}
+      style={{
+        backdropFilter: "blur(3.2908897399902344px)", // precise blur
+        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
+        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+      }}
     >
       <div className="p-4">
         <div className="flex items-center gap-2">

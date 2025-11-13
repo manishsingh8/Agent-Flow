@@ -52,40 +52,40 @@ export const SIDEBAR_DATA = {
         },
         {
           title: "Details",
-          url: "/login",
+          url: "/details",
         },
       ],
     },
     {
       title: "Cash Posting Page",
-      url: "#",
+      url: "cash-posting",
       icon: Bot,
     },
     {
       title: "Cash Management",
-      url: "#",
+      url: "/cash-management",
       icon: BookOpen,
     },
     {
       title: "Team",
-      url: "#",
+      url: "/team",
       icon: Settings2,
     },
   ],
   documents: [
     {
       name: "Data Library",
-      url: "#",
+      url: "/data-library",
       icon: Frame,
     },
     {
       name: "Reports",
-      url: "#",
+      url: "/reports",
       icon: PieChart,
     },
     {
       name: "Word Assistant",
-      url: "#",
+      url: "/word-assistant",
       icon: Map,
     },
   ],

@@ -14,6 +14,7 @@ import AgentToolNode from "./AgentToolsPanel";
 import { type Node, type Edge } from "reactflow";
 import GroupNode from "./GroupNode";
 import SubAgentNode from "./SubAgentNode";
+import bgImage from "../../../../assets/images/bg-img.png";
 
 interface WorkFlowProps {
   initialNodes: Node[];
@@ -68,6 +69,13 @@ export default function WorkflowPage({
           panOnScroll={false}
           panOnDrag={false}
           proOptions={{ hideAttribution: true }}
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: "cover", // or 'contain' depending on your needs
+            backgroundPosition: "center",
+          }}
         >
           <Background color="#e5e7eb" gap={16} />
         </ReactFlow>
