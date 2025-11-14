@@ -386,7 +386,7 @@ const ReconciliationAgent = () => {
         className="flex justify-between gap-2 p-0 mt-4 mb-4 bg-[#E6EEF4] rounded-3xl"
         style={{
           background:
-            "linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
+            "linear-gradient(90deg, rgba(230, 238, 244, 01) 0%, rgba(207, 221, 232, 0q) 49.49%, rgba(195, 202, 230, 01) 100%)",
         }}
       >
         <WorkflowPage initialNodes={initialNodes} initialEdges={initialEdges} />

@@ -8,7 +8,7 @@ const initialNodes: Node[] = [
   {
     id: "group-integration",
     type: "group",
-    position: { x: 50, y: 0 },
+    position: { x: 50, y: -43 },
     style: {
       display: "flex",
       width: 170,
@@ -289,7 +289,7 @@ const initialEdges: Edge[] = [
     id: "scheduler-rcm",
     source: "scheduler",
     target: "rcm-maestro",
-    type: "beizier",
+    type: "smoothstep",
     // animated: true,
     markerEnd: {
       type: MarkerType.ArrowClosed, // 👈 adds arrow

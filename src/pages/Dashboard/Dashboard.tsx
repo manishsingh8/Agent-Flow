@@ -11,7 +11,7 @@ const Dashboard = () => {
       className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto"
       style={{
         background:
-          "linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
+          "linear-gradient(0deg, #E6EEF4, #CFDDE8), linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
       }}
     >
       <Tabs defaultValue="rcm" className="w-[100%]">

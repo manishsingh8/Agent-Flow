@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/Sidebar";
 import { useSidebar } from "@/components/ui/Sidebar";
 
-import logoFull from "@/assets/images/logo.jpeg"; // logo for expanded sidebar
-import logoSmall from "@/assets/images/logo-icon.jpeg"; // logo for collapsed sidebar
+import logoFull from "@/assets/icons/rp-logo.svg"; // logo for expanded sidebar
+import logoSmall from "@/assets/icons/rp-logo-icon.svg"; // logo for collapsed sidebar
 
 export function TeamSwitcher({
   teams,
