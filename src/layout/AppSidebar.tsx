@@ -1,6 +1,6 @@
 import * as React from "react";
 import { NavMain } from "@/layout/NavMain";
-import { NavProjects } from "@/layout/NavProject";
+// import { NavProjects } from "@/layout/NavProject";
 import { NavUser } from "@/layout/NavUser";
 import { TeamSwitcher } from "@/layout/TeamSwitcher";
 import { SIDEBAR_DATA } from "../constants/SidebarData";
@@ -20,7 +20,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={SIDEBAR_DATA.navMain} />
-        <NavProjects projects={SIDEBAR_DATA.documents} />
+        {/* <NavProjects projects={SIDEBAR_DATA.documents} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={SIDEBAR_DATA.user} />
