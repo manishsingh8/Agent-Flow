@@ -5,6 +5,7 @@ import { PublicRoute } from "./PublicRoute";
 import { MainLayout } from "@/layout/MainLayout";
 import DashboardPage from "@/pages/Dashboard/Dashboard";
 import Payment from "@/pages/Payment/Payment";
+import CashPostingPage from "@/pages/CashPosting/CashPostingPage";
 // import SettingsPage from "@/pages/settings/SettingsPage";
 import LoginPage from "@/pages/Login/Login";
 
@@ -20,6 +21,7 @@ export const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/cash-posting" element={<CashPostingPage />} />
         </Route>
       </Route>
       {/* Catch-All */}

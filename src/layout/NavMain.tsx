@@ -34,6 +34,8 @@ export function NavMain({
 
   const isActiveLink = (url: string) => location.pathname === url;
 
+  console.log(isActiveLink, "activelink", location.pathname);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -60,7 +62,6 @@ export function NavMain({
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
-
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {item.items.map((subItem) => (
@@ -70,8 +71,8 @@ export function NavMain({
                             to={subItem.url}
                             className={`flex w-full items-center gap-2 px-2 py-1 rounded ${
                               isActiveLink(subItem.url)
-                                ? "bg-[#249563] text-white"
-                                : "text-gray-700"
+                                ? "!bg-[#249563] !text-white hover:!bg-[#249563]"
+                                : "text-gray-700 hover:bg-gray-100"
                             }`}
                           >
                             <span>{subItem.title}</span>
@@ -91,8 +92,8 @@ export function NavMain({
                   to={item.url}
                   className={`flex items-center gap-2 px-2 py-1 rounded ${
                     isActiveLink(item.url)
-                      ? "bg-[#249563] text-white"
-                      : "text-gray-700"
+                      ? "!bg-[#249563] !text-white hover:!bg-[#249563]"
+                      : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
                   {item.icon && <item.icon className="h-5 w-5" />}

@@ -41,24 +41,23 @@ export const SIDEBAR_DATA = {
       icon: House,
     },
     {
-      title: "Unreconciled Payments",
-      url: "#",
+      title: "Variance Queue",
+      url: "/payment",
       icon: PieChart,
-      isActive: true,
-      items: [
-        {
-          title: "List",
-          url: "/payment",
-        },
-        {
-          title: "Details",
-          url: "/details",
-        },
-      ],
     },
     {
-      title: "Cash Posting Page",
-      url: "cash-posting",
+      title: "Reconciled Report",
+      url: "/reconciled-report",
+      icon: PieChart,
+    },
+    {
+      title: "Cash Posting Report",
+      url: "/cash-posting",
+      icon: Bot,
+    },
+    {
+      title: "Cash Posting Queue",
+      url: "/cash-posting-queue",
       icon: Bot,
     },
     {
