@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -8,10 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search } from "lucide-react";
-import FilterIcon from "../../assets/icons/filter-icon.svg";
-import CircleTick from "../../assets/images/tick-circle.png";
-import CirclePlus from "../../assets/icons/circle-plus.svg";
 import EditIcon from "../../assets/images/edit-2.png";
 
 export interface Column<T> {
@@ -62,12 +57,12 @@ export function DataTable<T extends object = Record<string, unknown>>({
   onRowSelect,
   onSelectAll,
   searchEnabled = false,
-  searchTerm = "",
-  onSearchChange,
+  // searchTerm = "",
+  // onSearchChange,
   filtersEnabled = false,
-  filterOptions = [],
-  selectedFilters = [],
-  onFilterChange,
+  // filterOptions = [],
+  // selectedFilters = [],
+  // onFilterChange,
   exportEnabled = false,
   onExport,
   idKey = "id" as keyof T,

@@ -45,9 +45,9 @@ interface FilterSearchBarProps {
 }
 
 export function FilterSearchBar({
-  toggleOptions,
-  selectedToggle,
-  onToggleChange,
+  // toggleOptions,
+  // selectedToggle,
+  // onToggleChange,
 
   enableDateRange,
   fromDate,

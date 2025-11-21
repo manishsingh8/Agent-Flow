@@ -141,7 +141,7 @@ export const useCashPostingLogic = () => {
   };
 
   // Dynamically create columns for all keys
-  const columns: Column<Cash_Posting_Transaction>[] = (
+  const columns = (
     Object.keys(transactions[0]) as Array<keyof Cash_Posting_Transaction>
   )
     .filter((key) => key !== "id")
