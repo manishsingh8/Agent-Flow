@@ -20,9 +20,9 @@ interface ToggleOption {
 }
 
 interface FilterSearchBarProps {
-  toggleOptions: ToggleOption[];
-  selectedToggle: string;
-  onToggleChange: (value: string) => void;
+  toggleOptions?: ToggleOption[];
+  selectedToggle?: string;
+  onToggleChange?: (value: string) => void;
 
   enableDateRange?: boolean;
   fromDate?: string;
@@ -41,11 +41,15 @@ interface FilterSearchBarProps {
   onStatusChange?: (value: string) => void;
 
   showAdvancedSearch?: boolean;
+
+  // NEW PROPS
+  promptSearchValue?: string;
+  onPromptSearchChange?: (value: string) => void;
   onAdvancedSearch?: () => void;
 }
 
 export function FilterSearchBar({
-  // toggleOptions,
+  // toggleOptions = [],
   // selectedToggle,
   // onToggleChange,
 
@@ -66,30 +70,16 @@ export function FilterSearchBar({
   onStatusChange,
 
   showAdvancedSearch,
+  promptSearchValue,
+  onPromptSearchChange,
   onAdvancedSearch,
 }: FilterSearchBarProps) {
   const [payerOpen, setPayerOpen] = useState(false);
   const [statusOpen, setStatusOpen] = useState(false);
+  const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
 
   return (
     <div className="flex items-center justify-end gap-4 px-3 py-3 bg-white rounded-md">
-      {/* ------- Toggle Buttons -------- */}
-      {/* <div className="flex border rounded-[4px] overflow-hidden">
-        {toggleOptions.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => onToggleChange(opt.value)}
-            className={`flex-1 px-3 py-1 text-xs border-r last:border-r-0 transition ${
-              selectedToggle === opt.value
-                ? "bg-gray-200 text-gray-900"
-                : "bg-white text-gray-700"
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div> */}
-
       <div className="flex items-center gap-4">
         {/* ------- Date Range -------- */}
         {enableDateRange && (
@@ -138,7 +128,7 @@ export function FilterSearchBar({
                   <DropdownMenuItem
                     key={opt.value}
                     onClick={() => onPayerChange?.(opt.label)}
-                    className="!bg-transparent !shadow-none hover:!bg-gray-100 !focus:bg-transparent"
+                    className="!bg-transparent !shadow-none hover:!bg-gray-100"
                   >
                     {opt.label}
                   </DropdownMenuItem>
@@ -174,7 +164,7 @@ export function FilterSearchBar({
                   <DropdownMenuItem
                     key={opt.value}
                     onClick={() => onStatusChange?.(opt.label)}
-                    className="!bg-transparent !shadow-none hover:!bg-gray-100 !focus:bg-transparent"
+                    className="!bg-transparent !shadow-none hover:!bg-gray-100"
                   >
                     {opt.label}
                   </DropdownMenuItem>
@@ -184,16 +174,31 @@ export function FilterSearchBar({
           </div>
         )}
 
-        {/* ------- Advanced Search -------- */}
+        {/* ------- Prompt Search -------- */}
         {showAdvancedSearch && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-xs"
-            onClick={onAdvancedSearch}
-          >
-            Prompt Search
-          </Button>
+          <div className="flex items-center gap-2">
+            {/* <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              onClick={() => {
+                setShowPromptSearchInput((prev) => !prev);
+                onAdvancedSearch?.();
+              }}
+            >
+              Prompt Search
+            </Button> */}
+
+            {showPromptSearchInput && (
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={promptSearchValue}
+                onChange={(e) => onPromptSearchChange?.(e.target.value)}
+                className="h-7 text-xs w-48 transition-all duration-200"
+              />
+            )}
+          </div>
         )}
       </div>
     </div>

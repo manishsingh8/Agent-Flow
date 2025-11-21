@@ -2,7 +2,7 @@
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import { paymentCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
-import { usePaymentLogic } from "./Payment.hook";
+import { usePaymentLogic } from "./VarianceQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";

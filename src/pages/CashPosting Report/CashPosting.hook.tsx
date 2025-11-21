@@ -1,50 +1,27 @@
 import { useState, useMemo, type ReactNode } from "react";
-import { type Column } from "@/components/DataTable/DataTable";
 import {
-  DUMMY_TABLE_DATA as transactions,
-  type Transaction,
+  CASH_POSTING_TABLE_DATA as transactions,
+  type Cash_Posting_Transaction,
 } from "@/constants/TableData";
 
-export const usePaymentLogic = () => {
+export const useCashPostingLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-06-01");
   const [to, setTo] = useState("2025-06-01");
 
-  // 🔥 Add these two missing states
-  const [selectedPayer, setSelectedPayer] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
-
-  const payerOptions = [
-    { value: "all", label: "All Payers" },
-    { value: "payer1", label: "Payer 1" },
-    { value: "payer2", label: "Payer 2" },
-  ];
-
-  const statusOptions = [
-    { value: "all", label: "All Status" },
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
-  ];
-
-  // Table state (managed by parent)
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  // Edit modal state
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editedData, setEditedData] = useState<Partial<Transaction>[]>([]);
-
-  // Filtered data based on search and brand filters
+  // Filtered data based on search and region filters
   const filteredData = useMemo(() => {
     return transactions.filter((t) => {
-      const matchesBrand = selectedBrands.includes(t.brand);
+      const matchesBrand = selectedBrands.includes(t.region);
       const matchesSearch =
-        t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.payer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.accountNo.toLowerCase().includes(searchTerm.toLowerCase());
+        // t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.payer.toLowerCase().includes(searchTerm.toLowerCase());
+      // t.accountNo.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesBrand && matchesSearch;
     });
   }, [selectedBrands, searchTerm]);
@@ -74,9 +51,11 @@ export const usePaymentLogic = () => {
     }
   };
 
-  const handleBrandToggle = (brand: string) => {
+  const handleBrandToggle = (region: string) => {
     setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+      prev.includes(region)
+        ? prev.filter((b) => b !== region)
+        : [...prev, region]
     );
     setCurrentPage(1);
   };
@@ -95,54 +74,17 @@ export const usePaymentLogic = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   };
-
-  const handleEditClick = () => {
-    if (selectedRows.size > 0) {
-      // Get selected rows data and initialize edited data
-      const selectedRowsData = paginatedData.filter((row) =>
-        selectedRows.has(String(row.id))
-      );
-      setEditedData(
-        selectedRowsData.map((row) => ({
-          ...row,
-        }))
-      );
-      setIsEditModalOpen(true);
-    }
-  };
-
-  const handleFieldChange = (
-    rowIndex: number,
-    field: keyof Transaction,
-    value: unknown
-  ) => {
-    const updated = [...editedData];
-    updated[rowIndex] = {
-      ...updated[rowIndex],
-      [field]: value,
-    };
-    setEditedData(updated);
-  };
-
-  const handleEditSubmit = () => {
-    console.log("Updated data:", editedData);
-    setIsEditModalOpen(false);
-    setEditedData([]);
-  };
-
-  const handleEditCancel = () => {
-    setIsEditModalOpen(false);
-    setEditedData([]);
-  };
-
   const columnRules: Record<
     string,
     {
       bodyClassName?: string;
-      conditionalClassName?: (value: unknown, row: Transaction) => string;
+      conditionalClassName?: (
+        value: unknown,
+        row: Cash_Posting_Transaction
+      ) => string;
     }
   > = {
-    brand: {
+    region: {
       conditionalClassName: () => {
         return "bg-white border-1 border-[#E5E5E5] px-2 py-1 rounded-[6px] inline-block mt-1";
       },
@@ -151,9 +93,9 @@ export const usePaymentLogic = () => {
       conditionalClassName: (value) => {
         if (typeof value !== "string") return "";
         switch (value) {
-          case "Pending Approval":
+          case "Partially Posted":
             return "text-[#FF9500] bg-yellow-100 px-2 py-1 rounded-[6px] inline-block mt-1";
-          case "Done":
+          case "Fully Posted":
             return "text-[#34A255] bg-green-100 px-2 py-[2px] rounded-[6px] inline-block mt-1";
           case "Exception":
             return "text-[#E63435] bg-red-100 px-2 py-1 rounded-[6px] inline-block mt-1";
@@ -180,7 +122,7 @@ export const usePaymentLogic = () => {
         return value <= 0 ? "text-[#EC7723]" : "text-[#0A0A0A]";
       },
     },
-    transactionNo: {
+    cheque: {
       conditionalClassName: () => {
         return "text-[#0090FF]";
       },
@@ -190,14 +132,19 @@ export const usePaymentLogic = () => {
         return "text-[#E63435]";
       },
     },
+    reason: {
+      conditionalClassName: () => {
+        return "text-[#E63435]  px-2 py-1 rounded-[6px]  items-center justify-center mx-auto";
+      },
+    },
     email: {
       bodyClassName: "text-blue-600",
     },
   };
 
   // Dynamically create columns for all keys
-  const columns: Column<Transaction>[] = (
-    Object.keys(transactions[0]) as Array<keyof Transaction>
+  const columns = (
+    Object.keys(transactions[0]) as Array<keyof Cash_Posting_Transaction>
   )
     .filter((key) => key !== "id")
     .map((key) => {
@@ -221,39 +168,25 @@ export const usePaymentLogic = () => {
 
   return {
     toggle,
-    from,
-    to,
-    payerOptions,
-    statusOptions,
-    selectedPayer,
-    selectedStatus,
-    setSelectedPayer,
-    setSelectedStatus,
     setToggle,
+    from,
     setFrom,
+    to,
     setTo,
-    columns,
-    columnRules,
-    handleEditCancel,
-    handleEditSubmit,
-    handleFieldChange,
-    handleEditClick,
-    handleExport,
-    handleBrandToggle,
-    handleSelectAll,
-    handleRowSelect,
-    totalPages,
-    isEditModalOpen,
-    setSearchTerm,
-    setRowsPerPage,
     paginatedData,
+    columns,
     selectedRows,
+    handleRowSelect,
+    handleSelectAll,
     searchTerm,
+    setSearchTerm,
     selectedBrands,
+    handleBrandToggle,
+    handleExport,
     currentPage,
+    totalPages,
     setCurrentPage,
     rowsPerPage,
-    setIsEditModalOpen,
-    editedData,
+    setRowsPerPage,
   };
 };

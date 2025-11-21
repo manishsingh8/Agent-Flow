@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import EditIcon from "../../assets/images/edit-2.png";
+import { Search } from "lucide-react";
+import { Input } from "../ui/input";
 
 export interface Column<T> {
   key: keyof T;
@@ -57,8 +59,8 @@ export function DataTable<T extends object = Record<string, unknown>>({
   onRowSelect,
   onSelectAll,
   searchEnabled = false,
-  // searchTerm = "",
-  // onSearchChange,
+  searchTerm = "",
+  onSearchChange,
   filtersEnabled = false,
   // filterOptions = [],
   // selectedFilters = [],
@@ -83,7 +85,20 @@ export function DataTable<T extends object = Record<string, unknown>>({
       {/* Header: Search and Export */}
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
-          {/* {searchEnabled && onSearchChange && (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              // onClick={() => {
+              //   setShowPromptSearchInput((prev) => !prev);
+              //   onAdvancedSearch?.();
+              // }}
+            >
+              Prompt Search
+            </Button>
+          </div>
+          {searchEnabled && onSearchChange && (
             <div className="relative flex-1 max-w-sm shadow-none">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground shadow-none" />
               <Input
@@ -95,7 +110,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 }
               />
             </div>
-          )} */}
+          )}
 
           <div className="flex gap-2">
             {showEditButton && (

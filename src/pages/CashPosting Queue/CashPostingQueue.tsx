@@ -1,11 +1,11 @@
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
-import { useCashPostingLogic } from "./CashPosting.hook";
+import { useCashPostingQueueLogic } from "./CashPostingQueue.hook";
 import { BRANDS } from "@/constants/TableData";
 import { useState } from "react";
 import { Dialog } from "@/components/ui/dialog";
 
-const CashPostingPage = () => {
+const CashPostingQueue = () => {
   const {
     toggle,
     setToggle,
@@ -28,7 +28,7 @@ const CashPostingPage = () => {
     setCurrentPage,
     rowsPerPage,
     setRowsPerPage,
-  } = useCashPostingLogic();
+  } = useCashPostingQueueLogic();
 
   const [open, setOpen] = useState(false);
   return (
@@ -39,10 +39,10 @@ const CashPostingPage = () => {
           className="text-[20px] font-[600] text-[#0A0A0A]"
           onClick={() => setOpen(true)}
         >
-          Cash Posting Report
+          Cash Posting Queue
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#249563]">Cash Posting Report</span>
+          <span className="text-sm text-[#249563]">Cash Posting Queue</span>
         </div>
       </div>
       {/* Filter/Search */}
@@ -97,4 +97,4 @@ const CashPostingPage = () => {
   );
 };
 
-export default CashPostingPage;
+export default CashPostingQueue;
