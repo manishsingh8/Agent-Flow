@@ -49,9 +49,9 @@ interface FilterSearchBarProps {
 }
 
 export function FilterSearchBar({
-  // toggleOptions = [],
-  // selectedToggle,
-  // onToggleChange,
+  toggleOptions = [],
+  selectedToggle,
+  onToggleChange,
 
   enableDateRange,
   fromDate,
@@ -177,7 +177,7 @@ export function FilterSearchBar({
         {/* ------- Prompt Search -------- */}
         {showAdvancedSearch && (
           <div className="flex items-center gap-2">
-            {/* <Button
+            <Button
               variant="outline"
               size="sm"
               className="text-xs"
@@ -187,7 +187,7 @@ export function FilterSearchBar({
               }}
             >
               Prompt Search
-            </Button> */}
+            </Button>
 
             {showPromptSearchInput && (
               <Input

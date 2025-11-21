@@ -8,8 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import EditIcon from "../../assets/images/edit-2.png";
-import { Search } from "lucide-react";
-import { Input } from "../ui/input";
+// import { Search } from "lucide-react";
+// import { Input } from "../ui/input";
 
 export interface Column<T> {
   key: keyof T;
@@ -59,8 +59,8 @@ export function DataTable<T extends object = Record<string, unknown>>({
   onRowSelect,
   onSelectAll,
   searchEnabled = false,
-  searchTerm = "",
-  onSearchChange,
+  // searchTerm = "",
+  // onSearchChange,
   filtersEnabled = false,
   // filterOptions = [],
   // selectedFilters = [],
@@ -85,7 +85,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
       {/* Header: Search and Export */}
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -110,7 +110,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 }
               />
             </div>
-          )}
+          )} */}
 
           <div className="flex gap-2">
             {showEditButton && (
