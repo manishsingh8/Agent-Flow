@@ -1,4 +1,4 @@
-import RightArrow from "../../assets/icons/right-arrow.svg";
+// import RightArrow from "../../assets/icons/right-arrow.svg";
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import { paymentCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
@@ -53,12 +53,12 @@ const Payment = () => {
       {/* Header */}
       <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
         <div className="text-[20px] font-[600] text-[#0A0A0A]">
-          Unreconciled Payments
+          Variance Queue
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#737373]">Unreconciled Payments</span>
-          <img src={RightArrow} alt="right-arrow" className="mt-[6px]" />
-          <span className="text-sm text-[#249563]">List</span>
+          <span className="text-sm text-[#737373]">Variance Queue</span>
+          {/* <img src={RightArrow} alt="right-arrow" className="mt-[6px]" />
+          <span className="text-sm text-[#249563]">List</span> */}
         </div>
       </div>
 

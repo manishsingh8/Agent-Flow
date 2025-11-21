@@ -31,7 +31,6 @@ const CashPostingPage = () => {
   } = useCashPostingLogic();
 
   const [open, setOpen] = useState(false);
-  console.log(open, "open");
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       {/* Header */}
@@ -40,10 +39,10 @@ const CashPostingPage = () => {
           className="text-[20px] font-[600] text-[#0A0A0A]"
           onClick={() => setOpen(true)}
         >
-          Cash Posting Page
+          Cash Posting Report
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#249563]">Cash Posting Page</span>
+          <span className="text-sm text-[#249563]">Cash Posting Report</span>
         </div>
       </div>
       {/* Filter/Search */}
