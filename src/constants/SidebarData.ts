@@ -1,13 +1,13 @@
 import {
   AudioWaveform,
-  BookOpen,
+  // BookOpen,
   Bot,
   Command,
-  Frame,
+  // Frame,
   GalleryVerticalEnd,
-  Map,
+  // Map,
   PieChart,
-  Settings2,
+  // Settings2,
   House,
 } from "lucide-react";
 
@@ -60,32 +60,32 @@ export const SIDEBAR_DATA = {
       url: "/cash-posting-queue",
       icon: Bot,
     },
-    {
-      title: "Cash Management",
-      url: "/cash-management",
-      icon: BookOpen,
-    },
-    {
-      title: "Team",
-      url: "/team",
-      icon: Settings2,
-    },
+    // {
+    //   title: "Cash Management",
+    //   url: "/cash-management",
+    //   icon: BookOpen,
+    // },
+    // {
+    //   title: "Team",
+    //   url: "/team",
+    //   icon: Settings2,
+    // },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "/data-library",
-      icon: Frame,
-    },
-    {
-      name: "Reports",
-      url: "/reports",
-      icon: PieChart,
-    },
-    {
-      name: "Word Assistant",
-      url: "/word-assistant",
-      icon: Map,
-    },
-  ],
+  // documents: [
+  //   {
+  //     name: "Data Library",
+  //     url: "/data-library",
+  //     icon: Frame,
+  //   },
+  //   {
+  //     name: "Reports",
+  //     url: "/reports",
+  //     icon: PieChart,
+  //   },
+  //   {
+  //     name: "Word Assistant",
+  //     url: "/word-assistant",
+  //     icon: Map,
+  //   },
+  // ],
 };
