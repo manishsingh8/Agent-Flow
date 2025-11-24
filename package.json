@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start":"pnpm run dev",
-    "dev": "vite",
+    "start": "pnpm run dev",
+    "dev": "vite --port 3001",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -28,6 +28,7 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.5",
     "reactflow": "^11.11.4",
+    "recharts": "^3.5.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.17"
   },
