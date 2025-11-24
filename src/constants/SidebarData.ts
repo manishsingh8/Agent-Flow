@@ -41,7 +41,7 @@ export const SIDEBAR_DATA = {
       icon: House,
       items: [
         {
-          title: "RCA Dashboard",
+          title: "RCM Dashboard",
           url: "/dashboard/dashboard1",
         },
         {
