@@ -66,7 +66,7 @@ export default function KpiCard({
   return (
     <Card className={cn("rounded-lg p-0", className)}>
       <CardHeader className="flex flex-row items-start justify-between space-y-0 p-4 pb-2">
-        <p  className="text-sm font-medium">
+        <p className="text-sm font-medium">
           {title}
         </p>
         <div className="mt-0">{renderIcon()}</div>

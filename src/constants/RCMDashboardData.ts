@@ -78,3 +78,138 @@ export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
     },
   ];
 }
+
+
+export interface UserProductivity {
+  userId: string;
+  userName: string;
+  tasksCompleted: number;
+  avgTimeToResolution: number; // hours
+  team: string;
+  role: string;
+}
+
+
+export const userProductivityData: UserProductivity[] = [
+  {
+    userId: "user-5",
+    userName: "Pamela Cruz",
+    tasksCompleted: 214,
+    avgTimeToResolution: 14.4,
+    team: "Denials",
+    role: "Specialist",
+  },
+  {
+    userId: "user-1",
+    userName: "Logan Roberts",
+    tasksCompleted: 208,
+    avgTimeToResolution: 15.9,
+    team: "Denials",
+    role: "Senior Specialist",
+  },
+  {
+    userId: "user-3",
+    userName: "Joshua Gonzalez",
+    tasksCompleted: 165,
+    avgTimeToResolution: 15.6,
+    team: "Denials",
+    role: "Specialist",
+  },
+  {
+    userId: "user-4",
+    userName: "Christian Ramos",
+    tasksCompleted: 142,
+    avgTimeToResolution: 15.5,
+    team: "Denials",
+    role: "Specialist",
+  },
+  {
+    userId: "user-2",
+    userName: "Shirley Rogers",
+    tasksCompleted: 135,
+    avgTimeToResolution: 12.7,
+    team: "Denials",
+    role: "Senior Specialist",
+  },
+  {
+    userId: "user-6",
+    userName: "Pamela Turner",
+    tasksCompleted: 206,
+    avgTimeToResolution: 22.1,
+    team: "Prior Auth",
+    role: "Senior Specialist",
+  },
+  {
+    userId: "user-8",
+    userName: "Laura Harris",
+    tasksCompleted: 185,
+    avgTimeToResolution: 27.1,
+    team: "Prior Auth",
+    role: "Specialist",
+  },
+  {
+    userId: "user-10",
+    userName: "Tyler Nelson",
+    tasksCompleted: 182,
+    avgTimeToResolution: 28.2,
+    team: "Prior Auth",
+    role: "Specialist",
+  },
+  {
+    userId: "user-9",
+    userName: "Eugene Morris",
+    tasksCompleted: 168,
+    avgTimeToResolution: 25.9,
+    team: "Prior Auth",
+    role: "Specialist",
+  },
+  {
+    userId: "user-7",
+    userName: "William Richardson",
+    tasksCompleted: 134,
+    avgTimeToResolution: 22.2,
+    team: "Prior Auth",
+    role: "Senior Specialist",
+  },
+  {
+    userId: "user-11",
+    userName: "Rebecca Kim",
+    tasksCompleted: 315,
+    avgTimeToResolution: 10.3,
+    team: "A/R Follow-up",
+    role: "Senior Specialist",
+  },
+  {
+    userId: "user-15",
+    userName: "Janet Ward",
+    tasksCompleted: 309,
+    avgTimeToResolution: 9,
+    team: "A/R Follow-up",
+    role: "Specialist",
+  },
+  {
+    userId: "user-13",
+    userName: "Melissa Smith",
+    tasksCompleted: 264,
+    avgTimeToResolution: 10.3,
+    team: "A/R Follow-up",
+    role: "Specialist",
+  },
+  {
+    userId: "user-14",
+    userName: "Sara Stewart",
+    tasksCompleted: 262,
+    avgTimeToResolution: 9.5,
+    team: "A/R Follow-up",
+    role: "Specialist",
+  },
+  {
+    userId: "user-12",
+    userName: "Alan Bailey",
+    tasksCompleted: 239,
+    avgTimeToResolution: 8.3,
+    team: "A/R Follow-up",
+    role: "Senior Specialist",
+  },
+];
+
