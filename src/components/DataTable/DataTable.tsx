@@ -7,23 +7,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import EditIcon from "../../assets/images/edit-2.png";
-// import { Search } from "lucide-react";
-// import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
+import {
+  X,
+  Search,
+  User,
+  Zap,
+  UserCircle,
+  Edit,
+  // Eye,
+  // Trash2,
+} from "lucide-react";
+import { useState } from "react";
 
 export interface Column<T> {
   key: keyof T;
   label: string;
   render?: (value: unknown, row: T) => React.ReactNode;
-  className?: string; // header classes
-  bodyClassName?: string; //  NEW: body-only class
-  conditionalClassName?: (value: unknown, row: T) => string; // NEW: dynamic class
+  className?: string;
+  bodyClassName?: string;
+  conditionalClassName?: (value: unknown, row: T) => string;
+}
+
+export interface AssignmentUser {
+  id: string;
+  name: string;
+  avatar?: string;
 }
 
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
-  selectable?: boolean; // show checkboxes
+  selectable?: boolean;
   selectedRows?: Set<string>;
   onRowSelect?: (id: string) => void;
   onSelectAll?: () => void;
@@ -36,7 +52,7 @@ interface DataTableProps<T> {
   onFilterChange?: (value: string) => void;
   exportEnabled?: boolean;
   onExport?: () => void;
-  idKey?: keyof T; // key to use for unique id
+  idKey?: keyof T;
   pageInfo?: {
     currentPage: number;
     totalPages: number;
@@ -49,6 +65,16 @@ interface DataTableProps<T> {
     enabled?: boolean;
     onEditClick?: () => void;
   };
+  assignmentFeature?: {
+    enabled: boolean;
+    onAssign?: (userId: string, selectedRowIds: string[]) => void;
+    users?: AssignmentUser[];
+    quickActions?: boolean;
+    currentUserId?: string;
+    onChangeStatus?: (selectedRowIds: string[]) => void;
+    onWatchOptions?: (selectedRowIds: string[]) => void;
+    onDelete?: (selectedRowIds: string[]) => void;
+  };
 }
 
 export function DataTable<T extends object = Record<string, unknown>>({
@@ -59,86 +85,96 @@ export function DataTable<T extends object = Record<string, unknown>>({
   onRowSelect,
   onSelectAll,
   searchEnabled = false,
-  // searchTerm = "",
-  // onSearchChange,
   filtersEnabled = false,
-  // filterOptions = [],
-  // selectedFilters = [],
-  // onFilterChange,
   exportEnabled = false,
   onExport,
   idKey = "id" as keyof T,
   pageInfo,
   editRow,
+  assignmentFeature,
 }: DataTableProps<T>) {
+  const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const hasSelectedRows = selectedRows.size > 0;
   const showEditButton = editRow?.enabled && selectable && hasSelectedRows;
+  const showActionBar =
+    assignmentFeature?.enabled && selectable && hasSelectedRows;
 
   const handleEditClick = () => {
-    if (selectedRows.size > 0 && editRow?.onEditClick) {
-      editRow.onEditClick();
+    if (selectedRows.size > 0) {
+      if (editRow?.onEditClick) {
+        editRow.onEditClick();
+      }
+      if (assignmentFeature?.enabled) {
+        setIsAssignmentModalOpen(true);
+      }
     }
   };
 
+  const handleAssignUser = (userId: string) => {
+    if (assignmentFeature?.onAssign) {
+      assignmentFeature.onAssign(userId, Array.from(selectedRows));
+    }
+    setIsAssignmentModalOpen(false);
+    setSearchQuery("");
+  };
+
+  const handleChangeStatus = () => {
+    if (assignmentFeature?.onChangeStatus) {
+      assignmentFeature.onChangeStatus(Array.from(selectedRows));
+    }
+  };
+
+  // const handleWatchOptions = () => {
+  //   if (assignmentFeature?.onWatchOptions) {
+  //     assignmentFeature.onWatchOptions(Array.from(selectedRows));
+  //   }
+  // };
+
+  // const handleDelete = () => {
+  //   if (assignmentFeature?.onDelete) {
+  //     assignmentFeature.onDelete(Array.from(selectedRows));
+  //   }
+  // };
+
+  const filteredUsers =
+    assignmentFeature?.users?.filter((user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Header: Search and Export */}
+    <div className="space-y-6 relative">
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
-          {/* <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-xs"
-              // onClick={() => {
-              //   setShowPromptSearchInput((prev) => !prev);
-              //   onAdvancedSearch?.();
-              // }}
-            >
-              Prompt Search
-            </Button>
-          </div>
-          {searchEnabled && onSearchChange && (
-            <div className="relative flex-1 max-w-sm shadow-none">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground shadow-none" />
-              <Input
-                placeholder="Search"
-                className="pl-10 shadow-none"
-                value={searchTerm}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  onSearchChange(e.target.value)
-                }
-              />
-            </div>
-          )} */}
-
           <div className="flex gap-2">
-            {showEditButton && (
+            {showEditButton && !showActionBar && (
               <Button
-                // variant="default"
-                className="bg-gray-[100] hover:bg-gray-100 text-[#474747] border-1 border-[#e5e5e5] cursor-pointer"
+                variant="outline"
                 onClick={handleEditClick}
+                data-testid="button-edit"
+                className="gap-2"
               >
-                <img src={EditIcon} alt="edit icon" />
+                <Edit className="w-4 h-4" />
                 Edit
               </Button>
             )}
-
-            {/* {filtersEnabled && onFilterChange && (
-              <Button
-                variant="outline"
-                className="text-green-600 border-none bg-green-50 cursor-pointer"
-              >
-                <img src={FilterIcon} alt="filter-icon" />
-                <span className="text-sm">Filters</span>
-              </Button>
-            )} */}
 
             {exportEnabled && onExport && (
               <Button
                 variant="default"
                 className="bg-[#249563] hover:bg-green-700"
                 onClick={onExport}
+                data-testid="button-export"
               >
                 Export
               </Button>
@@ -147,32 +183,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
         </div>
       )}
 
-      {/* Filter Buttons */}
-      {/* {filtersEnabled && filterOptions.length > 0 && onFilterChange && (
-        <div className="flex flex-wrap gap-2">
-          {filterOptions.map((option) => (
-            <Button
-              key={option}
-              variant={selectedFilters.includes(option) ? "default" : "outline"}
-              size="sm"
-              className={
-                selectedFilters.includes(option)
-                  ? "bg-[rgba(36,149,99,0.1)] border border-green-700 text-[#249563] hover:bg-[rgba(36,149,99,0.3)] text-xs"
-                  : "border-gray-300 hover:bg-gray-50 text-xs"
-              }
-              onClick={() => onFilterChange(option)}
-            >
-              <img
-                src={selectedFilters.includes(option) ? CircleTick : CirclePlus}
-                alt="tick-icon"
-              />
-              {option}
-            </Button>
-          ))}
-        </div>
-      )} */}
-
-      {/* Table */}
       <div className="rounded-lg border border-border overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-50">
@@ -186,6 +196,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                     }
                     onChange={onSelectAll}
                     className="w-4 h-4 cursor-pointer accent-green-600 bg-green-50 border-green-600"
+                    data-testid="checkbox-select-all"
                   />
                 </TableHead>
               )}
@@ -219,6 +230,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                           checked={selectedRows.has(rowId)}
                           onChange={() => onRowSelect(rowId)}
                           className="w-4 h-4 cursor-pointer accent-green-600 bg-green-50 border-green-600"
+                          data-testid={`checkbox-row-${rowId}`}
                         />
                       </TableCell>
                     )}
@@ -262,7 +274,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
         </Table>
       </div>
 
-      {/* Pagination Footer */}
       {pageInfo && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-border">
           <div className="text-xs text-muted-foreground">
@@ -279,6 +290,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                   pageInfo.onRowsPerPageChange(Number(e.target.value))
                 }
                 className="border border-border rounded px-2 py-1 text-xs bg-background cursor-pointer"
+                data-testid="select-rows-per-page"
               >
                 {(pageInfo.rowsPerPageOptions || [5, 10, 15]).map((opt) => (
                   <option key={opt} value={opt}>
@@ -296,6 +308,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 size="sm"
                 onClick={() => pageInfo.onPageChange(1)}
                 disabled={pageInfo.currentPage === 1}
+                data-testid="button-first-page"
               >
                 {"<<"}
               </Button>
@@ -306,6 +319,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                   pageInfo.onPageChange(Math.max(1, pageInfo.currentPage - 1))
                 }
                 disabled={pageInfo.currentPage === 1}
+                data-testid="button-prev-page"
               >
                 {"<"}
               </Button>
@@ -318,6 +332,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                   )
                 }
                 disabled={pageInfo.currentPage === pageInfo.totalPages}
+                data-testid="button-next-page"
               >
                 {">"}
               </Button>
@@ -326,12 +341,199 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 size="sm"
                 onClick={() => pageInfo.onPageChange(pageInfo.totalPages)}
                 disabled={pageInfo.currentPage === pageInfo.totalPages}
+                data-testid="button-last-page"
               >
                 {">>"}
               </Button>
             </div>
           </div>
         </div>
+      )}
+
+      {showActionBar && (
+        <div
+          className="absolute bottom-0 left-0 right-0 bg-background border-t border-border shadow-lg z-40 animate-in slide-in-from-bottom duration-200"
+          data-testid="action-bar"
+        >
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between gap-3">
+              <div
+                className="text-sm font-medium"
+                data-testid="text-selected-count"
+              >
+                {selectedRows.size} selected
+              </div>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="default"
+                  onClick={handleEditClick}
+                  className="gap-2"
+                  data-testid="button-edit-fields"
+                >
+                  <Edit className="w-4 h-4" />
+                  Edit fields
+                </Button>
+                <Button
+                  variant="outline"
+                  size="default"
+                  onClick={handleChangeStatus}
+                  className="gap-2"
+                  data-testid="button-change-status"
+                >
+                  <Zap className="w-4 h-4" />
+                  Change status
+                </Button>
+                {/* <Button
+                  variant="outline"
+                  size="default"
+                  onClick={handleWatchOptions}
+                  className="gap-2"
+                  data-testid="button-watch-options"
+                >
+                  <Eye className="w-4 h-4" />
+                  Watch options
+                </Button> */}
+                {/* <Button
+                  variant="outline"
+                  size="default"
+                  onClick={handleDelete}
+                  className="gap-2 text-destructive border-destructive hover:bg-destructive/10"
+                  data-testid="button-delete"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </Button> */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    // if (onSelectAll) onSelectAll();
+                  }}
+                  data-testid="button-close-action-bar"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isAssignmentModalOpen && assignmentFeature?.enabled && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-50 animate-in fade-in duration-200"
+            onClick={() => {
+              setIsAssignmentModalOpen(false);
+              setSearchQuery("");
+            }}
+            data-testid="overlay-assignment-modal"
+          />
+          <div
+            className="fixed top-0 right-0 bottom-0 w-96 bg-background shadow-xl z-50 animate-in slide-in-from-right duration-250 flex flex-col"
+            data-testid="modal-assignment"
+          >
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h2
+                className="text-base font-semibold"
+                data-testid="text-modal-title"
+              >
+                Assignee
+              </h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setIsAssignmentModalOpen(false);
+                  setSearchQuery("");
+                }}
+                data-testid="button-close-modal"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="p-6 flex-1 overflow-y-auto">
+              <div className="mb-6">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search users..."
+                    className="pl-10"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    data-testid="input-search-users"
+                  />
+                </div>
+              </div>
+
+              {assignmentFeature.quickActions !== false && (
+                <div className="space-y-2 mb-6 pb-6 border-b border-border">
+                  <button
+                    onClick={() => handleAssignUser("unassigned")}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-left"
+                    data-testid="button-assign-unassigned"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                      <User className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                    <span className="text-sm">Unassigned</span>
+                  </button>
+                  {/* <button
+                    onClick={() => handleAssignUser("automatic")}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-left"
+                    data-testid="button-assign-automatic"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                    <span className="text-sm">Automatic</span>
+                  </button> */}
+                  <button
+                    onClick={() => {
+                      if (assignmentFeature.currentUserId) {
+                        handleAssignUser(assignmentFeature.currentUserId);
+                      }
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-left"
+                    data-testid="button-assign-to-me"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                      <UserCircle className="w-4 h-4 text-primary-foreground" />
+                    </div>
+                    <span className="text-sm font-medium">Assign to me</span>
+                  </button>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <button
+                      key={user.id}
+                      onClick={() => handleAssignUser(user.id)}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-left"
+                      data-testid={`button-assign-user-${user.id}`}
+                    >
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarFallback className="text-xs">
+                          {getInitials(user.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-medium">{user.name}</span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground text-sm">
+                    No users found
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

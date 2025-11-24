@@ -10,6 +10,8 @@ import CashPostingQueue from "@/pages/CashPosting Queue/CashPostingQueue";
 import ReconciledReport from "@/pages/ReconciledReport/ReconciledReport";
 // import SettingsPage from "@/pages/settings/SettingsPage";
 import LoginPage from "@/pages/Login/Login";
+import Dashboard1 from "@/pages/RCADashboard/RCADashboard";
+import Dashboard2 from "@/pages/CDADashboard/CDADashboard";
 
 export const AppRoutes = () => {
   return (
@@ -26,6 +28,8 @@ export const AppRoutes = () => {
           <Route path="/cash-posting" element={<CashPostingPage />} />
           <Route path="/cash-posting-queue" element={<CashPostingQueue />} />
           <Route path="/reconciled-report" element={<ReconciledReport />} />
+          <Route path="/dashboard/dashboard1" element={<Dashboard1 />} />
+          <Route path="/dashboard/dashboard2" element={<Dashboard2 />} />
         </Route>
       </Route>
       {/* Catch-All */}

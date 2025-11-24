@@ -36,6 +36,21 @@ export const SIDEBAR_DATA = {
   ],
   navMain: [
     {
+      title: "Dashboard",
+      url: "#",
+      icon: House,
+      items: [
+        {
+          title: "RCA Dashboard",
+          url: "/dashboard/dashboard1",
+        },
+        {
+          title: "CDA Dashboard",
+          url: "/dashboard/dashboard2",
+        },
+      ],
+    },
+    {
       title: "LifeCycle",
       url: "/",
       icon: House,
@@ -60,32 +75,5 @@ export const SIDEBAR_DATA = {
       url: "/cash-posting-queue",
       icon: Bot,
     },
-    // {
-    //   title: "Cash Management",
-    //   url: "/cash-management",
-    //   icon: BookOpen,
-    // },
-    // {
-    //   title: "Team",
-    //   url: "/team",
-    //   icon: Settings2,
-    // },
   ],
-  // documents: [
-  //   {
-  //     name: "Data Library",
-  //     url: "/data-library",
-  //     icon: Frame,
-  //   },
-  //   {
-  //     name: "Reports",
-  //     url: "/reports",
-  //     icon: PieChart,
-  //   },
-  //   {
-  //     name: "Word Assistant",
-  //     url: "/word-assistant",
-  //     icon: Map,
-  //   },
-  // ],
 };

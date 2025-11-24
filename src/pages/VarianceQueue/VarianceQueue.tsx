@@ -6,9 +6,77 @@ import { usePaymentLogic } from "./VarianceQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
-
-// Dummy transactions for demonstration
 import { BRANDS } from "@/constants/TableData";
+
+interface Task {
+  id: string;
+  title: string;
+  status: string;
+  priority: string;
+  assignee: string;
+}
+
+const mockTasks: Task[] = [
+  {
+    id: "1",
+    title: "Design homepage mockup",
+    status: "In Progress",
+    priority: "High",
+    assignee: "John Doe",
+  },
+  {
+    id: "2",
+    title: "Implement authentication",
+    status: "To Do",
+    priority: "High",
+    assignee: "Jane Smith",
+  },
+  {
+    id: "3",
+    title: "Write API documentation",
+    status: "In Progress",
+    priority: "Medium",
+    assignee: "Bob Johnson",
+  },
+  {
+    id: "4",
+    title: "Fix mobile responsiveness",
+    status: "Done",
+    priority: "Low",
+    assignee: "Alice Brown",
+  },
+  {
+    id: "5",
+    title: "Add dark mode support",
+    status: "To Do",
+    priority: "Medium",
+    assignee: "Charlie Wilson",
+  },
+];
+
+const mockUsers: AssignmentUser[] = [
+  { id: "user-1", name: "John Doe", avatar: undefined },
+  { id: "user-2", name: "Jane Smith", avatar: undefined },
+  { id: "user-3", name: "Bob Johnson", avatar: undefined },
+  { id: "user-4", name: "Alice Brown", avatar: undefined },
+  { id: "user-5", name: "Charlie Wilson", avatar: undefined },
+];
+
+const columns: Column<Task>[] = [
+  { key: "title", label: "Task" },
+  {
+    key: "status",
+    label: "Status",
+    bodyClassName: "font-medium",
+    conditionalClassName: (value) => {
+      if (value === "Done") return "text-green-600";
+      if (value === "In Progress") return "text-blue-600";
+      return "text-muted-foreground";
+    },
+  },
+  { key: "priority", label: "Priority" },
+  { key: "assignee", label: "Assignee" },
+];
 
 const Payment = () => {
   const {
@@ -47,6 +115,22 @@ const Payment = () => {
     setIsEditModalOpen,
     editedData,
   } = usePaymentLogic();
+
+  const handleAssign = (userId: string, selectedRowIds: string[]) => {
+    console.log(`Assigned user ${userId} to tasks:`, selectedRowIds);
+  };
+
+  const handleChangeStatus = (selectedRowIds: string[]) => {
+    console.log("Change status for tasks:", selectedRowIds);
+  };
+
+  const handleWatchOptions = (selectedRowIds: string[]) => {
+    console.log("Watch options for tasks:", selectedRowIds);
+  };
+
+  const handleDelete = (selectedRowIds: string[]) => {
+    console.log("Delete tasks:", selectedRowIds);
+  };
 
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -105,30 +189,30 @@ const Payment = () => {
         <DataTable
           data={paginatedData}
           columns={columns}
-          selectable
+          selectable={true}
           selectedRows={selectedRows}
           onRowSelect={handleRowSelect}
           onSelectAll={handleSelectAll}
-          searchEnabled
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          filtersEnabled
-          filterOptions={BRANDS}
-          selectedFilters={selectedBrands}
-          onFilterChange={handleBrandToggle}
-          exportEnabled
+          exportEnabled={true}
           onExport={handleExport}
           idKey="id"
           pageInfo={{
             currentPage,
-            totalPages,
+            totalPages: Math.ceil(mockTasks.length / rowsPerPage),
             onPageChange: setCurrentPage,
             rowsPerPage,
             onRowsPerPageChange: setRowsPerPage,
+            rowsPerPageOptions: [5, 10, 15],
           }}
-          editRow={{
+          assignmentFeature={{
             enabled: true,
-            onEditClick: handleEditClick,
+            onAssign: handleAssign,
+            users: mockUsers,
+            quickActions: true,
+            currentUserId: "user-1",
+            onChangeStatus: handleChangeStatus,
+            onWatchOptions: handleWatchOptions,
+            onDelete: handleDelete,
           }}
         />
       </div>
