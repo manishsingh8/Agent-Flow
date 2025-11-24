@@ -12,6 +12,7 @@ import ReconciledReport from "@/pages/ReconciledReport/ReconciledReport";
 import LoginPage from "@/pages/Login/Login";
 import Dashboard1 from "@/pages/RCADashboard/RCADashboard";
 import Dashboard2 from "@/pages/CDADashboard/CDADashboard";
+import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
 
 export const AppRoutes = () => {
   return (
@@ -30,6 +31,10 @@ export const AppRoutes = () => {
           <Route path="/reconciled-report" element={<ReconciledReport />} />
           <Route path="/dashboard/dashboard1" element={<Dashboard1 />} />
           <Route path="/dashboard/dashboard2" element={<Dashboard2 />} />
+          <Route
+            path="/remittance-processing"
+            element={<RemittanceProcessing />}
+          />
         </Route>
       </Route>
       {/* Catch-All */}

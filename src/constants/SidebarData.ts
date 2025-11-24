@@ -9,6 +9,8 @@ import {
   PieChart,
   // Settings2,
   House,
+  BrainCircuit,
+  WavesLadder,
 } from "lucide-react";
 
 export const SIDEBAR_DATA = {
@@ -53,7 +55,7 @@ export const SIDEBAR_DATA = {
     {
       title: "LifeCycle",
       url: "/",
-      icon: House,
+      icon: WavesLadder,
     },
     {
       title: "Variance Queue",
@@ -74,6 +76,11 @@ export const SIDEBAR_DATA = {
       title: "Cash Posting Queue",
       url: "/cash-posting-queue",
       icon: Bot,
+    },
+    {
+      title: "Remittance Processing",
+      url: "/remittance-processing",
+      icon: BrainCircuit,
     },
   ],
 };
