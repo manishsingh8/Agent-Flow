@@ -213,3 +213,43 @@ export const userProductivityData: UserProductivity[] = [
   },
 ];
 
+export type WorkQueueDataPoint = {
+  date: string; 
+  "New Items": number;
+  "Completed Items": number;
+  "Rollover Items": number;
+};
+
+export const workQueueData: WorkQueueDataPoint[] = [
+  { date: "2025-10-26", "New Items": 275, "Completed Items": 239, "Rollover Items": 55 },
+  { date: "2025-10-27", "New Items": 187, "Completed Items": 283, "Rollover Items": 42 },
+  { date: "2025-10-28", "New Items": 264, "Completed Items": 260, "Rollover Items": 45 },
+  { date: "2025-10-29", "New Items": 243, "Completed Items": 221, "Rollover Items": 47 },
+  { date: "2025-10-30", "New Items": 222, "Completed Items": 202, "Rollover Items": 42 },
+  { date: "2025-10-31", "New Items": 86,  "Completed Items": 79,  "Rollover Items": 19 },
+  { date: "2025-11-01", "New Items": 105, "Completed Items": 96,  "Rollover Items": 18 },
+  { date: "2025-11-02", "New Items": 208, "Completed Items": 175, "Rollover Items": 60 },
+  { date: "2025-11-03", "New Items": 237, "Completed Items": 263, "Rollover Items": 41 },
+  { date: "2025-11-04", "New Items": 237, "Completed Items": 294, "Rollover Items": 59 },
+  { date: "2025-11-05", "New Items": 244, "Completed Items": 227, "Rollover Items": 51 },
+  { date: "2025-11-06", "New Items": 286, "Completed Items": 265, "Rollover Items": 56 },
+  { date: "2025-11-07", "New Items": 111, "Completed Items": 107, "Rollover Items": 18 },
+  { date: "2025-11-08", "New Items": 77,  "Completed Items": 115, "Rollover Items": 20 },
+  { date: "2025-11-09", "New Items": 232, "Completed Items": 220, "Rollover Items": 49 },
+  { date: "2025-11-10", "New Items": 208, "Completed Items": 188, "Rollover Items": 51 },
+  { date: "2025-11-11", "New Items": 263, "Completed Items": 230, "Rollover Items": 54 },
+  { date: "2025-11-12", "New Items": 283, "Completed Items": 188, "Rollover Items": 46 },
+  { date: "2025-11-13", "New Items": 218, "Completed Items": 311, "Rollover Items": 62 },
+  { date: "2025-11-14", "New Items": 104, "Completed Items": 106, "Rollover Items": 21 },
+  { date: "2025-11-15", "New Items": 89,  "Completed Items": 99,  "Rollover Items": 17 },
+  { date: "2025-11-16", "New Items": 217, "Completed Items": 272, "Rollover Items": 45 },
+  { date: "2025-11-17", "New Items": 261, "Completed Items": 251, "Rollover Items": 56 },
+  { date: "2025-11-18", "New Items": 277, "Completed Items": 277, "Rollover Items": 63 },
+  { date: "2025-11-19", "New Items": 283, "Completed Items": 275, "Rollover Items": 44 },
+  { date: "2025-11-20", "New Items": 252, "Completed Items": 319, "Rollover Items": 60 },
+  { date: "2025-11-21", "New Items": 117, "Completed Items": 94,  "Rollover Items": 21 },
+  { date: "2025-11-22", "New Items": 92,  "Completed Items": 80,  "Rollover Items": 26 },
+  { date: "2025-11-23", "New Items": 220, "Completed Items": 319, "Rollover Items": 53 },
+  { date: "2025-11-24", "New Items": 293, "Completed Items": 314, "Rollover Items": 45 },
+];
+
