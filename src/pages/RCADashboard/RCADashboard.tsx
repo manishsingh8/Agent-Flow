@@ -3,6 +3,7 @@ import { AreaChart } from "lucide-react";
 import useRCMDashboard from "./RCMDashboard.hook";
 import { Card, CardContent, CardHeader } from "@/components/KpiCard/UI/Card";
 import UserProductivityTable from "@/components/UserProductivityTable/UserProductivityTable";
+import WorkQueueVolumeChart from "@/components/WorkQueueVolumeChart/WorkQueueVolumeChart";
 
 const Dashboard1 = () => {
   const { kpiCards, loading } = useRCMDashboard();
@@ -62,7 +63,7 @@ const Dashboard1 = () => {
                   />
                 </CardContent>
               </Card>
-              {/* <WorkQueueVolumeChart data={workQueueData} /> */}
+              <WorkQueueVolumeChart  />
             </div>
     </div>
   );
