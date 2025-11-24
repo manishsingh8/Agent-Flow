@@ -4,6 +4,7 @@ import useRCMDashboard from "./RCMDashboard.hook";
 import { Card, CardContent, CardHeader } from "@/components/KpiCard/UI/Card";
 import UserProductivityTable from "@/components/UserProductivityTable/UserProductivityTable";
 import WorkQueueVolumeChart from "@/components/WorkQueueVolumeChart/WorkQueueVolumeChart";
+import OperationalView from "@/components/OperationalView/OperationalView";
 
 const Dashboard1 = () => {
   const { kpiCards, loading } = useRCMDashboard();
@@ -65,6 +66,7 @@ const Dashboard1 = () => {
               </Card>
               <WorkQueueVolumeChart  />
             </div>
+            <OperationalView />
     </div>
   );
 };
