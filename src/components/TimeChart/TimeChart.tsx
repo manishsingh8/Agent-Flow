@@ -19,8 +19,8 @@ const data = [
 
 const ExceptionReasonsChart = () => {
   const colors = {
-    high: "#166F4C", // darkest green, high severity
-    medium: "#249563", // base green
+    high: "#DB3C57FF", // darkest green, high severity
+    medium: "#F4B376FF", // base green
     low: "#6CCBA2", // light green, low severity
   };
 
@@ -95,16 +95,16 @@ const ExceptionReasonsChart = () => {
 
           <div className="grid grid-cols-3 gap-4 mt-6">
             <div className="p-3 bg-red-50 dark:bg-red-950 rounded-lg">
-              <div className="text-2xl font-bold text-red-600">82</div>
+              <div className="text-2xl font-bold text-rose-500">82</div>
               <div className="text-xs text-red-600/70">High Priority</div>
             </div>
             <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded-lg">
-              <div className="text-2xl font-bold text-orange-600">55</div>
+              <div className="text-2xl font-bold text-amber-500">55</div>
               <div className="text-xs text-orange-600/70">Medium Priority</div>
             </div>
-            <div className="p-3 bg-amber-50 dark:bg-amber-950 rounded-lg">
-              <div className="text-2xl font-bold text-amber-600">43</div>
-              <div className="text-xs text-amber-600/70">Low Priority</div>
+            <div className="p-3 bg-[#CAF1E0FF] dark:bg-amber-950 rounded-lg">
+              <div className="text-2xl font-bold text-[#249563]">43</div>
+              <div className="text-xs text-[#249563]">Low Priority</div>
             </div>
           </div>
         </div>
