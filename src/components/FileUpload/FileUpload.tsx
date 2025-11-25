@@ -3,7 +3,7 @@ import { useState } from "react";
 const FileUpload = () => {
   const [fileName, setFileName] = useState("No file chosen");
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     setFileName(file ? file.name : "No file chosen");
   };
