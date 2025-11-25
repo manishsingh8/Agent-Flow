@@ -10,8 +10,10 @@ import {
   type UserProductivity,
 } from "@/constants/RCMDashboardData";
 import UserAssignmentsDialog from "../UserAssignment/UserAssignment";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductivityTable() {
+  const navigate = useNavigate();
   const [isAssignmentsModalOpen, setAssignmentsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProductivity | null>(
     null
@@ -72,6 +74,7 @@ export default function ProductivityTable() {
   };
 
   const handleViewAIPerformance = (userId: string) => {
+    navigate(`/ai-performance/${userId}`);
     console.log("View AI performance for", userId);
   };
 
@@ -132,6 +135,7 @@ export default function ProductivityTable() {
               size="sm"
               onClick={() => handleUserClick(row.userId)}
               aria-label={`View assignments for ${row.userName}`}
+              className="cursor-pointer"
             >
               View Assignments
             </Button>
