@@ -92,10 +92,12 @@ export function DataTable<T extends object = Record<string, unknown>>({
   pageInfo,
   editRow,
   assignmentFeature,
+  searchTerm = "",
+  onSearchChange,
 }: DataTableProps<T>) {
   const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
   const hasSelectedRows = selectedRows.size > 0;
   const showEditButton = editRow?.enabled && selectable && hasSelectedRows;
   const showActionBar =
@@ -156,6 +158,32 @@ export function DataTable<T extends object = Record<string, unknown>>({
     <div className="space-y-6 relative">
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs h-9"
+              onClick={() => {
+                setShowPromptSearchInput((prev) => !prev);
+                // onAdvancedSearch?.();
+              }}
+            >
+              Prompt Search
+            </Button>
+          </div>
+          {searchEnabled && onSearchChange && showPromptSearchInput && (
+            <div className="relative flex-1 max-w-sm shadow-none">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground shadow-none" />
+              <Input
+                placeholder="Search"
+                className="pl-10 shadow-none"
+                value={searchTerm}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onSearchChange(e.target.value)
+                }
+              />
+            </div>
+          )}
           <div className="flex gap-2">
             {showEditButton && !showActionBar && (
               <Button

@@ -194,6 +194,9 @@ const Payment = () => {
           onRowSelect={handleRowSelect}
           onSelectAll={handleSelectAll}
           exportEnabled={true}
+          searchEnabled
+          searchTerm={""}
+          onSearchChange={() => {}}
           onExport={handleExport}
           idKey="id"
           pageInfo={{
