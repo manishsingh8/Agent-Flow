@@ -6,7 +6,7 @@ import UserProductivityTable from "@/components/UserProductivityTable/UserProduc
 import WorkQueueVolumeChart from "@/components/WorkQueueVolumeChart/WorkQueueVolumeChart";
 import OperationalView from "@/components/OperationalView/OperationalView";
 
-const Dashboard1 = () => {
+const RCMDashboard = () => {
   const { kpiCards, loading } = useRCMDashboard();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -69,4 +69,4 @@ const Dashboard1 = () => {
   );
 };
 
-export default Dashboard1;
+export default RCMDashboard;

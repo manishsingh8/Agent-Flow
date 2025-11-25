@@ -10,7 +10,7 @@ import CashPostingQueue from "@/pages/CashPosting Queue/CashPostingQueue";
 import ReconciledReport from "@/pages/ReconciledReport/ReconciledReport";
 // import SettingsPage from "@/pages/settings/SettingsPage";
 import LoginPage from "@/pages/Login/Login";
-import Dashboard1 from "@/pages/RCADashboard/RCADashboard";
+import Dashboard1 from "@/pages/RCADashboard/RCMDashboard";
 import Dashboard2 from "@/pages/CDADashboard/CDADashboard";
 import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
 
