@@ -9,9 +9,20 @@ import {
   userProductivityData,
   type UserProductivity,
 } from "@/constants/RCMDashboardData";
+import UserAssignmentsDialog from "../UserAssignment/UserAssignment";
 
 export default function ProductivityTable() {
-  const [, setAssignmentOpen] = useState(false);
+  const [isAssignmentsModalOpen, setAssignmentsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserProductivity | null>(
+    null
+  );
+
+  // assignments shown inside dialog (start empty — you'll populate later)
+  const [userAssignments, setUserAssignments] = useState<any[]>([]); // replace `any` with your AggregatedWorklistItem type when available
+  const [allUsers, setAllUsers] = useState<any[]>([]); // empty now; you'll load/provide later
+
+  // UI state for reassigning
+  const [isReassigning, setIsReassigning] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const rowsPerPageOptions = [5, 10, 15];
@@ -23,12 +34,44 @@ export default function ProductivityTable() {
   );
   // handlers used by action buttons
   const handleUserClick = (userId: string) => {
-    // implement navigation or modal show
-    console.log("View assignments for", userId);
+    setSelectedUser({ userId, userName: "" }); // you can set userName if available
+
+    setUserAssignments([]); // TODO: replace with fetch/load from API when ready
+
+    setAllUsers([]);
+    setAssignmentsModalOpen(true);
+  };
+
+  const handleModalOpenChange = (open: boolean) => {
+    if (!open) {
+      setSelectedUser(null);
+      setUserAssignments([]);
+    }
+    setAssignmentsModalOpen(open);
+  };
+
+  // called by dialog when a reassignment happens
+  const handleReassignTask = async (
+    task: any, // replace `any` with AggregatedWorklistItem type
+    fromUser: any,
+    toUser: any
+  ) => {
+    try {
+      setIsReassigning(true);
+
+      // TODO: call your API here to reassign
+      // await api.reassignTask(task.id, toUser.id);
+
+      // optimistic update: remove reassigned task from modal list
+      setUserAssignments((prev) => prev.filter((t) => t.id !== task.id));
+    } catch (err) {
+      console.error("Reassign failed", err);
+    } finally {
+      setIsReassigning(false);
+    }
   };
 
   const handleViewAIPerformance = (userId: string) => {
-    // implement navigation to AI performance
     console.log("View AI performance for", userId);
   };
 
@@ -176,6 +219,15 @@ export default function ProductivityTable() {
             console.log("Delete", selectedRowIds);
           },
         }}
+      />
+      <UserAssignmentsDialog
+        isOpen={isAssignmentsModalOpen}
+        onOpenChange={handleModalOpenChange}
+        user={selectedUser}
+        assignments={userAssignments}
+        allUsers={allUsers}
+        onReassign={handleReassignTask}
+        isReassigning={isReassigning}
       />
     </div>
   );

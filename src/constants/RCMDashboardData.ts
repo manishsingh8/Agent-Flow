@@ -30,6 +30,40 @@ export interface KpiCardItem {
   trend?: "up" | "down" | "neutral";
 }
 
+export type WorklistType =
+  | "Denial"
+  | "Prior Auth"
+  | "Unreconciled"
+  | "AR"
+  | "CDI"
+  | "Charge Audit"
+  | "Coding"
+  | "Credit Balance"
+  | "Financial Counseling"
+  | "Patient Statement"
+  | "AR Follow-up"
+  | "Coding Query";
+
+export interface AggregatedWorklistItem {
+  id: string;
+  worklistType: WorklistType;
+  type: WorklistType;
+  patientName: string;
+  priority: "High" | "Medium" | "Low";
+  assignedTo?: string;
+  dateCreated: string;
+  mrn: string;
+  age: number;
+  balance: number;
+  description: string;
+  dueDate: string;
+  link: string;
+  category?: string;
+  count?: number;
+  value?: number;
+  details?: string;
+}
+
 export const operationalMetrics: OperationalMetrics = {
   transactionPosting: {
     autoPostRate: 78.0, // "78.0%"
