@@ -1,6 +1,6 @@
 import FileUploadZone from "@/components/FileUploadZone/FileUploadZone";
 import { useState } from "react";
-import FileUpload from "@/components/FileUpload/FileUpload";
+// import FileUpload from "@/components/FileUpload/FileUpload";
 import { Button } from "@/components/ui/Button";
 import { BrainCircuit } from "lucide-react";
 
@@ -28,10 +28,10 @@ const RemittanceProcessing = () => {
         </div>
       </div>
       <div className="flex  gap-4 border-[1px] border-[#E6ECF0] p-4 rounded-lg">
-        <div className="flex flex-col justify-between w-[50%]">
+        <div className="flex flex-col justify-between w-[50%] gap-8">
           <div>
             <div className="font-[600]">ERA/EOB File</div>
-            <FileUpload />
+            {/* <FileUpload /> */}
             Upload the remittance file (X12 835, EOB). The system will match it
             against open payments and identify adjustments. An ERA file is
             required.

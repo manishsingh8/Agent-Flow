@@ -8,12 +8,10 @@ const Dashboard2 = () => {
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
         <div className="text-[20px] font-[600] text-[#0A0A0A]">
-          CDA Evaluation Dashboard
+          HCD Dashboard
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#737373]">
-            CDA Evaluation Dashboard
-          </span>
+          <span className="text-sm text-[#737373]">HCD Dashboard</span>
           {/* <img src={RightArrow} alt="right-arrow" className="mt-[6px]" />
           <span className="text-sm text-[#249563]">List</span> */}
         </div>
@@ -32,8 +30,8 @@ const Dashboard2 = () => {
         ))}
       </div>
       <div className="flex gap-4">
-        <ProcessingTimeChart />
         <ExceptionReasonsChart />
+        <ProcessingTimeChart />
       </div>
     </div>
   );

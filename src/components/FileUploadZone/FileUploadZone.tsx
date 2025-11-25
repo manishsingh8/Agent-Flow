@@ -12,7 +12,7 @@ interface FileUploadZoneProps {
 const FileUploadZone = ({
   onFileSelect,
   selectedFile,
-  accept = ".835,.eob,.txt,.x12",
+  accept = ".835,.eob,.x12",
   maxSize = 10 * 1024 * 1024,
 }: FileUploadZoneProps) => {
   const [isDragging, setIsDragging] = useState(false);

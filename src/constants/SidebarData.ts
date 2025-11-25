@@ -47,8 +47,8 @@ export const SIDEBAR_DATA = {
           url: "/dashboard/dashboard1",
         },
         {
-          title: "CDA Dashboard",
-          url: "/dashboard/dashboard2",
+          title: "HCD Dashboard",
+          url: "/dashboard/hcd-dashboard",
         },
       ],
     },
