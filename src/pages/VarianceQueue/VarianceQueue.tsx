@@ -6,7 +6,7 @@ import { usePaymentLogic } from "./VarianceQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
-import { BRANDS } from "@/constants/TableData";
+// import { BRANDS } from "@/constants/TableData";
 
 interface Task {
   id: string;
@@ -54,7 +54,7 @@ const mockTasks: Task[] = [
   },
 ];
 
-const mockUsers: AssignmentUser[] = [
+const mockUsers = [
   { id: "user-1", name: "John Doe", avatar: undefined },
   { id: "user-2", name: "Jane Smith", avatar: undefined },
   { id: "user-3", name: "Bob Johnson", avatar: undefined },
@@ -62,21 +62,21 @@ const mockUsers: AssignmentUser[] = [
   { id: "user-5", name: "Charlie Wilson", avatar: undefined },
 ];
 
-const columns: Column<Task>[] = [
-  { key: "title", label: "Task" },
-  {
-    key: "status",
-    label: "Status",
-    bodyClassName: "font-medium",
-    conditionalClassName: (value) => {
-      if (value === "Done") return "text-green-600";
-      if (value === "In Progress") return "text-blue-600";
-      return "text-muted-foreground";
-    },
-  },
-  { key: "priority", label: "Priority" },
-  { key: "assignee", label: "Assignee" },
-];
+// const columns: Column<Task>[] = [
+//   { key: "title", label: "Task" },
+//   {
+//     key: "status",
+//     label: "Status",
+//     bodyClassName: "font-medium",
+//     conditionalClassName: (value) => {
+//       if (value === "Done") return "text-green-600";
+//       if (value === "In Progress") return "text-blue-600";
+//       return "text-muted-foreground";
+//     },
+//   },
+//   { key: "priority", label: "Priority" },
+//   { key: "assignee", label: "Assignee" },
+// ];
 
 const Payment = () => {
   const {
@@ -96,19 +96,19 @@ const Payment = () => {
     handleEditCancel,
     handleEditSubmit,
     handleFieldChange,
-    handleEditClick,
+    // handleEditClick,
     handleExport,
-    handleBrandToggle,
+    // handleBrandToggle,
     handleSelectAll,
     handleRowSelect,
-    totalPages,
+    // totalPages,
     isEditModalOpen,
-    setSearchTerm,
+    // setSearchTerm,
     setRowsPerPage,
     paginatedData,
     selectedRows,
-    searchTerm,
-    selectedBrands,
+    // searchTerm,
+    // selectedBrands,
     currentPage,
     setCurrentPage,
     rowsPerPage,
