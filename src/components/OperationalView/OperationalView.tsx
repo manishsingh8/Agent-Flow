@@ -78,16 +78,15 @@ export default function OperationalView() {
         <div>
           <p className="text-lg font-semibold">Operational View</p>
           <p className="text-sm text-muted-foreground">
-            Comprehensive operational metrics — last updated:{" "}
-            {new Date(data.lastUpdated).toLocaleString()}
+           Comprehensive operational metrics for bank statements, remits, transaction posting, and reporting performance
           </p>
         </div>
       </CardHeader>
 
       <CardContent>
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 py-1 px-2 h-12 ">
+            <TabsTrigger value="overview" className="h-10">Overview</TabsTrigger>
             <TabsTrigger value="bank-statements">Bank Statements</TabsTrigger>
             <TabsTrigger value="remits">Remits</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
