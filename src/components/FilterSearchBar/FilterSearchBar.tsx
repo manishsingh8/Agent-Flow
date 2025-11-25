@@ -69,14 +69,14 @@ export function FilterSearchBar({
   selectedStatus,
   onStatusChange,
 
-  showAdvancedSearch,
-  promptSearchValue,
-  onPromptSearchChange,
-  onAdvancedSearch,
+  // showAdvancedSearch,
+  // promptSearchValue,
+  // onPromptSearchChange,
+  // onAdvancedSearch,
 }: FilterSearchBarProps) {
   const [payerOpen, setPayerOpen] = useState(false);
   const [statusOpen, setStatusOpen] = useState(false);
-  const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
+  // const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
 
   return (
     <div className="flex items-center justify-end gap-4 px-3 py-3 bg-white rounded-md">
@@ -175,7 +175,7 @@ export function FilterSearchBar({
         )}
 
         {/* ------- Prompt Search -------- */}
-        {showAdvancedSearch && (
+        {/* {showAdvancedSearch && (
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -199,7 +199,7 @@ export function FilterSearchBar({
               />
             )}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

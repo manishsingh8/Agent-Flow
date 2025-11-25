@@ -34,8 +34,6 @@ export function NavMain({
 
   const isActiveLink = (url: string) => location.pathname === url;
 
-  console.log(isActiveLink, "activelink", location.pathname);
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
