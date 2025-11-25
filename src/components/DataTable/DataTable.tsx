@@ -200,7 +200,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
             {exportEnabled && onExport && (
               <Button
                 variant="default"
-                className="bg-[#249563] hover:bg-green-700"
+                className="bg-[#249563] hover:bg-green-700 cursor-pointer"
                 onClick={onExport}
                 data-testid="button-export"
               >
