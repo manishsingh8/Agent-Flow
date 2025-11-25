@@ -13,6 +13,7 @@ import LoginPage from "@/pages/Login/Login";
 import Dashboard1 from "@/pages/RCMDashboard/RCMDashboard";
 import Dashboard2 from "@/pages/CDADashboard/CDADashboard";
 import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
+import AiPerformancePage from "@/pages/AiPerformance/AiPerformance";
 
 export const AppRoutes = () => {
   return (
@@ -35,6 +36,7 @@ export const AppRoutes = () => {
             path="/remittance-processing"
             element={<RemittanceProcessing />}
           />
+          <Route path="/ai-performance/:id" element={<AiPerformancePage />} />
         </Route>
       </Route>
       {/* Catch-All */}
