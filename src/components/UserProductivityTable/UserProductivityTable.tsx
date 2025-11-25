@@ -11,7 +11,7 @@ import {
 } from "@/constants/RCMDashboardData";
 
 export default function ProductivityTable() {
-  const [assignmentOpen, setAssignmentOpen] = useState(false);
+  const [, setAssignmentOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const rowsPerPageOptions = [5, 10, 15];
