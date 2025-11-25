@@ -48,25 +48,23 @@ const Dashboard1 = () => {
         )}
       </div>
 
-      { /* Productivity & WorkLoad */ }
+      {/* Productivity & WorkLoad */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <p  className="text-md font-medium">
-                    User Productivity & Workload
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <UserProductivityTable
-                    // data={productivityData}
-                    // onViewAssignments={handleViewAssignments}
-                  />
-                </CardContent>
-              </Card>
-              <WorkQueueVolumeChart  />
-            </div>
-            <OperationalView />
+      <div className="grid grid-cols-1 gap-4">
+        <Card>
+          <CardHeader>
+            <p className="text-md font-medium">User Productivity & Workload</p>
+          </CardHeader>
+          <CardContent>
+            <UserProductivityTable
+            // data={productivityData}
+            // onViewAssignments={handleViewAssignments}
+            />
+          </CardContent>
+        </Card>
+        <WorkQueueVolumeChart />
+      </div>
+      <OperationalView />
     </div>
   );
 };

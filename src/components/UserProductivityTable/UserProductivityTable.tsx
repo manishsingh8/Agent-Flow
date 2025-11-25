@@ -5,12 +5,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Link } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Column } from "@/components/DataTable/DataTable";
-import { userProductivityData, type UserProductivity } from "@/constants/RCMDashboardData";
-
+import {
+  userProductivityData,
+  type UserProductivity,
+} from "@/constants/RCMDashboardData";
 
 export default function ProductivityTable() {
   const [assignmentOpen, setAssignmentOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const rowsPerPageOptions = [5, 10, 15];
 
+  // derived
+  const totalPages = Math.max(
+    1,
+    Math.ceil(userProductivityData.length / rowsPerPage)
+  );
   // handlers used by action buttons
   const handleUserClick = (userId: string) => {
     // implement navigation or modal show
@@ -21,6 +31,10 @@ export default function ProductivityTable() {
     // implement navigation to AI performance
     console.log("View AI performance for", userId);
   };
+
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedData = userProductivityData.slice(start, end);
 
   const columns: Column<UserProductivity>[] = useMemo(
     () => [
@@ -55,7 +69,9 @@ export default function ProductivityTable() {
       {
         key: "tasksCompleted",
         label: "Tasks Completed",
-        render: (value) => <div className="text-sm font-medium">{String(value)}</div>,
+        render: (value) => (
+          <div className="text-sm font-medium">{String(value)}</div>
+        ),
       },
       {
         key: "avgTimeToResolution",
@@ -65,7 +81,7 @@ export default function ProductivityTable() {
       {
         key: "userId",
         label: "Actions",
-        // className: "text-center",
+        className: "text-center",
         render: (_value, row) => (
           <div className="flex items-center justify-center gap-2">
             <Button
@@ -95,9 +111,8 @@ export default function ProductivityTable() {
   return (
     <div>
       <DataTable<UserProductivity>
-        data={userProductivityData}
+        data={paginatedData}
         columns={columns}
-        // no selection, no pagination — render full list
         searchEnabled={true}
         // exportEnabled={true}
         // onExport={() => {
@@ -124,6 +139,20 @@ export default function ProductivityTable() {
         //   URL.revokeObjectURL(url);
         // }}
         idKey="userId"
+        pageInfo={{
+          currentPage,
+          totalPages,
+          onPageChange: (page: number) => {
+            const next = Math.max(1, Math.min(totalPages, page));
+            setCurrentPage(next);
+          },
+          rowsPerPage,
+          onRowsPerPageChange: (value: number) => {
+            setRowsPerPage(value);
+            setCurrentPage(1);
+          },
+          rowsPerPageOptions,
+        }}
         assignmentFeature={{
           enabled: true,
           onAssign: (userId, selectedRowIds) => {

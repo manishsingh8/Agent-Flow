@@ -24,34 +24,24 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import {
-  Activity,
-  FileText,
-  TrendingUp,
-  Clock,
-  DollarSign,
-  Zap,
-} from "lucide-react";
 import { rcmDashboardData } from "@/constants/RCMDashboardData";
 
 type ByDay = { day: string; count: number; amount: number; percentage: number };
 
-const CHART_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-];
+const COLORS = {
+  high: "#166F4C",
+  medium: "#249563",
+  low: "#6CCBA2",
+  alt1: "#1f7a4a",
+  alt2: "#2fa06a",
+};
 
+const piePalette = [COLORS.high, COLORS.medium, COLORS.low, COLORS.alt1, COLORS.alt2];
 const formatCurrency = (v: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v);
 
 const formatNumber = (v: number) => new Intl.NumberFormat("en-US").format(v);
 
-/**
- * Small helper table for day-of-week lists
- */
 function ByDayTable({ items }: { items: ByDay[] }) {
   return (
     <div className="overflow-x-auto">
@@ -170,14 +160,29 @@ export default function OperationalView() {
                       )}
                       margin={{ top: 8, right: 12, left: -12, bottom: 8 }}
                     >
+                      <defs>
+                        <linearGradient id="gradBank" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor={COLORS.high} stopOpacity={0.8} />
+                          <stop offset="95%" stopColor={COLORS.high} stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="gradRemit" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor={COLORS.medium} stopOpacity={0.8} />
+                          <stop offset="95%" stopColor={COLORS.medium} stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="gradPosting" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor={COLORS.low} stopOpacity={0.8} />
+                          <stop offset="95%" stopColor={COLORS.low} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="date" tickFormatter={(v) => formatShortDate(v)} />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
                       <Legend />
-                      <Area type="monotone" dataKey="BankStatements" name="Statements" stroke={CHART_COLORS[0]} fill={CHART_COLORS[0]} fillOpacity={0.2} />
-                      <Area type="monotone" dataKey="Remits" name="Remits" stroke={CHART_COLORS[1]} fill={CHART_COLORS[1]} fillOpacity={0.2} />
-                      <Area type="monotone" dataKey="Posting" name="Posting" stroke={CHART_COLORS[2]} fill={CHART_COLORS[2]} fillOpacity={0.2} />
+                      <Area type="monotone" dataKey="BankStatements" name="Statements" stroke={COLORS.high} fill="url(#gradBank)" fillOpacity={1} />
+                      <Area type="monotone" dataKey="Remits" name="Remits" stroke={COLORS.medium} fill="url(#gradRemit)" fillOpacity={1} />
+                      <Area type="monotone" dataKey="Posting" name="Posting" stroke={COLORS.low} fill="url(#gradPosting)" fillOpacity={1} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -204,8 +209,8 @@ export default function OperationalView() {
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="date" tickFormatter={(v) => formatShortDate(v)} />
                       <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="count" name="Statements" stroke={CHART_COLORS[0]} fill={CHART_COLORS[0]} fillOpacity={0.2} />
+                      <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
+                      <Area type="monotone" dataKey="count" name="Statements" stroke={COLORS.high} fill={COLORS.high} fillOpacity={0.12} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -234,10 +239,10 @@ export default function OperationalView() {
                   <CardContent className="h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
-                        <Pie data={data.remits.byType} dataKey="count" nameKey="type" cx="50%" cy="50%" outerRadius={90} label={(entry) => `${entry.type}: ${entry.percentage}%`} >
-                          {data.remits.byType.map((e, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                        <Pie data={data.remits.byType} dataKey="count" nameKey="type" cx="50%" cy="50%" outerRadius={90} label={(entry: any) => `${entry.type}: ${entry.percentage}%`} >
+                          {data.remits.byType.map((e, i) => <Cell key={i} fill={piePalette[i % piePalette.length]} />)}
                         </Pie>
-                        <Tooltip />
+                        <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
                       </PieChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -281,8 +286,8 @@ export default function OperationalView() {
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="date" tickFormatter={(v) => formatShortDate(v)} />
                       <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="count" name="Remits" stroke={CHART_COLORS[1]} fill={CHART_COLORS[1]} fillOpacity={0.2} />
+                      <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
+                      <Area type="monotone" dataKey="count" name="Remits" stroke={COLORS.medium} fill={COLORS.medium} fillOpacity={0.12} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -303,9 +308,9 @@ export default function OperationalView() {
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="type" />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
                       <Legend />
-                      <Bar dataKey="count" name="Count" fill={CHART_COLORS[2]} />
+                      <Bar dataKey="count" name="Count" fill={COLORS.medium} />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -349,8 +354,8 @@ export default function OperationalView() {
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="date" tickFormatter={(v) => formatShortDate(v)} />
                       <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="count" name="Transactions" stroke={CHART_COLORS[2]} fill={CHART_COLORS[2]} fillOpacity={0.2} />
+                      <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
+                      <Area type="monotone" dataKey="count" name="Transactions" stroke={COLORS.low} fill={COLORS.low} fillOpacity={0.12} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -421,8 +426,8 @@ export default function OperationalView() {
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="date" tickFormatter={(v) => formatShortDate(v)} />
                       <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="count" name="Reports" stroke={CHART_COLORS[3]} fill={CHART_COLORS[3]} fillOpacity={0.2} />
+                      <Tooltip contentStyle={{ backgroundColor: "white", border: "1px solid #e5e7eb" }} />
+                      <Area type="monotone" dataKey="count" name="Reports" stroke={COLORS.alt1} fill={COLORS.alt1} fillOpacity={0.12} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
