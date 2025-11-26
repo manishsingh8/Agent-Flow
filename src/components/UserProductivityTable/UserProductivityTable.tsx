@@ -1,30 +1,48 @@
 // src/components/ProductivityTable.tsx
-import { useMemo, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { Button } from "@/components/ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Link } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Column } from "@/components/DataTable/DataTable";
-import {
-  userProductivityData,
-  type UserProductivity,
-} from "@/constants/RCMDashboardData";
+import { type UserProductivity } from "@/constants/RCMDashboardData";
 import UserAssignmentsDialog from "../UserAssignment/UserAssignment";
 import { useNavigate } from "react-router-dom";
 
-export default function ProductivityTable() {
+interface UserProductivityTableProps {
+  data: UserProductivity[];
+  isAssignmentsModalOpen: boolean;
+  onAssignmentsModalChange: Dispatch<SetStateAction<boolean>>;
+  selectedUser: UserProductivity | null;
+  onSelectUser: Dispatch<SetStateAction<UserProductivity | null>>;
+  userAssignments: any[];
+  onUserAssignmentsChange: Dispatch<SetStateAction<any[]>>;
+  allUsers: any[];
+  onAllUsersChange: Dispatch<SetStateAction<any[]>>;
+  isReassigning: boolean;
+  onReassigningChange: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function ProductivityTable({
+  data,
+  isAssignmentsModalOpen,
+  onAssignmentsModalChange,
+  selectedUser,
+  onSelectUser,
+  userAssignments,
+  onUserAssignmentsChange,
+  allUsers,
+  onAllUsersChange,
+  isReassigning,
+  onReassigningChange,
+}: UserProductivityTableProps) {
   const navigate = useNavigate();
-  const [isAssignmentsModalOpen, setAssignmentsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<UserProductivity | null>(
-    null
-  );
-
-  // assignments shown inside dialog (start empty — you'll populate later)
-  const [userAssignments, setUserAssignments] = useState<any[]>([]); // replace `any` with your AggregatedWorklistItem type when available
-  const [allUsers, setAllUsers] = useState<any[]>([]); // empty now; you'll load/provide later
-
-  // UI state for reassigning
-  const [isReassigning, setIsReassigning] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const rowsPerPageOptions = [5, 10, 15];
@@ -32,55 +50,62 @@ export default function ProductivityTable() {
   // derived
   const totalPages = Math.max(
     1,
-    Math.ceil(userProductivityData.length / rowsPerPage)
+    Math.ceil(data.length / rowsPerPage)
   );
-  // handlers used by action buttons
-  const handleUserClick = (userId: string) => {
-    setSelectedUser({ userId, userName: "" , role: "", team: "", tasksCompleted: 0, avgTimeToResolution: 0 }); // you can set userName if available
 
-    setUserAssignments([]); // TODO: replace with fetch/load from API when ready
+  const handleUserClick = useCallback(
+    (user: UserProductivity) => {
+      onSelectUser(user);
+      onUserAssignmentsChange([]);
+      onAllUsersChange([]);
+      onAssignmentsModalChange(true);
+    },
+    [
+      onSelectUser,
+      onUserAssignmentsChange,
+      onAllUsersChange,
+      onAssignmentsModalChange,
+    ]
+  );
 
-    setAllUsers([]);
-    setAssignmentsModalOpen(true);
-  };
+  const handleModalOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        onSelectUser(null);
+        onUserAssignmentsChange([]);
+      }
+      onAssignmentsModalChange(open);
+    },
+    [onAssignmentsModalChange, onSelectUser, onUserAssignmentsChange]
+  );
 
-  const handleModalOpenChange = (open: boolean) => {
-    if (!open) {
-      setSelectedUser(null);
-      setUserAssignments([]);
-    }
-    setAssignmentsModalOpen(open);
-  };
+  const handleReassignTask = useCallback(
+    async (task: any) => {
+      try {
+        onReassigningChange(true);
+        onUserAssignmentsChange((prev: any[]) =>
+          prev.filter((t) => t.id !== task.id)
+        );
+      } catch (err) {
+        console.error("Reassign failed", err);
+      } finally {
+        onReassigningChange(false);
+      }
+    },
+    [onReassigningChange, onUserAssignmentsChange]
+  );
 
-  // called by dialog when a reassignment happens
-  const handleReassignTask = async (
-    task: any, // replace `any` with AggregatedWorklistItem type
-    // _fromUser: any,
-    // _toUser: any
-  ) => {
-    try {
-      setIsReassigning(true);
-
-      // TODO: call your API here to reassign
-      // await api.reassignTask(task.id, toUser.id);
-
-      // optimistic update: remove reassigned task from modal list
-      setUserAssignments((prev) => prev.filter((t) => t.id !== task.id));
-    } catch (err) {
-      console.error("Reassign failed", err);
-    } finally {
-      setIsReassigning(false);
-    }
-  };
-
-  const handleViewAIPerformance = (userId: string) => {
-    navigate(`/ai-performance/${userId}`);
-    console.log("View AI performance for", userId);
-  };
+  const handleViewAIPerformance = useCallback(
+    (userId: string) => {
+      navigate(`/ai-performance/${userId}`);
+      console.log("View AI performance for", userId);
+    },
+    [navigate]
+  );
 
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const paginatedData = userProductivityData.slice(start, end);
+  const paginatedData = data.slice(start, end);
 
   const columns: Column<UserProductivity>[] = useMemo(
     () => [
@@ -133,7 +158,7 @@ export default function ProductivityTable() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleUserClick(row.userId)}
+              onClick={() => handleUserClick(row)}
               aria-label={`View assignments for ${row.userName}`}
               className="cursor-pointer"
             >
@@ -153,7 +178,7 @@ export default function ProductivityTable() {
         ),
       },
     ],
-    []
+    [handleUserClick, handleViewAIPerformance]
   );
 
   return (

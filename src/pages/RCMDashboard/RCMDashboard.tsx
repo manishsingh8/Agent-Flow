@@ -7,7 +7,22 @@ import WorkQueueVolumeChart from "@/components/WorkQueueVolumeChart/WorkQueueVol
 import OperationalView from "@/components/OperationalView/OperationalView";
 
 const RCMDashboard = () => {
-  const { kpiCards, loading } = useRCMDashboard();
+  const {
+    kpiCards,
+    loading,
+    productivityData,
+    isAssignmentsModalOpen,
+    setAssignmentsModalOpen,
+    selectedUser,
+    setSelectedUser,
+    userAssignments,
+    setUserAssignments,
+    allUsers,
+    setAllUsers,
+    isReassigning,
+    setIsReassigning,
+  } = useRCMDashboard();
+
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       {/* Header */}
@@ -57,8 +72,17 @@ const RCMDashboard = () => {
           </CardHeader>
           <CardContent>
             <UserProductivityTable
-            // data={productivityData}
-            // onViewAssignments={handleViewAssignments}
+              data={productivityData}
+              isAssignmentsModalOpen={isAssignmentsModalOpen}
+              onAssignmentsModalChange={setAssignmentsModalOpen}
+              selectedUser={selectedUser}
+              onSelectUser={setSelectedUser}
+              userAssignments={userAssignments}
+              onUserAssignmentsChange={setUserAssignments}
+              allUsers={allUsers}
+              onAllUsersChange={setAllUsers}
+              isReassigning={isReassigning}
+              onReassigningChange={setIsReassigning}
             />
           </CardContent>
         </Card>
