@@ -144,6 +144,7 @@ export default function ProductivityTable() {
               size="sm"
               onClick={() => handleViewAIPerformance(row.userId)}
               aria-label={`View AI Performance for ${row.userName}`}
+              className="cursor-pointer"
             >
               <Link className="h-4 w-4 mr-1" aria-hidden="true" />
               AI Performance
