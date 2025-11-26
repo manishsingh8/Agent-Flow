@@ -94,7 +94,7 @@ export default function UserAssignmentsDialog({
   };
 
   const potentialAssignees = allUsers.filter(
-    (u) => u.id !== user.id && u.role === "Operational"
+    (u) => u.userId !== user.userId && u.role === "Operational"
   );
 
   return (
@@ -176,7 +176,7 @@ export default function UserAssignmentsDialog({
                               {potentialAssignees.length > 0 ? (
                                 potentialAssignees.map((assignee) => (
                                   <DropdownMenuItem
-                                    key={assignee.id}
+                                    key={assignee.userId}
                                     onSelect={() => handleReassignClick(task, assignee)}
                                   >
                                     {assignee.userName}

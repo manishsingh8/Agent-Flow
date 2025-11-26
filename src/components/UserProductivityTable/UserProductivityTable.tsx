@@ -36,7 +36,7 @@ export default function ProductivityTable() {
   );
   // handlers used by action buttons
   const handleUserClick = (userId: string) => {
-    setSelectedUser({ userId, userName: "" }); // you can set userName if available
+    setSelectedUser({ userId, userName: "" , role: "", team: "", tasksCompleted: 0, avgTimeToResolution: 0 }); // you can set userName if available
 
     setUserAssignments([]); // TODO: replace with fetch/load from API when ready
 
@@ -55,8 +55,8 @@ export default function ProductivityTable() {
   // called by dialog when a reassignment happens
   const handleReassignTask = async (
     task: any, // replace `any` with AggregatedWorklistItem type
-    fromUser: any,
-    toUser: any
+    // _fromUser: any,
+    // _toUser: any
   ) => {
     try {
       setIsReassigning(true);
@@ -204,7 +204,7 @@ export default function ProductivityTable() {
           enabled: true,
           onAssign: (userId, selectedRowIds) => {
             console.log("Assign", userId, selectedRowIds);
-            setAssignmentOpen(false);
+            // setAssignmentOpen(false);
           },
           users: [
             { id: "user-5", name: "Pamela Cruz" },
