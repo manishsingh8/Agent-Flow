@@ -19,7 +19,7 @@ const ReusableDoughnutChart = ({
   description,
   data,
   icon: Icon,
-  legendPosition = "right",
+  // legendPosition = "right",
 }: Props) => {
   return (
     <div className="w-full flex flex-col gap-4 p-4 border rounded-xl bg-white">

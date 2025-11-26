@@ -149,7 +149,7 @@ const CustomBarChart = ({
                       dataKey={segment.dataKey}
                       stackId="a"
                       fill={segment.color}
-                      radius={radius}
+                      radius={radius as [number, number, number, number]}
                       barSize={barSize}
                     />
                   );
