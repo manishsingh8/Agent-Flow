@@ -1,7 +1,20 @@
 import { cdaCardsData } from "@/constants/CDADashboard";
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
-import ExceptionReasonsChart from "@/components/TimeChart/TimeChart";
-import ProcessingTimeChart from "@/components/ProcessingChart/ProcessingChart";
+import CustomDoughnutChart from "@/components/CustomDoughnutChart/CustomDoughnutChart";
+import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
+import { AlertTriangle } from "lucide-react";
+import CustomAreaChart from "@/components/CustomAreaChart/CustomAreaChart";
+import {
+  parentData,
+  data,
+  data1,
+  stackedData,
+  stackSegments,
+  agentData,
+  processingTimeData,
+  slaComplianceData,
+  slaSegments,
+} from "@/constants/ChartsData";
 
 const Dashboard2 = () => {
   return (
@@ -30,8 +43,78 @@ const Dashboard2 = () => {
         ))}
       </div>
       <div className="flex gap-4">
-        <ExceptionReasonsChart />
-        <ProcessingTimeChart />
+        <CustomBarChart
+          title="Average Processing Time (min)"
+          description="Average time (in minutes) to process documents by workflow."
+          data={parentData}
+          xKey="workflow"
+          dataKey="time"
+          color="#249563"
+          barSize={40}
+          tooltipLabel="Processing Time"
+        />
+        <CustomDoughnutChart
+          title="Top Exception Reasons"
+          description="Breakdown of documents that failed automated processing."
+          icon={AlertTriangle}
+          data={data1}
+          legendPosition="right" // or "bottom"
+        />
+      </div>
+      <div className="flex gap-4">
+        <CustomBarChart
+          title="Daily Document Volume by Type (Oct 2025)"
+          description="Breakdown of document types processed daily"
+          data={stackedData}
+          xKey="date"
+          segments={stackSegments}
+          barSize={20}
+        />
+        <CustomDoughnutChart
+          title="Documents by Status"
+          description=""
+          data={data}
+          legendPosition="right" // or "bottom"
+        />
+      </div>
+      <div className="flex gap-4">
+        <div className="w-[50%]">
+          <CustomBarChart
+            title="Total Documents Processed per Agent (30 Days)"
+            data={agentData}
+            xKey="agentId"
+            dataKey="completed"
+            color="#249563"
+            tooltipLabel="Completed Documents"
+            xAxisLabel="Agent ID"
+            yAxisLabel="Total Completed Documents"
+          />
+        </div>
+        <div className="w-[50%]">
+          <CustomBarChart
+            title="Average Processing Time by Document Type"
+            data={processingTimeData}
+            xKey="documentType"
+            dataKey="avgTime"
+            color="#1D4ED8"
+            tooltipLabel="Hours"
+            xAxisLabel="Document Type"
+            yAxisLabel="AVG Processing Time (Hours)"
+          />
+        </div>
+      </div>
+      <div className="flex gap-4">
+        <div className="w-[50%]">
+          <CustomAreaChart
+            title="SLA Compliance Over Time (Documents Processed)"
+            data={slaComplianceData}
+            xKey="date"
+            segments={slaSegments}
+            xAxisLabel="Date"
+            yAxisLabel="Document Count"
+          />
+        </div>
+        <div></div>
       </div>
     </div>
   );
