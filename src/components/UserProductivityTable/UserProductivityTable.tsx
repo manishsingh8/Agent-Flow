@@ -1,17 +1,48 @@
 // src/components/ProductivityTable.tsx
-import { useMemo, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { Button } from "@/components/ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Link } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Column } from "@/components/DataTable/DataTable";
-import {
-  userProductivityData,
-  type UserProductivity,
-} from "@/constants/RCMDashboardData";
+import { type UserProductivity } from "@/constants/RCMDashboardData";
+import UserAssignmentsDialog from "../UserAssignment/UserAssignment";
+import { useNavigate } from "react-router-dom";
 
-export default function ProductivityTable() {
-  const [, setAssignmentOpen] = useState(false);
+interface UserProductivityTableProps {
+  data: UserProductivity[];
+  isAssignmentsModalOpen: boolean;
+  onAssignmentsModalChange: Dispatch<SetStateAction<boolean>>;
+  selectedUser: UserProductivity | null;
+  onSelectUser: Dispatch<SetStateAction<UserProductivity | null>>;
+  userAssignments: any[];
+  onUserAssignmentsChange: Dispatch<SetStateAction<any[]>>;
+  allUsers: any[];
+  onAllUsersChange: Dispatch<SetStateAction<any[]>>;
+  isReassigning: boolean;
+  onReassigningChange: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function ProductivityTable({
+  data,
+  isAssignmentsModalOpen,
+  onAssignmentsModalChange,
+  selectedUser,
+  onSelectUser,
+  userAssignments,
+  onUserAssignmentsChange,
+  allUsers,
+  onAllUsersChange,
+  isReassigning,
+  onReassigningChange,
+}: UserProductivityTableProps) {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const rowsPerPageOptions = [5, 10, 15];
@@ -19,22 +50,62 @@ export default function ProductivityTable() {
   // derived
   const totalPages = Math.max(
     1,
-    Math.ceil(userProductivityData.length / rowsPerPage)
+    Math.ceil(data.length / rowsPerPage)
   );
-  // handlers used by action buttons
-  const handleUserClick = (userId: string) => {
-    // implement navigation or modal show
-    console.log("View assignments for", userId);
-  };
 
-  const handleViewAIPerformance = (userId: string) => {
-    // implement navigation to AI performance
-    console.log("View AI performance for", userId);
-  };
+  const handleUserClick = useCallback(
+    (user: UserProductivity) => {
+      onSelectUser(user);
+      onUserAssignmentsChange([]);
+      onAllUsersChange([]);
+      onAssignmentsModalChange(true);
+    },
+    [
+      onSelectUser,
+      onUserAssignmentsChange,
+      onAllUsersChange,
+      onAssignmentsModalChange,
+    ]
+  );
+
+  const handleModalOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        onSelectUser(null);
+        onUserAssignmentsChange([]);
+      }
+      onAssignmentsModalChange(open);
+    },
+    [onAssignmentsModalChange, onSelectUser, onUserAssignmentsChange]
+  );
+
+  const handleReassignTask = useCallback(
+    async (task: any) => {
+      try {
+        onReassigningChange(true);
+        onUserAssignmentsChange((prev: any[]) =>
+          prev.filter((t) => t.id !== task.id)
+        );
+      } catch (err) {
+        console.error("Reassign failed", err);
+      } finally {
+        onReassigningChange(false);
+      }
+    },
+    [onReassigningChange, onUserAssignmentsChange]
+  );
+
+  const handleViewAIPerformance = useCallback(
+    (userId: string) => {
+      navigate(`/ai-performance/${userId}`);
+      console.log("View AI performance for", userId);
+    },
+    [navigate]
+  );
 
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const paginatedData = userProductivityData.slice(start, end);
+  const paginatedData = data.slice(start, end);
 
   const columns: Column<UserProductivity>[] = useMemo(
     () => [
@@ -87,8 +158,9 @@ export default function ProductivityTable() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleUserClick(row.userId)}
+              onClick={() => handleUserClick(row)}
               aria-label={`View assignments for ${row.userName}`}
+              className="cursor-pointer"
             >
               View Assignments
             </Button>
@@ -97,6 +169,7 @@ export default function ProductivityTable() {
               size="sm"
               onClick={() => handleViewAIPerformance(row.userId)}
               aria-label={`View AI Performance for ${row.userName}`}
+              className="cursor-pointer"
             >
               <Link className="h-4 w-4 mr-1" aria-hidden="true" />
               AI Performance
@@ -105,7 +178,7 @@ export default function ProductivityTable() {
         ),
       },
     ],
-    []
+    [handleUserClick, handleViewAIPerformance]
   );
 
   return (
@@ -157,7 +230,7 @@ export default function ProductivityTable() {
           enabled: true,
           onAssign: (userId, selectedRowIds) => {
             console.log("Assign", userId, selectedRowIds);
-            setAssignmentOpen(false);
+            // setAssignmentOpen(false);
           },
           users: [
             { id: "user-5", name: "Pamela Cruz" },
@@ -176,6 +249,15 @@ export default function ProductivityTable() {
             console.log("Delete", selectedRowIds);
           },
         }}
+      />
+      <UserAssignmentsDialog
+        isOpen={isAssignmentsModalOpen}
+        onOpenChange={handleModalOpenChange}
+        user={selectedUser}
+        assignments={userAssignments}
+        allUsers={allUsers}
+        onReassign={handleReassignTask}
+        isReassigning={isReassigning}
       />
     </div>
   );
