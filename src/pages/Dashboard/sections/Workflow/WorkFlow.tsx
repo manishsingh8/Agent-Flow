@@ -54,7 +54,7 @@ WorkFlowProps) {
     }
 
     // Update tab based on label
-    if (data?.label) {
+    if (data?.label && data?.isSetTab) {
       let tabValue = data.label;
 
       if (data.label === "Intake Orchestrator Agent") {
