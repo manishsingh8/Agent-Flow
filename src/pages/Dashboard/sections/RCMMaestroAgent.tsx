@@ -108,6 +108,7 @@ const initialNodes: Node[] = [
       showLogo: false,
       showAddButton: true,
       // route: "/era-parser",
+      isSetTab: true,
       handles: [
         { position: "Top", type: "target", id: "top" },
         { position: "Left", type: "target", id: "left" },
@@ -124,6 +125,7 @@ const initialNodes: Node[] = [
       label: "Reconciliation Agent",
       // route: "/variance-queue",
       showAddButton: true,
+      isSetTab: true,
       showLogo: false,
       handles: [
         { position: "Top", type: "target", id: "top" },
@@ -139,6 +141,7 @@ const initialNodes: Node[] = [
       label: "Cash Posting Agent",
       showAddButton: true,
       showLogo: false,
+      isSetTab: true,
       // route: "/cash-posting-queue",
       handles: [
         { position: "Top", type: "target", id: "top" },
