@@ -25,16 +25,13 @@ export const AppRoutes = () => {
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/payment" element={<Payment />} />
+          <Route path="/variance-queue" element={<Payment />} />
           <Route path="/cash-posting" element={<CashPostingPage />} />
           <Route path="/cash-posting-queue" element={<CashPostingQueue />} />
           <Route path="/reconciled-report" element={<ReconciledReport />} />
-          <Route path="/dashboard/dashboard1" element={<Dashboard1 />} />
+          <Route path="/dashboard/rcm-dashboard" element={<Dashboard1 />} />
           <Route path="/dashboard/hcd-dashboard" element={<Dashboard2 />} />
-          <Route
-            path="/remittance-processing"
-            element={<RemittanceProcessing />}
-          />
+          <Route path="/era-parser" element={<RemittanceProcessing />} />
         </Route>
       </Route>
       {/* Catch-All */}

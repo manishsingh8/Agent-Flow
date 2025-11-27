@@ -53,7 +53,7 @@ const RCMDashboard = () => {
       <div className="grid grid-cols-1 gap-4">
         <Card>
           <CardHeader>
-            <p className="text-md font-medium">User Productivity & Workload</p>
+            <p className="text-md font-medium">User Productivity</p>
           </CardHeader>
           <CardContent>
             <UserProductivityTable

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import CashPostingAgent from "./sections/CashPostingAgent";
 import IntakeOrchestratorAgent from "./sections/IntakeOrchestratorAgent";
@@ -6,6 +7,17 @@ import ReconciliationAgent from "./sections/ReconciliationAgent";
 import { ChevronDown } from "lucide-react";
 
 const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState(
+    localStorage.getItem("activetab") || "rcm"
+  );
+
+  console.log(activeTab, "tab");
+
+  // Keep localStorage synced when state changes
+  useEffect(() => {
+    console.log("called");
+    localStorage.setItem("activetab", activeTab);
+  }, [activeTab]);
   return (
     <div
       className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto"
@@ -14,7 +26,7 @@ const Dashboard = () => {
           "linear-gradient(0deg, #E6EEF4, #CFDDE8), linear-gradient(90deg, rgba(230, 238, 244, 0.8) 0%, rgba(207, 221, 232, 0.8) 49.49%, rgba(195, 202, 230, 0.8) 100%)",
       }}
     >
-      <Tabs defaultValue="rcm" className="w-[100%]">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-[100%]">
         <div className="flex justify-between w-[100%]">
           <TabsList className="bg-transparent gap-2 flex justify-center items-center w-[90%] ">
             <TabsTrigger
@@ -48,7 +60,7 @@ const Dashboard = () => {
           </div>
         </div>
         <TabsContent value="rcm">
-          <RCMMaestroAgent />
+          <RCMMaestroAgent setActiveTab={setActiveTab} />
         </TabsContent>
         <TabsContent value="intake">
           <IntakeOrchestratorAgent />

@@ -38,13 +38,18 @@ export const SIDEBAR_DATA = {
   ],
   navMain: [
     {
+      title: "RCM Flows",
+      url: "/",
+      icon: WavesLadder,
+    },
+    {
       title: "Dashboard",
       url: "#",
       icon: House,
       items: [
         {
           title: "RCM Dashboard",
-          url: "/dashboard/dashboard1",
+          url: "/dashboard/rcm-dashboard",
         },
         {
           title: "HCD Dashboard",
@@ -53,34 +58,45 @@ export const SIDEBAR_DATA = {
       ],
     },
     {
-      title: "LifeCycle",
-      url: "/",
-      icon: WavesLadder,
-    },
-    {
-      title: "Variance Queue",
-      url: "/payment",
+      title: "Reconciliation",
+      url: "#",
       icon: PieChart,
+      items: [
+        {
+          title: "Variance Queue",
+          url: "/variance-queue",
+        },
+        {
+          title: "Reconciled Report",
+          url: "/reconciled-report",
+        },
+      ],
     },
     {
-      title: "Reconciled Report",
-      url: "/reconciled-report",
-      icon: PieChart,
-    },
-    {
-      title: "Cash Posting Report",
-      url: "/cash-posting",
+      title: "Cash Posting",
+      url: "#",
       icon: Bot,
+      items: [
+        {
+          title: "Cash Posting Queue",
+          url: "/cash-posting-queue",
+        },
+        {
+          title: "Cash Posting Report",
+          url: "/cash-posting",
+        },
+      ],
     },
     {
-      title: "Cash Posting Queue",
-      url: "/cash-posting-queue",
-      icon: Bot,
-    },
-    {
-      title: "Remittance Processing",
-      url: "/remittance-processing",
+      title: "Document Parser",
+      url: "#",
       icon: BrainCircuit,
+      items: [
+        {
+          title: "ERA Parser",
+          url: "/era-parser",
+        },
+      ],
     },
   ],
 };

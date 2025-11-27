@@ -89,6 +89,7 @@ const initialNodes: Node[] = [
       showAddButton: true,
       showLogo: true,
       isSecondLeftHandle: "true",
+      route: "/dashboard/rcm-dashboard",
       handles: [
         { position: "Left", type: "target", id: "left" },
         { position: "Left", type: "target", id: "left-2" },
@@ -106,6 +107,7 @@ const initialNodes: Node[] = [
       label: "Intake Orchestrator Agent",
       showLogo: false,
       showAddButton: true,
+      // route: "/era-parser",
       handles: [
         { position: "Top", type: "target", id: "top" },
         { position: "Left", type: "target", id: "left" },
@@ -120,6 +122,7 @@ const initialNodes: Node[] = [
     position: { x: 800, y: 300 },
     data: {
       label: "Reconciliation Agent",
+      // route: "/variance-queue",
       showAddButton: true,
       showLogo: false,
       handles: [
@@ -136,6 +139,7 @@ const initialNodes: Node[] = [
       label: "Cash Posting Agent",
       showAddButton: true,
       showLogo: false,
+      // route: "/cash-posting-queue",
       handles: [
         { position: "Top", type: "target", id: "top" },
         { position: "Right", type: "Source", id: "right" },
@@ -516,7 +520,7 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const RCMMaestroAgent = () => {
+const RCMMaestroAgent = ({ setActiveTab }: any) => {
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mt-3">
@@ -540,7 +544,11 @@ const RCMMaestroAgent = () => {
           backdropFilter: "blur(15px)",
         }}
       >
-        <WorkflowPage initialNodes={initialNodes} initialEdges={initialEdges} />
+        <WorkflowPage
+          initialNodes={initialNodes}
+          initialEdges={initialEdges}
+          setActiveTab={setActiveTab}
+        />
       </div>
     </div>
   );

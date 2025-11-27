@@ -22,6 +22,7 @@ const initialNodes: Node[] = [
       label: "Cash Posting Agent",
       showLogo: true,
       showAddButton: true,
+      // route: "/cash-posting-queue",
       handles: [
         { position: "Left", type: "target", id: "left" },
         { position: "Bottom", type: "source", id: "bottom-1" },

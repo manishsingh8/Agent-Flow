@@ -78,7 +78,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
 
 export const INTAKE_ORCHESTRATOR_DATA = [
   {
-    headerText: "Claims Received",
+    headerText: "BAI Files",
     percentage: "12",
     value: "982",
     colorClass: {
@@ -90,7 +90,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "positive",
   },
   {
-    headerText: "Claims Processed",
+    headerText: "Remits",
     percentage: "9",
     value: "870",
     colorClass: {
@@ -102,7 +102,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "positive",
   },
   {
-    headerText: "Pending Claims",
+    headerText: "Correspondence Documents",
     percentage: "-4",
     value: "112",
     colorClass: {
@@ -114,7 +114,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "",
   },
   {
-    headerText: "Rejected Claims",
+    headerText: "Cash Posting Documents",
     percentage: "-2",
     value: "25",
     colorClass: {
@@ -125,35 +125,36 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     image: MapMediumImg,
     status: "",
   },
-  {
-    headerText: "Reprocessed Claims",
-    percentage: "6",
-    value: "14",
-    colorClass: {
-      text: "text-teal-600",
-      border: "border-teal-600",
-      chart: "stroke-teal-600",
-    },
-    image: MapImage,
-    status: "positive",
-  },
-  {
-    headerText: "Claims Approved",
-    percentage: "-15",
-    value: "820",
-    colorClass: {
-      text: "text-rose-500",
-      border: "border-rose-500",
-      chart: "stroke-rose-500",
-    },
-    image: MapNegative,
-    status: "negative",
-  },
+  // may needed later on
+  // {
+  //   headerText: "Reprocessed Claims",
+  //   percentage: "6",
+  //   value: "14",
+  //   colorClass: {
+  //     text: "text-teal-600",
+  //     border: "border-teal-600",
+  //     chart: "stroke-teal-600",
+  //   },
+  //   image: MapImage,
+  //   status: "positive",
+  // },
+  // {
+  //   headerText: "Claims Approved",
+  //   percentage: "-15",
+  //   value: "820",
+  //   colorClass: {
+  //     text: "text-rose-500",
+  //     border: "border-rose-500",
+  //     chart: "stroke-rose-500",
+  //   },
+  //   image: MapNegative,
+  //   status: "negative",
+  // },
 ];
 
 export const RECONCILIATION_DATA = [
   {
-    headerText: "Total Candidates",
+    headerText: "Total Transactions",
     percentage: "5",
     value: "684",
     colorClass: {
@@ -165,7 +166,7 @@ export const RECONCILIATION_DATA = [
     status: "positive",
   },
   {
-    headerText: "Reconciled Count",
+    headerText: "Reconciled Transaction Count",
     percentage: "8",
     value: "512",
     colorClass: {
@@ -179,7 +180,7 @@ export const RECONCILIATION_DATA = [
   {
     headerText: "Matched Amount",
     percentage: "-1",
-    value: "1450236",
+    value: "$14,50,236",
     colorClass: {
       text: "text-amber-500",
       border: "border-amber-500",
@@ -191,7 +192,7 @@ export const RECONCILIATION_DATA = [
   {
     headerText: "Unmatched Amount",
     percentage: "3",
-    value: "2819.11",
+    value: "$2,819.11",
     colorClass: {
       text: "text-teal-600",
       border: "border-teal-600",
@@ -230,7 +231,7 @@ export const CASH_POSTING_DATA = [
   {
     headerText: "Post Ready Amount",
     percentage: "5",
-    value: "820345",
+    value: "$8,20,345",
     colorClass: {
       text: "text-teal-600",
       border: "border-teal-600",
@@ -254,7 +255,7 @@ export const CASH_POSTING_DATA = [
   {
     headerText: "Posted Amount",
     percentage: "-1",
-    value: "612441.22",
+    value: "$6,12,441.22",
     colorClass: {
       text: "text-amber-500",
       border: "border-amber-500",

@@ -46,7 +46,7 @@ export const useReconciledReportLogic = () => {
       const matchesSearch =
         t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         t.payer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.accountNo.toLowerCase().includes(searchTerm.toLowerCase());
+        t.account.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesBrand && matchesSearch;
     });
   }, [selectedBrands, searchTerm]);
