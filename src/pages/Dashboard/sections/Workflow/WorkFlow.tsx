@@ -12,7 +12,7 @@ import IntegrationNode from "./IntegrationNode";
 import AgentNode from "./AgentNode";
 import EMRNode from "./EMRNode";
 import AgentToolNode from "./AgentToolsPanel";
-import { type Node, type Edge } from "reactflow";
+import { type Node, type Edge, type NodeMouseHandler } from "reactflow";
 import GroupNode from "./GroupNode";
 import SubAgentNode from "./SubAgentNode";
 import bgImage from "../../../../assets/images/bg-img.png";
@@ -44,7 +44,7 @@ WorkFlowProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const onNodeClick = (_: any, node: Node) => {
+  const onNodeClick: NodeMouseHandler = (_, node) => {
     const data = node?.data;
 
     // Navigation route
@@ -66,7 +66,7 @@ WorkFlowProps) {
       }
 
       localStorage.setItem("activetab", tabValue);
-      setActiveTab(tabValue);
+      setActiveTab?.(tabValue);
     }
   };
 
