@@ -22,6 +22,7 @@ const initialNodes: Node[] = [
       label: "Intake Orchestrator Agent",
       showLogo: true,
       showAddButton: true,
+      // route: "/era-parser",
       handles: [
         { position: "Left", type: "target", id: "left" },
         { position: "Bottom", type: "source", id: "bottom-1" },
@@ -53,6 +54,7 @@ const initialNodes: Node[] = [
       label: "EDI Parser Agent",
       showAddButton: true,
       showLogo: false,
+      route: "/era-parser",
       handles: [
         { position: "Top", type: "target", id: "top" },
         { position: "Bottom", type: "source", id: "bottom" },

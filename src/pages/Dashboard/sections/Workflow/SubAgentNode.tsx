@@ -33,7 +33,7 @@ export default function SubAgentNode({ data }: SubAgentNodeProps) {
         boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
       }}
     >
-      <div className="p-4">
+      <div className="pointer-events-auto w-full h-full flex items-center justify-center p-4">
         <div className="flex items-center gap-2">
           <span
             className="text-lg font-semibold text-card-foreground font-medium"

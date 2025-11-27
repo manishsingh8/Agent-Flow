@@ -17,16 +17,16 @@ export const paymentCardsData = [
     amount: "$28,719.39",
     bgColor: "#E6FFFA",
   },
-  {
-    id: 4,
-    headerText: "Pay Variance",
-    amount: "$85,120.75",
-    bgColor: "#FEF5E5",
-  },
-  {
-    id: 5,
-    headerText: "Post Variance",
-    amount: "$392,613.65",
-    bgColor: "#FFF0F0",
-  },
+  // {
+  //   id: 4,
+  //   headerText: "Pay Variance",
+  //   amount: "$85,120.75",
+  //   bgColor: "#FEF5E5",
+  // },
+  // {
+  //   id: 5,
+  //   headerText: "Post Variance",
+  //   amount: "$392,613.65",
+  //   bgColor: "#FFF0F0",
+  // },
 ];

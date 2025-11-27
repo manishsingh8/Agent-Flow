@@ -75,7 +75,7 @@ export default function ProductivityTable() {
       },
       {
         key: "avgTimeToResolution",
-        label: "Avg. Time to Resolution (hrs)",
+        label: "Avg. Time to Resolve (hrs)",
         render: (value) => Number(value).toFixed(1),
       },
       {
@@ -113,7 +113,9 @@ export default function ProductivityTable() {
       <DataTable<UserProductivity>
         data={paginatedData}
         columns={columns}
-        searchEnabled={true}
+        searchEnabled
+        searchTerm={""}
+        onSearchChange={() => {}}
         // exportEnabled={true}
         // onExport={() => {
         //   // simple CSV export (demo)

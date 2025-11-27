@@ -19,8 +19,8 @@ const ReusableDoughnutChart = ({
   description,
   data,
   icon: Icon,
-  // legendPosition = "right",
-}: Props) => {
+}: // legendPosition = "right",
+Props) => {
   return (
     <div className="w-full flex flex-col gap-4 p-4 border rounded-xl bg-white">
       {/* HEADER */}
@@ -33,7 +33,7 @@ const ReusableDoughnutChart = ({
       )}
 
       {/* FLEX LAYOUT — legend can be placed right or bottom */}
-      <div className="flex relative justify-center">
+      <div className="flex relative justify-start">
         {/* DOUGHNUT CHART */}
         <div className="w-[300px] h-[300px]">
           <ResponsiveContainer width="100%" height="100%">

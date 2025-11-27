@@ -5,7 +5,7 @@ export interface Transaction {
   transactionType: string;
   region: string;
   payer: string;
-  accountNo: string;
+  account: string;
   depositDate: string;
   bankDeposit: number;
   remittance: number;
@@ -20,7 +20,7 @@ export interface ReconciledTransaction {
   transactionType: string;
   region: string;
   payer: string;
-  accountNo: string;
+  account: string;
   depositDate: string;
   bankDeposit: number;
   remittance: number;
@@ -30,7 +30,7 @@ export interface ReconciledTransaction {
 
 export const EDITABLE_FIELDS: (keyof Transaction)[] = [
   "payer",
-  "accountNo",
+  "account",
   "bankDeposit",
   "remittance",
   "EMR",
@@ -39,7 +39,7 @@ export const EDITABLE_FIELDS: (keyof Transaction)[] = [
 ];
 export const EDITABLE_RECONCILED_FIELDS: (keyof ReconciledTransaction)[] = [
   "payer",
-  "accountNo",
+  "account",
   "bankDeposit",
   "remittance",
   "EMR",
@@ -53,7 +53,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credits",
     region: "CH",
     payer: "AGC CORP",
-    accountNo: "0045",
+    account: "0045",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -68,7 +68,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -83,7 +83,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -98,7 +98,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -113,7 +113,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 0,
     remittance: 0,
@@ -128,7 +128,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "ACME INC",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -143,7 +143,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "ACH Credits",
     region: "ALT",
     payer: "TECH CORP",
-    accountNo: "0123",
+    account: "0123",
     depositDate: "09/11/2025",
     bankDeposit: 5000.0,
     remittance: 5000.0,
@@ -158,7 +158,7 @@ export const DUMMY_TABLE_DATA: Transaction[] = [
     transactionType: "Wire Transfer",
     region: "BRK MA",
     payer: "GLOBAL FINANCE",
-    accountNo: "0456",
+    account: "0456",
     depositDate: "09/11/2025",
     bankDeposit: 7500.5,
     remittance: 7500.5,
@@ -175,7 +175,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credits",
     region: "CH",
     payer: "AGC CORP",
-    accountNo: "0045",
+    account: "0045",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -190,7 +190,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -205,7 +205,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -220,7 +220,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -235,7 +235,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "BOMBAY DUCK D...",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 0,
     remittance: 0,
@@ -250,7 +250,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credit Trans...",
     region: "CH",
     payer: "ACME INC",
-    accountNo: "2426",
+    account: "2426",
     depositDate: "09/10/2025",
     bankDeposit: 4816.74,
     remittance: 4816.74,
@@ -265,7 +265,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "ACH Credits",
     region: "ALT",
     payer: "TECH CORP",
-    accountNo: "0123",
+    account: "0123",
     depositDate: "09/11/2025",
     bankDeposit: 5000.0,
     remittance: 5000.0,
@@ -280,7 +280,7 @@ export const DUMMY_RECONCILED_TABLE_DATA: ReconciledTransaction[] = [
     transactionType: "Wire Transfer",
     region: "BRK MA",
     payer: "GLOBAL FINANCE",
-    accountNo: "0456",
+    account: "0456",
     depositDate: "09/11/2025",
     bankDeposit: 7500.5,
     remittance: 7500.5,
@@ -310,28 +310,27 @@ export interface Cash_Posting_Transaction {
   cheque: string;
   payer: string;
   region: string;
-  postingtype: string;
-  totalamount: number;
-  postedamount: number;
+  postingType: string;
+  totalAmount: number;
+  postedAmount: number;
   remittance: number;
-  // chequereceivedon: number;
-  attemptedon: number;
+  attemptedOn: string | null; // updated to string or null
   status: string;
   reason: string;
 }
 
+// MAIN TABLE
 export const CASH_POSTING_TABLE_DATA: Cash_Posting_Transaction[] = [
   {
     id: "TXN001",
     cheque: "CHQ-875432",
     payer: "John Doe",
     region: "CH",
-    postingtype: "Manual",
-    totalamount: 55000,
-    postedamount: 35000,
+    postingType: "Manual",
+    totalAmount: 55000,
+    postedAmount: 35000,
     remittance: 20000,
-    // chequereceivedon: 1731475200, // Unix timestamp
-    attemptedon: 1731734400, // Unix timestamp
+    attemptedOn: "16-11-2024",
     status: "Partially Posted",
     reason: "Exception",
   },
@@ -340,12 +339,11 @@ export const CASH_POSTING_TABLE_DATA: Cash_Posting_Transaction[] = [
     cheque: "CHQ-129834",
     payer: "Airtel Payments",
     region: "CH",
-    postingtype: "Auto",
-    totalamount: 78000,
-    postedamount: 78000,
+    postingType: "Auto",
+    totalAmount: 78000,
+    postedAmount: 78000,
     remittance: 0,
-    // chequereceivedon: 1731129600,
-    attemptedon: 1731216000,
+    attemptedOn: "10-11-2024",
     status: "Fully Posted",
     reason: "Exception",
   },
@@ -354,12 +352,11 @@ export const CASH_POSTING_TABLE_DATA: Cash_Posting_Transaction[] = [
     cheque: "CHQ-998712",
     payer: "Reliance Retail",
     region: "CH",
-    postingtype: "Manual",
-    totalamount: 64000,
-    postedamount: 0,
+    postingType: "Manual",
+    totalAmount: 64000,
+    postedAmount: 0,
     remittance: 64000,
-    // chequereceivedon: 1730956800,
-    attemptedon: 0, // not posted yet
+    attemptedOn: "10-11-2024",
     status: "Partially Posted",
     reason: "Exception",
   },
@@ -368,12 +365,11 @@ export const CASH_POSTING_TABLE_DATA: Cash_Posting_Transaction[] = [
     cheque: "CHQ-567890",
     payer: "Tata Consultancy",
     region: "CH",
-    postingtype: "Auto",
-    totalamount: 92000,
-    postedamount: 92000,
+    postingType: "Auto",
+    totalAmount: 92000,
+    postedAmount: 92000,
     remittance: 0,
-    // chequereceivedon: 1730438400,
-    attemptedon: 1730524800,
+    attemptedOn: "02-11-2024",
     status: "Fully Posted",
     reason: "Exception",
   },
@@ -382,28 +378,28 @@ export const CASH_POSTING_TABLE_DATA: Cash_Posting_Transaction[] = [
     cheque: "CHQ-443210",
     payer: "Flipkart India",
     region: "CH",
-    postingtype: "Manual",
-    totalamount: 28000,
-    postedamount: 10000,
+    postingType: "Manual",
+    totalAmount: 28000,
+    postedAmount: 10000,
     remittance: 18000,
-    // chequereceivedon: 1731648000,
-    attemptedon: 0,
+    attemptedOn: "10-11-2024",
     status: "Partially Posted",
     reason: "Exception",
   },
 ];
+
+// QUEUE TABLE
 export const CASH_POSTING_QUEUE_TABLE_DATA: Cash_Posting_Transaction[] = [
   {
     id: "TXN001",
     cheque: "CHQ-875432",
     payer: "John Doe",
     region: "CH",
-    postingtype: "Manual",
-    totalamount: 55000,
-    postedamount: 35000,
+    postingType: "Manual",
+    totalAmount: 55000,
+    postedAmount: 35000,
     remittance: 20000,
-    // chequereceivedon: 1731475200, // Unix timestamp
-    attemptedon: 1731734400, // Unix timestamp
+    attemptedOn: "16-11-2024",
     status: "Partially Posted",
     reason: "Exception",
   },
@@ -412,12 +408,11 @@ export const CASH_POSTING_QUEUE_TABLE_DATA: Cash_Posting_Transaction[] = [
     cheque: "CHQ-998712",
     payer: "Reliance Retail",
     region: "CH",
-    postingtype: "Manual",
-    totalamount: 64000,
-    postedamount: 0,
+    postingType: "Manual",
+    totalAmount: 64000,
+    postedAmount: 0,
     remittance: 64000,
-    // chequereceivedon: 1730956800,
-    attemptedon: 0, // not posted yet
+    attemptedOn: "10-11-2024",
     status: "Partially Posted",
     reason: "Exception",
   },
@@ -426,12 +421,11 @@ export const CASH_POSTING_QUEUE_TABLE_DATA: Cash_Posting_Transaction[] = [
     cheque: "CHQ-443210",
     payer: "Flipkart India",
     region: "CH",
-    postingtype: "Manual",
-    totalamount: 28000,
-    postedamount: 10000,
+    postingType: "Manual",
+    totalAmount: 28000,
+    postedAmount: 10000,
     remittance: 18000,
-    // chequereceivedon: 1731648000,
-    attemptedon: 0,
+    attemptedOn: "10-11-2024",
     status: "Partially Posted",
     reason: "Exception",
   },

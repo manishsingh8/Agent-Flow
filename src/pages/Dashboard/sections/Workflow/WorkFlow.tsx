@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactFlow, {
   Background,
   ConnectionMode,
@@ -19,6 +20,8 @@ import bgImage from "../../../../assets/images/bg-img.png";
 interface WorkFlowProps {
   initialNodes: Node[];
   initialEdges: Edge[];
+  onNavigateTab?: (value: string) => void;
+  setActiveTab?: (value: string) => void;
 }
 
 const nodeTypes = {
@@ -33,10 +36,39 @@ const nodeTypes = {
 export default function WorkflowPage({
   initialNodes,
   initialEdges,
-}: WorkFlowProps) {
+  setActiveTab,
+}: // onNavigateTab,
+WorkFlowProps) {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const onNodeClick = (_: any, node: Node) => {
+    const data = node?.data;
+
+    // Navigation route
+    if (data?.route) {
+      navigate(data.route);
+      return;
+    }
+
+    // Update tab based on label
+    if (data?.label) {
+      let tabValue = data.label;
+
+      if (data.label === "Intake Orchestrator Agent") {
+        tabValue = "intake";
+      } else if (data.label === "Reconciliation Agent") {
+        tabValue = "reconciliation";
+      } else if (data.label === "Cash Posting Agent") {
+        tabValue = "cashPosting";
+      }
+
+      localStorage.setItem("activetab", tabValue);
+      setActiveTab(tabValue);
+    }
+  };
 
   useEffect(() => {
     const wrapper = reactFlowWrapper.current;
@@ -69,6 +101,7 @@ export default function WorkflowPage({
           panOnScroll={false}
           panOnDrag={false}
           proOptions={{ hideAttribution: true }}
+          onNodeClick={onNodeClick}
           style={{
             width: "100%",
             height: "100%",

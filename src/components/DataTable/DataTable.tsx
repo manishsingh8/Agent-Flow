@@ -166,6 +166,12 @@ export function DataTable<T extends object = Record<string, unknown>>({
               onClick={() => {
                 setShowPromptSearchInput((prev) => !prev);
                 // onAdvancedSearch?.();
+                console.log(
+                  "clicked",
+                  searchEnabled,
+                  onSearchChange,
+                  showPromptSearchInput
+                );
               }}
             >
               Prompt Search
