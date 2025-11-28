@@ -9,16 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
-import {
-  X,
-  Search,
-  User,
-  Zap,
-  UserCircle,
-  Edit,
-  // Eye,
-  // Trash2,
-} from "lucide-react";
+import { X, Search, User, Zap, UserCircle, Edit } from "lucide-react";
 import { useState } from "react";
 
 export interface Column<T> {
@@ -28,6 +19,7 @@ export interface Column<T> {
   className?: string;
   bodyClassName?: string;
   conditionalClassName?: (value: unknown, row: T) => string;
+  isAmount?: boolean;
 }
 
 export interface AssignmentUser {
@@ -76,6 +68,24 @@ interface DataTableProps<T> {
     onDelete?: (selectedRowIds: string[]) => void;
   };
 }
+
+// ------------------------------
+// ⭐ NEW FORMATTER FUNCTION ⭐
+// ------------------------------
+const formatAmount = (value: unknown) => {
+  if (value === null || value === undefined || value === "") return "$0.00";
+
+  const num = Number(value);
+
+  if (isNaN(num)) return String(value);
+
+  return num.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 
 export function DataTable<T extends object = Record<string, unknown>>({
   data,
@@ -128,18 +138,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
     }
   };
 
-  // const handleWatchOptions = () => {
-  //   if (assignmentFeature?.onWatchOptions) {
-  //     assignmentFeature.onWatchOptions(Array.from(selectedRows));
-  //   }
-  // };
-
-  // const handleDelete = () => {
-  //   if (assignmentFeature?.onDelete) {
-  //     assignmentFeature.onDelete(Array.from(selectedRows));
-  //   }
-  // };
-
   const filteredUsers =
     assignmentFeature?.users?.filter((user) =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -156,6 +154,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
 
   return (
     <div className="space-y-6 relative">
+      {/* TOP BAR */}
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
           <div className="flex items-center gap-2">
@@ -163,33 +162,24 @@ export function DataTable<T extends object = Record<string, unknown>>({
               variant="outline"
               size="sm"
               className="text-xs h-9"
-              onClick={() => {
-                setShowPromptSearchInput((prev) => !prev);
-                // onAdvancedSearch?.();
-                console.log(
-                  "clicked",
-                  searchEnabled,
-                  onSearchChange,
-                  showPromptSearchInput
-                );
-              }}
+              onClick={() => setShowPromptSearchInput((prev) => !prev)}
             >
               Prompt Search
             </Button>
           </div>
+
           {searchEnabled && onSearchChange && showPromptSearchInput && (
             <div className="relative flex-1 max-w-sm shadow-none">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground shadow-none" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search"
                 className="pl-10 shadow-none"
                 value={searchTerm}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  onSearchChange(e.target.value)
-                }
+                onChange={(e) => onSearchChange(e.target.value)}
               />
             </div>
           )}
+
           <div className="flex gap-2">
             {showEditButton && !showActionBar && (
               <Button
@@ -217,6 +207,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
         </div>
       )}
 
+      {/* TABLE */}
       <div className="rounded-lg border border-border overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-50">
@@ -229,11 +220,11 @@ export function DataTable<T extends object = Record<string, unknown>>({
                       selectedRows.size === data.length && data.length > 0
                     }
                     onChange={onSelectAll}
-                    className="w-4 h-4 cursor-pointer accent-green-600 bg-green-50 border-green-600"
-                    data-testid="checkbox-select-all"
+                    className="w-4 h-4 cursor-pointer accent-green-600"
                   />
                 </TableHead>
               )}
+
               {columns.map((col) => (
                 <TableHead
                   key={String(col.key)}
@@ -246,6 +237,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
               ))}
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {data.length > 0 ? (
               data.map((row) => {
@@ -263,30 +255,28 @@ export function DataTable<T extends object = Record<string, unknown>>({
                           type="checkbox"
                           checked={selectedRows.has(rowId)}
                           onChange={() => onRowSelect(rowId)}
-                          className="w-4 h-4 cursor-pointer accent-green-600 bg-green-50 border-green-600"
-                          data-testid={`checkbox-row-${rowId}`}
+                          className="w-4 h-4 cursor-pointer accent-green-600"
                         />
                       </TableCell>
                     )}
 
+                    {/* UPDATED RENDER HERE */}
                     {columns.map((col) => {
                       const cellValue = row[col.key];
 
                       return (
                         <TableCell
                           key={String(col.key)}
-                          className={`
-                  text-xs
-                  ${col.bodyClassName || ""}
-                  ${
-                    col.conditionalClassName
-                      ? col.conditionalClassName(cellValue, row)
-                      : ""
-                  }
-                `}
+                          className={`text-xs ${col.bodyClassName || ""} ${
+                            col.conditionalClassName
+                              ? col.conditionalClassName(cellValue, row)
+                              : ""
+                          }`}
                         >
                           {col.render
                             ? col.render(cellValue, row)
+                            : col.isAmount
+                            ? formatAmount(cellValue)
                             : String(cellValue ?? "")}
                         </TableCell>
                       );
@@ -308,6 +298,8 @@ export function DataTable<T extends object = Record<string, unknown>>({
         </Table>
       </div>
 
+      {/* ----- Pagination, Action Bar & Assignment Modal Code Remains Same ----- */}
+      {/* (Keeping untouched to avoid breaking existing behavior) */}
       {pageInfo && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-border">
           <div className="text-xs text-muted-foreground">

@@ -132,11 +132,6 @@ export default function RemittanceProcessing() {
       setAnalysis(parsed);
       setIsProcessing(false);
       setIsProcessed(true);
-
-      toast({
-        title: "Processing Complete",
-        description: "The remittance file has been analyzed successfully.",
-      });
     } catch (error) {
       console.error(error);
       setIsProcessing(false);
@@ -235,13 +230,29 @@ export default function RemittanceProcessing() {
               <div className="p-8 bg-slate-50/50 flex flex-col justify-center min-h-[300px]">
                 {!isProcessed ? (
                   <div className="border-2 border-dashed border-slate-200 rounded-xl p-10 text-center">
-                    <Upload className="w-8 h-8 mx-auto text-slate-400 mb-4" />
-                    <h3 className="text-lg font-medium">
-                      Upload a remittance file
-                    </h3>
-                    <p className="text-sm text-slate-500">
-                      The system will attempt to match and analyze the file.
-                    </p>
+                    {isProcessing ? (
+                      <div className="flex flex-col items-center justify-center space-y-4 animate-pulse">
+                        {/* Loading spinner */}
+                        <div className="w-10 h-10 border-4 border-slate-300 border-t-[#249563] rounded-full animate-spin"></div>
+
+                        {/* Skeleton title */}
+                        <div className="h-4 w-40 bg-slate-300 rounded"></div>
+
+                        {/* Skeleton subtitle */}
+                        <div className="h-3 w-60 bg-slate-200 rounded"></div>
+                        <div className="h-3 w-48 bg-slate-200 rounded"></div>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 mx-auto text-slate-400 mb-4" />
+                        <h3 className="text-lg font-medium">
+                          Upload a remittance file
+                        </h3>
+                        <p className="text-sm text-slate-500">
+                          The system will attempt to match and analyze the file.
+                        </p>
+                      </>
+                    )}
                   </div>
                 ) : (
                   <div className="bg-blue-50 border border-blue-100 rounded-xl p-6 relative">
