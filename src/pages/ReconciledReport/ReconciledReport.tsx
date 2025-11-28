@@ -1,6 +1,6 @@
 // import RightArrow from "../../assets/icons/right-arrow.svg";
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
-import { paymentCardsData } from "@/constants/PaymentsCardData";
+import { reconciledCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { useReconciledReportLogic } from "./ReconciledReport.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
@@ -64,7 +64,7 @@ const ReconciledReport = () => {
 
       {/* Payment Cards */}
       <div className="grid grid-cols-5 gap-4">
-        {paymentCardsData.map((card) => (
+        {reconciledCardsData.map((card) => (
           <PaymentCard
             key={card.id}
             headerText={card.headerText}

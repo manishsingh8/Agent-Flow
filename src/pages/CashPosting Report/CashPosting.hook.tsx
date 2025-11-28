@@ -150,15 +150,21 @@ export const useCashPostingLogic = () => {
     .map((key) => {
       const rule = columnRules[String(key)] || {};
 
+      // Check if this is an amount field
+      const amountFields = ["totalAmount", "postedAmount", "remittance"];
+      const isAmountField = amountFields.includes(String(key));
+
       return {
         key,
         label: key
           .replace(/([A-Z])/g, " $1")
           .replace(/^./, (str) => str.toUpperCase()),
-        render: (val: unknown): ReactNode => {
-          if (typeof val === "number") return `$${val.toFixed(2)}`;
-          return String(val);
-        },
+        render: isAmountField
+          ? undefined
+          : (val: unknown): ReactNode => {
+              return String(val ?? "");
+            },
+        isAmount: isAmountField,
 
         // 👇 NEW ADDED PROPERTIES
         bodyClassName: rule.bodyClassName || "",
