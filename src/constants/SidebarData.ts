@@ -96,6 +96,10 @@ export const SIDEBAR_DATA = {
           title: "ERA Parser",
           url: "/era-parser",
         },
+        {
+          title: "EOB Parser",
+          url: "/eob-parser",
+        },
       ],
     },
   ],
