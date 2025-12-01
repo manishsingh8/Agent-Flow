@@ -337,7 +337,10 @@ export default function RemittanceProcessing() {
                   {/* ADJUSTMENTS */}
                   <section>
                     <h3 className="text-base font-bold">Adjustments:</h3>
-                    <pre className="text-xs bg-slate-100 p-3 rounded">
+                    <pre
+                      className="text-xs bg-slate-100 p-3 rounded 
+               max-w-[90%] max-h-40 overflow-y-auto whitespace-pre-wrap"
+                    >
                       {analysis?.adjustments || "None"}
                     </pre>
                   </section>
