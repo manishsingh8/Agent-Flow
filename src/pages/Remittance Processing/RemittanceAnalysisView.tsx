@@ -1,4 +1,4 @@
-import React from "react";
+
 
 interface RemitResponse {
   fileName: string;
@@ -25,6 +25,9 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
   if (!data || !data.result) return null;
 
   const { result } = data;
+  const carcCodes = result.analysis?.claimAdjustmentReasonCodes ?? [];
+  const rarcCodes = result.analysis?.remittanceAdviceRemarkCodes ?? [];
+  const providerAdjustments = result.analysis?.providerLevelAdjustments ?? [];
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 max-w-[100%] overflow-x-auto">
@@ -68,45 +71,37 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
       )}
 
       {/* CARC CODES */}
-      {result.analysis?.claimAdjustmentReasonCodes?.length > 0 && (
+      {carcCodes.length > 0 && (
         <section>
           <h3 className="font-semibold text-lg mb-2">
             Claim Adjustment Reason Codes
           </h3>
           <pre className="text-xs bg-slate-100 p-3 rounded overflow-auto">
-            {JSON.stringify(
-              result.analysis.claimAdjustmentReasonCodes,
-              null,
-              2
-            )}
+            {JSON.stringify(carcCodes, null, 2)}
           </pre>
         </section>
       )}
 
       {/* RARC CODES */}
-      {result.analysis?.remittanceAdviceRemarkCodes?.length > 0 && (
+      {rarcCodes.length > 0 && (
         <section>
           <h3 className="font-semibold text-lg mb-2">
             Remittance Remark Codes
           </h3>
           <pre className="text-xs bg-slate-100 p-3 rounded overflow-auto ">
-            {JSON.stringify(
-              result.analysis.remittanceAdviceRemarkCodes,
-              null,
-              2
-            )}
+            {JSON.stringify(rarcCodes, null, 2)}
           </pre>
         </section>
       )}
 
       {/* PROVIDER LEVEL ADJUSTMENTS (PLB) */}
-      {result.analysis?.providerLevelAdjustments?.length > 0 && (
+      {providerAdjustments.length > 0 && (
         <section>
           <h3 className="font-semibold text-lg mb-2">
             Provider-Level Adjustments (PLB)
           </h3>
           <pre className="text-xs bg-slate-100 p-3 rounded overflow-auto ">
-            {JSON.stringify(result.analysis.providerLevelAdjustments, null, 2)}
+            {JSON.stringify(providerAdjustments, null, 2)}
           </pre>
         </section>
       )}

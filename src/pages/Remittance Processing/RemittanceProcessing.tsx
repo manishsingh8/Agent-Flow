@@ -1,9 +1,8 @@
 import { useState, useRef } from "react";
-import { Upload, FileText, Zap, Search, Bot } from "lucide-react";
+import { Upload, Zap, Bot } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 import { RemitAnalysisView } from "./RemittanceAnalysisView";
