@@ -27,17 +27,17 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
   const { result } = data;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
+    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 max-w-[100%] overflow-x-auto">
       {/* FILE NAME */}
-      {data.fileName && (
+      {/* {data.fileName && (
         <section>
           <h3 className="font-semibold text-lg mb-1">File Name</h3>
           <p className="text-sm text-slate-600">{data.fileName}</p>
         </section>
-      )}
+      )} */}
 
       {/* WORKFLOW */}
-      {result.workflow && (
+      {/* {result.workflow && (
         <section>
           <h3 className="font-semibold text-lg mb-2">Workflow Suggestion</h3>
           <div className="bg-slate-100 p-4 rounded text-sm">
@@ -55,7 +55,7 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
             )}
           </div>
         </section>
-      )}
+      )} */}
 
       {/* CLAIM SUMMARY */}
       {result.analysis?.claimLevelSummary && (
