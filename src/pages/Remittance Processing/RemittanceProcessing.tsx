@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { Upload, FileText, Zap, Search, Bot } from "lucide-react";
-
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -53,13 +52,10 @@ export default function RemittanceProcessing() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) return;
-
     const selectedFile = e.target.files[0];
     const fileName = selectedFile.name.toLowerCase();
     const validExtensions = [".835", ".eob", ".edi", ".txt"];
-
     const isValid = validExtensions.some((ext) => fileName.endsWith(ext));
-
     if (!isValid) {
       toast({
         title: "Invalid File Format",
@@ -67,12 +63,10 @@ export default function RemittanceProcessing() {
           "Only ERA/EOB (X12 835) files are supported. Please upload a valid .835 or .eob file.",
         variant: "destructive",
       });
-
       e.target.value = "";
       setFile(null);
       return;
     }
-
     setFile(selectedFile);
     setIsProcessed(false);
   };
