@@ -1,5 +1,3 @@
-
-
 interface RemitResponse {
   fileName: string;
   result: {
@@ -31,35 +29,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 max-w-[100%] overflow-x-auto">
-      {/* FILE NAME */}
-      {/* {data.fileName && (
-        <section>
-          <h3 className="font-semibold text-lg mb-1">File Name</h3>
-          <p className="text-sm text-slate-600">{data.fileName}</p>
-        </section>
-      )} */}
-
-      {/* WORKFLOW */}
-      {/* {result.workflow && (
-        <section>
-          <h3 className="font-semibold text-lg mb-2">Workflow Suggestion</h3>
-          <div className="bg-slate-100 p-4 rounded text-sm">
-            {result.workflow?.suggestedAction && (
-              <p>
-                <span className="font-semibold">Suggested Action:</span>{" "}
-                {result.workflow.suggestedAction}
-              </p>
-            )}
-            {result.workflow?.reviewPriority && (
-              <p>
-                <span className="font-semibold">Priority:</span>{" "}
-                {result.workflow.reviewPriority}
-              </p>
-            )}
-          </div>
-        </section>
-      )} */}
-
       {/* CLAIM SUMMARY */}
       {result.analysis?.claimLevelSummary && (
         <section>
@@ -125,13 +94,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
           </div>
         </section>
       )}
-
-      {/* RAW RESULT (Optional Debugging) */}
-      {/* 
-      <pre className="text-xs bg-slate-200 p-3 rounded">
-        {JSON.stringify(result, null, 2)}
-      </pre>
-      */}
     </div>
   );
 };

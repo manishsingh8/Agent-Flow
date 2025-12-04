@@ -20,7 +20,6 @@ export default function RemittanceProcessing() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) return;
-
     const selectedFile = e.target.files[0];
     const name = selectedFile.name.toLowerCase();
     const valid = [".835", ".eob", ".edi", ".txt"];
@@ -31,12 +30,10 @@ export default function RemittanceProcessing() {
         description: "Upload a valid .835 or .eob file.",
         variant: "destructive",
       });
-
       e.target.value = "";
       setFile(null);
       return;
     }
-
     setFile(selectedFile);
     setIsProcessed(false);
     setRemitData(null);

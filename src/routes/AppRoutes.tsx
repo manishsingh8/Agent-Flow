@@ -13,6 +13,7 @@ import LoginPage from "@/pages/Login/Login";
 import Dashboard1 from "@/pages/RCMDashboard/RCMDashboard";
 import Dashboard2 from "@/pages/HCDDashboard/HCDDashboard";
 import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
+import EOBParser from "@/pages/EOB Parser/EOBParser";
 
 export const AppRoutes = () => {
   return (
@@ -32,6 +33,7 @@ export const AppRoutes = () => {
           <Route path="/dashboard/rcm-dashboard" element={<Dashboard1 />} />
           <Route path="/dashboard/hcd-dashboard" element={<Dashboard2 />} />
           <Route path="/era-parser" element={<RemittanceProcessing />} />
+          <Route path="/eob-parser" element={<EOBParser />} />
         </Route>
       </Route>
       {/* Catch-All */}
