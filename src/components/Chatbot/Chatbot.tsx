@@ -7,6 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import ChatbotImg from "../../assets/images/chatbot.png";
 
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
 interface ChatbotProps {
   onClose: () => void;
 }
@@ -35,7 +42,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition =
-        window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+        window?.SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.onstart = () => setIsListening(true);

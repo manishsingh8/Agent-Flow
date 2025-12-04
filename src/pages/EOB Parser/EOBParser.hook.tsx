@@ -1,5 +1,20 @@
 import { useState } from "react";
 
+type PipelineResult = {
+  split: {
+    letters: any[];
+    analysis: any;
+  };
+  classify: {
+    category: string;
+    analysis: any;
+  };
+  extract: {
+    service_lines: any[];
+    analysis: any;
+  };
+};
+
 export const useEOBLogic = () => {
   const [file, setFile] = useState<File | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -7,7 +22,9 @@ export const useEOBLogic = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // ⭐ Now pipelineResult is structured & accordion-ready
-  const [pipelineResult, setPipelineResult] = useState(null);
+  const [pipelineResult, setPipelineResult] = useState<PipelineResult | null>(
+    null
+  );
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const pdfFile = e.target.files?.[0];
