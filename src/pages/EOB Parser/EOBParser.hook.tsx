@@ -5,6 +5,8 @@ export const useEOBLogic = () => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // ⭐ Now pipelineResult is structured & accordion-ready
   const [pipelineResult, setPipelineResult] = useState(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,8 +14,7 @@ export const useEOBLogic = () => {
     if (pdfFile) {
       setIsLoading(true);
       setFile(pdfFile);
-      const url = URL.createObjectURL(pdfFile);
-      setPdfUrl(url);
+      setPdfUrl(URL.createObjectURL(pdfFile));
     }
   };
 
@@ -35,7 +36,7 @@ export const useEOBLogic = () => {
     setPipelineResult(null);
   };
 
-  // ⭐ START PIPELINE - CALL ALL 3 APIS TOGETHER
+  // ⭐ CALL ALL THREE APIS TOGETHER AND MERGE CLEANLY
   const handleStartPipeline = async () => {
     if (!file) return;
 
@@ -48,7 +49,7 @@ export const useEOBLogic = () => {
       formData.append("start_page", "1");
       formData.append("end_page", "1");
 
-      // ⭐ Run all 3 API calls in parallel
+      // 🔥 RUN ALL THREE APIS IN PARALLEL
       const [splitRes, classifyRes, extractRes] = await Promise.all([
         fetch(
           "https://d3gjsnfpy4.execute-api.us-east-1.amazonaws.com/dev/split",
@@ -73,30 +74,35 @@ export const useEOBLogic = () => {
         ),
       ]);
 
-      // ⭐ Validate all responses
       if (!splitRes.ok || !classifyRes.ok || !extractRes.ok) {
         throw new Error("One or more pipeline steps failed");
       }
 
-      // ⭐ Parse all API responses
       const [splitData, classifyData, extractData] = await Promise.all([
         splitRes.json(),
         classifyRes.json(),
         extractRes.json(),
       ]);
+      console.log(splitData, classifyData, extractData, "data");
+      // ⭐ CLEAN MERGED RESULT FOR ACCORDIONS
+      const finalOutput = {
+        split: {
+          letters: splitData?.data?.letters || [],
+          analysis: splitData?.data?.analysis || {},
+        },
+        classify: {
+          category: classifyData?.data?.category || "",
+          analysis: classifyData?.data?.analysis || {},
+        },
+        extract: {
+          service_lines: extractData?.data?.service_lines || [],
+          analysis: extractData?.data?.analysis || {},
+        },
+      };
 
-      console.log("Pipeline results:", {
-        splitData,
-        classifyData,
-        extractData,
-      });
+      console.log("Final Merged Pipeline Output:", finalOutput);
 
-      // ⭐ Save final merged result
-      setPipelineResult({
-        split: splitData,
-        classify: classifyData,
-        extract: extractData,
-      });
+      setPipelineResult(finalOutput);
     } catch (error) {
       console.error(error);
       alert("Error running pipeline");
@@ -107,18 +113,14 @@ export const useEOBLogic = () => {
 
   return {
     file,
-    setFile,
     pdfUrl,
-    setPdfUrl,
     numPages,
-    setNumPages,
     isLoading,
-    setIsLoading,
     pipelineResult,
     handleStartPipeline,
-    clearFile,
+    handleFileSelect,
     onDocumentLoadError,
     onDocumentLoadSuccess,
-    handleFileSelect,
+    clearFile,
   };
 };

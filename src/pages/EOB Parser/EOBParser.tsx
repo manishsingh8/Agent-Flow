@@ -22,10 +22,10 @@ export default function PdfPipelineViewer() {
     isLoading,
     pipelineResult,
     handleStartPipeline,
-    clearFile,
+    handleFileSelect,
     onDocumentLoadError,
     onDocumentLoadSuccess,
-    handleFileSelect,
+    clearFile,
   } = useEOBLogic();
 
   console.log(pipelineResult, "result");
@@ -45,7 +45,7 @@ export default function PdfPipelineViewer() {
 
       <div className="w-full h-screen flex gap-6 bg-gray-50 overflow-hidden font-sans">
         {/* LEFT PANEL */}
-        <div className="w-[40%]  overflow-auto">
+        <div className="w-[40%] max-w-[500px]  overflow-auto">
           <Card
             className={`w-[100%] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between ${
               pipelineResult ? "" : "h-full"
@@ -127,108 +127,129 @@ export default function PdfPipelineViewer() {
               {pipelineResult && (
                 <div className="w-full mt-4 p-4">
                   <Accordion type="single" collapsible>
+                    {/* ---------- STAGE 1 → Split Analysis ---------- */}
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
-                        Stage 1: Quality assessment and page Analysis
+                        Stage 1: Quality Assessment & Page Analysis
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          Our flagship product combines cutting-edge technology
-                          with sleek design. Built with premium materials, it
-                          offers unparalleled performance and reliability.
-                        </p>
+                      <AccordionContent className="flex flex-col gap-4">
+                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                          {pipelineResult?.split?.analysis
+                            ? JSON.stringify(
+                                pipelineResult?.split?.analysis,
+                                null,
+                                2
+                              )
+                            : "No analysis found"}
+                        </pre>
                       </AccordionContent>
                     </AccordionItem>
+
+                    {/* ---------- STAGE 2 → Letters from Split API ---------- */}
                     <AccordionItem value="item-2">
                       <AccordionTrigger>
                         Stage 2: Document Boundary Detection & Grouping
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          We offer worldwide shipping through trusted courier
-                          partners. Standard delivery takes 3-5 business days,
-                          while express shipping ensures delivery within 1-2
-                          business days.
-                        </p>
+                      <AccordionContent className="flex flex-col gap-4">
+                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                          {pipelineResult?.split?.letters
+                            ? JSON.stringify(
+                                pipelineResult?.split?.letters,
+                                null,
+                                2
+                              )
+                            : "No letters detected"}
+                        </pre>
                       </AccordionContent>
                     </AccordionItem>
+
+                    {/* ---------- STAGE 3 → Classification Analysis ---------- */}
                     <AccordionItem value="item-3">
                       <AccordionTrigger>
                         Stage 3: Document Classification & Template Tagging
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          We stand behind our products with a comprehensive
-                          30-day return policy. If you&apos;re not completely
-                          satisfied, simply return the item in its original
-                          condition.
-                        </p>
+                      <AccordionContent className="flex flex-col gap-4">
+                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                          {pipelineResult?.classify?.analysis
+                            ? JSON.stringify(
+                                pipelineResult.classify.analysis,
+                                null,
+                                2
+                              )
+                            : "Classification analysis unavailable"}
+                        </pre>
                       </AccordionContent>
                     </AccordionItem>
+
+                    {/* ---------- STAGE 4 → Extracted Service Lines ---------- */}
                     <AccordionItem value="item-4">
                       <AccordionTrigger>
                         Stage 4: Comprehensive Data Extraction
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          Our flagship product combines cutting-edge technology
-                          with sleek design. Built with premium materials, it
-                          offers unparalleled performance and reliability.
-                        </p>
+                      <AccordionContent className="flex flex-col gap-4">
+                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                          {pipelineResult?.extract?.analysis
+                            ? JSON.stringify(
+                                pipelineResult.extract.analysis,
+                                null,
+                                2
+                              )
+                            : "No service lines extracted"}
+                        </pre>
                       </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="item-5">
+                    {/* may needed later  */}
+                    {/* ---------- STAGE 5 → Category ---------- */}
+                    {/* <AccordionItem value="item-5">
                       <AccordionTrigger>
-                        Stage 5: Summery Generation & Validation
+                        Stage 5: Summary Generation & Validation
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          We offer worldwide shipping through trusted courier
-                          partners. Standard delivery takes 3-5 business days,
-                          while express shipping ensures delivery within 1-2
-                          business days.
-                        </p>
+                      <AccordionContent className="flex flex-col gap-4">
+                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                          {pipelineResult?.classify?.category
+                            ? pipelineResult.classify.category
+                            : "No category detected"}
+                        </pre>
                       </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-6">
+                    </AccordionItem> */}
+
+                    {/* ---------- STAGE 6 → Extract Analysis ---------- */}
+                    {/* <AccordionItem value="item-6">
                       <AccordionTrigger>
                         Stage 6: Final Compilation & Telemetry
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          We stand behind our products with a comprehensive
-                          30-day return policy. If you&apos;re not completely
-                          satisfied, simply return the item in its original
-                          condition.
-                        </p>
+                      <AccordionContent className="flex flex-col gap-4">
+                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                          {pipelineResult?.extract?.analysis
+                            ? JSON.stringify(
+                                pipelineResult.extract.analysis,
+                                null,
+                                2
+                              )
+                            : "Extract analysis unavailable"}
+                        </pre>
                       </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-7">
+                    </AccordionItem> */}
+
+                    {/* ---------- STAGE 7 (Optional) ---------- */}
+                    {/* <AccordionItem value="item-7">
                       <AccordionTrigger>
                         Stage 7: Document Splitting & Export
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          We offer worldwide shipping through trusted courier
-                          partners. Standard delivery takes 3-5 business days,
-                          while express shipping ensures delivery within 1-2
-                          business days.
-                        </p>
+                      <AccordionContent>
+                        <p>No additional data assigned.</p>
                       </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-8">
+                    </AccordionItem> */}
+
+                    {/* ---------- STAGE 8 (Optional) ---------- */}
+                    {/* <AccordionItem value="item-8">
                       <AccordionTrigger>
-                        Stage 8: Professional Summery Generation
+                        Stage 8: Professional Summary Generation
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4 text-balance">
-                        <p>
-                          We stand behind our products with a comprehensive
-                          30-day return policy. If you&apos;re not completely
-                          satisfied, simply return the item in its original
-                          condition.
-                        </p>
+                      <AccordionContent>
+                        <p>No additional data assigned.</p>
                       </AccordionContent>
-                    </AccordionItem>
+                    </AccordionItem> */}
                   </Accordion>
                 </div>
               )}
