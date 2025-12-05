@@ -8,15 +8,10 @@ import { ChevronDown } from "lucide-react";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState(
-    localStorage.getItem("activetab") || "rcm"
+    sessionStorage.getItem("activetab") || "rcm"
   );
-
-  console.log(activeTab, "tab");
-
-  // Keep localStorage synced when state changes
   useEffect(() => {
-    console.log("called");
-    localStorage.setItem("activetab", activeTab);
+    sessionStorage.setItem("activetab", activeTab);
   }, [activeTab]);
   return (
     <div

@@ -65,7 +65,7 @@ WorkFlowProps) {
         tabValue = "cashPosting";
       }
 
-      localStorage.setItem("activetab", tabValue);
+      sessionStorage.setItem("activetab", tabValue);
       setActiveTab?.(tabValue);
     }
   };
