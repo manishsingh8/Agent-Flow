@@ -123,7 +123,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 1 && (
-          <div className="flex flex-col items-center justify-center gap-4 py-8">
+          <div className="flex flex-col items-center justify-center gap-4">
             {/* <Avatar className="h-20 w-20 bg-gradient-to-br from-cyan-400 to-green-400">
               <AvatarFallback className="bg-transparent text-3xl">
                 🤖
@@ -201,6 +201,11 @@ export function Chatbot({ onClose }: ChatbotProps) {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             className="flex-1"
+            style={{
+              backdropFilter: "blur(3.2908897399902344px)", // precise blur
+              WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
+              boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+            }}
           />
           <Button
             variant={isListening ? "default" : "outline"}
@@ -208,6 +213,11 @@ export function Chatbot({ onClose }: ChatbotProps) {
             onClick={handleMicClick}
             className="px-3 h-9"
             title="Use microphone"
+            style={{
+              backdropFilter: "blur(3.2908897399902344px)", // precise blur
+              WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
+              boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+            }}
           >
             <Mic className="h-5 w-5" />
           </Button>
