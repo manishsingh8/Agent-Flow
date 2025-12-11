@@ -5,6 +5,7 @@ import { X, Mic, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { TypingIndicator } from "./TypingIndicator";
 import ChatbotImg from "../../assets/images/chatbot.png";
 
 declare global {
@@ -35,10 +36,11 @@ export function Chatbot({ onClose }: ChatbotProps) {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isListening, setIsListening] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
-  // Initialize speech recognition
+  // Initialize speech recognition and call initial API
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition =
@@ -55,6 +57,45 @@ export function Chatbot({ onClose }: ChatbotProps) {
         };
       }
     }
+
+    // Call initial API when chatbot opens
+    const initializeChatbot = async () => {
+      try {
+        const payload = {
+          user_id: 8,
+          message: "Hello",
+        };
+
+        const response = await fetch(
+          "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/webhook",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await response.json();
+        console.log("Initial API Response:", data);
+
+        // Update the first message with the reply from API
+        if (data && data.reply) {
+          setMessages([
+            {
+              id: "1",
+              role: "assistant",
+              content: data.reply,
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error("Error calling initial API:", error);
+      }
+    };
+
+    initializeChatbot();
   }, []);
 
   const scrollToBottom = () => {
@@ -75,17 +116,61 @@ export function Chatbot({ onClose }: ChatbotProps) {
       content: inputValue,
     };
     setMessages((prev) => [...prev, userMessage]);
+    const messageToSend = inputValue;
     setInputValue("");
 
-    // Simulate assistant response
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: `I received your message: "${inputValue}". How can I help you further?`,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    }, 500);
+    // Show typing indicator
+    setIsTyping(true);
+
+    // Call chat API with user message
+    const callChatAPI = async () => {
+      try {
+        const payload = {
+          user_id: 8,
+          message: messageToSend,
+        };
+
+        const response = await fetch(
+          "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/chat",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await response.json();
+        console.log("Chat API Response:", data);
+
+        // Hide typing indicator
+        setIsTyping(false);
+
+        // Add assistant response to messages
+        if (data && data.reply) {
+          const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "assistant",
+            content: data.reply,
+          };
+          setMessages((prev) => [...prev, assistantMessage]);
+        }
+      } catch (error) {
+        console.error("Error calling chat API:", error);
+        // Hide typing indicator
+        setIsTyping(false);
+        // Fallback error message
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: "Sorry, I encountered an error processing your request.",
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
+    };
+
+    callChatAPI();
   };
 
   const handleMicClick = () => {
@@ -124,16 +209,11 @@ export function Chatbot({ onClose }: ChatbotProps) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center gap-4">
-            {/* <Avatar className="h-20 w-20 bg-gradient-to-br from-cyan-400 to-green-400">
-              <AvatarFallback className="bg-transparent text-3xl">
-                🤖
-              </AvatarFallback>
-            </Avatar> */}
             <img src={ChatbotImg} alt="chatbot image" />
           </div>
         )}
 
-        {/* {messages.map((message) => (
+        {messages.map((message) => (
           <div
             key={message.id}
             className={`flex gap-3 ${
@@ -141,7 +221,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
             }`}
           >
             {message.role === "assistant" && (
-              <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gradient-to-br from-cyan-400 to-green-400 flex items-center justify-center text-sm">
+              <div className="shrink-0 h-8 w-8 rounded-full bg-linear-to-br from-cyan-400 to-green-400 flex items-center justify-center text-sm">
                 🤖
               </div>
             )}
@@ -155,40 +235,39 @@ export function Chatbot({ onClose }: ChatbotProps) {
               <p className="text-sm">{message.content}</p>
             </div>
           </div>
-        ))} */}
-        {/* <div ref={messagesEndRef} /> */}
-        <div>
-          <div className="font-bold text-2xl">
-            Hello John! I'm your
-            <div className="text-[#06BED8]">AI Assistant.</div>
+        ))}
+
+        {isTyping && <TypingIndicator />}
+        <div ref={messagesEndRef} />
+
+        {messages.length === 1 && (
+          <div className="text-sm">
+            <div className="text-xs text-muted-foreground text-left">
+              You can talk to me, ask questions and perform tasks with text
+              commands.
+            </div>
+            <ul className="list-disc pl-4 text-[#171717] marker:text-[#171717]">
+              <li>
+                <p className="text-xs text-muted-foreground text-left">
+                  I can generate dynamic data analytics dashboards customized to
+                  your needs.
+                </p>
+              </li>
+              <li>
+                <p className="text-xs text-muted-foreground text-left">
+                  I can help you with jobs, queries and any tasks you would like
+                  to create, execute or assign.
+                </p>
+              </li>
+              <li>
+                <p className="text-xs text-muted-foreground text-left">
+                  I can scan and analyze your data and provide you with all the
+                  answers .
+                </p>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div className="text-sm">
-          <div className="text-xs text-muted-foreground text-left">
-            You can talk to me, ask questions and perform tasks with text
-            commands.
-          </div>
-          <ul className="list-disc pl-4 text-[#171717] marker:text-[#171717]">
-            <li>
-              <p className="text-xs text-muted-foreground text-left">
-                I can generate dynamic data analytics dashboards customized to
-                your needs.
-              </p>
-            </li>
-            <li>
-              <p className="text-xs text-muted-foreground text-left">
-                I can help you with jobs, queries and any tasks you would like
-                to create, execute or assign.
-              </p>
-            </li>
-            <li>
-              <p className="text-xs text-muted-foreground text-left">
-                I can scan and analyze your data and provide you with all the
-                answers .
-              </p>
-            </li>
-          </ul>
-        </div>
+        )}
       </div>
 
       {/* Input Area */}
