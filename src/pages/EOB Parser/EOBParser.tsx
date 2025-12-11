@@ -45,7 +45,7 @@ export default function PdfPipelineViewer() {
       );
     if (status === "completed")
       return <span className="text-green-600"> Completed</span>;
-    return <span className="text-gray-500"> Waiting</span>;
+    return <span className="text-gray-500"> </span>;
   };
 
   return (
@@ -63,9 +63,9 @@ export default function PdfPipelineViewer() {
         </div>
       </div>
 
-      <div className="w-full h-screen flex gap-6 bg-gray-50 overflow-hidden font-sans">
+      <div className=" h-screen flex gap-6 bg-gray-50 overflow-hidden font-sans">
         {/* LEFT PANEL */}
-        <div className="w-[40%] max-w-[500px] overflow-auto">
+        <div className="w-[50%]  overflow-auto">
           <Card
             className={`w-[100%] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between 
               "h-full"`}
@@ -205,12 +205,10 @@ export default function PdfPipelineViewer() {
                         ) : stageStatus.stage1 === "processing" ? (
                           "Processing Stage 1..."
                         ) : (
-                          "Waiting"
+                          ""
                         )}
                       </AccordionContent>
                     </AccordionItem>
-
-                    {/* ---------- STAGE 2 ---------- */}
                     <AccordionItem value="item-2">
                       <AccordionTrigger
                         disabled={stageStatus.stage1 !== "completed"}
@@ -286,8 +284,6 @@ export default function PdfPipelineViewer() {
                         )}
                       </AccordionContent>
                     </AccordionItem>
-                    {/* ---------- STAGE 3 ---------- */}
-                    {/* ---------- STAGE 3 ---------- */}
                     <AccordionItem value="item-3">
                       <AccordionTrigger
                         disabled={stageStatus.stage2 !== "completed"}
@@ -370,10 +366,7 @@ export default function PdfPipelineViewer() {
                         )}
                       </AccordionContent>
                     </AccordionItem>
-
-                    {/* ---------- STAGE 4 ---------- */}
-                    {/* ---------- STAGE 4 ---------- */}
-                    <AccordionItem value="item-4">
+                    <AccordionItem value="item-4" className="max-w-[650px]">
                       <AccordionTrigger
                         disabled={stageStatus.stage3 !== "completed"}
                       >
@@ -392,8 +385,8 @@ export default function PdfPipelineViewer() {
                         pipelineResult?.extract ? (
                           <div className="flex flex-col gap-6">
                             {/* Service Lines Table */}
-                            <div className="overflow-auto">
-                              <table className="w-full text-sm text-left border border-gray-200">
+                            <div className="w-full overflow-x-auto overflow-hidden">
+                              <table className="!w-[50px] min-w-max text-sm text-left border border-gray-200">
                                 <thead className="bg-gray-100">
                                   <tr>
                                     <th className="px-4 py-2 border">
@@ -468,9 +461,10 @@ export default function PdfPipelineViewer() {
                                     </th>
                                   </tr>
                                 </thead>
+
                                 <tbody>
                                   {pipelineResult.extract[0]?.service_lines.map(
-                                    (line: any, index: number) => (
+                                    (line, index) => (
                                       <tr
                                         key={index}
                                         className="even:bg-gray-50"
@@ -617,8 +611,8 @@ export default function PdfPipelineViewer() {
         </div>
 
         {/* RIGHT PANEL – DOCUMENT VIEWER */}
-        <Card className="w-[60%] flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-0 overflow-hidden flex flex-col">
-          <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
+        <Card className="w-[50%] flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-0 overflow-hidden flex flex-col">
+          <div className=" p-4 border-b border-gray-100 flex justify-between items-center bg-white">
             <div>
               <h2 className="text-sm font-semibold text-gray-900">
                 Document Preview
