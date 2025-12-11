@@ -5,41 +5,33 @@ import {
   type ReconciledTransaction,
 } from "@/constants/TableData";
 
+const payerOptions = [
+  { value: "all", label: "All Payers" },
+  { value: "payer1", label: "Payer 1" },
+  { value: "payer2", label: "Payer 2" },
+];
+const statusOptions = [
+  { value: "all", label: "All Status" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+];
+
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-06-01");
   const [to, setTo] = useState("2025-06-01");
-
-  // 🔥 Add these two missing states
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
-
-  const payerOptions = [
-    { value: "all", label: "All Payers" },
-    { value: "payer1", label: "Payer 1" },
-    { value: "payer2", label: "Payer 2" },
-  ];
-
-  const statusOptions = [
-    { value: "all", label: "All Status" },
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
-  ];
-
-  // Table state (managed by parent)
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedData, setEditedData] = useState<
     Partial<ReconciledTransaction>[]
   >([]);
 
-  // Filtered data based on search and region filters
   const filteredData = useMemo(() => {
     return transactions.filter((t) => {
       const matchesBrand = selectedBrands.includes(t.region);
@@ -78,7 +70,9 @@ export const useReconciledReportLogic = () => {
 
   const handleBrandToggle = (region: string) => {
     setSelectedBrands((prev) =>
-      prev.includes(region) ? prev.filter((b) => b !== region) : [...prev, region]
+      prev.includes(region)
+        ? prev.filter((b) => b !== region)
+        : [...prev, region]
     );
     setCurrentPage(1);
   };
@@ -100,7 +94,6 @@ export const useReconciledReportLogic = () => {
 
   const handleEditClick = () => {
     if (selectedRows.size > 0) {
-      // Get selected rows data and initialize edited data
       const selectedRowsData = paginatedData.filter((row) =>
         selectedRows.has(String(row.id))
       );
@@ -199,8 +192,6 @@ export const useReconciledReportLogic = () => {
       bodyClassName: "text-blue-600",
     },
   };
-
-  // Dynamically create columns for all keys
   const columns: Column<ReconciledTransaction>[] = (
     Object.keys(transactions[0]) as Array<keyof ReconciledTransaction>
   )
@@ -217,8 +208,6 @@ export const useReconciledReportLogic = () => {
           if (typeof val === "number") return `$${val.toFixed(2)}`;
           return String(val);
         },
-
-        // 👇 NEW ADDED PROPERTIES
         bodyClassName: rule.bodyClassName || "",
         conditionalClassName: rule.conditionalClassName || undefined,
       };

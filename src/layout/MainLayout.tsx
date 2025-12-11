@@ -7,7 +7,7 @@ import {
 import { AppSidebar } from "@/layout/AppSidebar";
 import { Separator } from "@/components/ui/Separator";
 import { Outlet } from "react-router-dom";
-import { Chatbot } from "@/components/Chatbot/Chatbot";
+import { Chatbot } from "@/pages/Chatbot/Chatbot";
 import { MessageCircle } from "lucide-react";
 
 export const MainLayout = () => {

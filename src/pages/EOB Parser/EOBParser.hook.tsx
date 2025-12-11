@@ -20,8 +20,6 @@ export const useEOBLogic = () => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  // ⭐ Now pipelineResult is structured & accordion-ready
   const [pipelineResult, setPipelineResult] = useState<PipelineResult | null>(
     null
   );
@@ -52,8 +50,6 @@ export const useEOBLogic = () => {
     setNumPages(null);
     setPipelineResult(null);
   };
-
-  // ⭐ CALL ALL THREE APIS TOGETHER AND MERGE CLEANLY
   const handleStartPipeline = async () => {
     if (!file) return;
 
@@ -65,8 +61,6 @@ export const useEOBLogic = () => {
       formData.append("file", file);
       formData.append("start_page", "1");
       formData.append("end_page", "1");
-
-      // 🔥 RUN ALL THREE APIS IN PARALLEL
       const [splitRes, classifyRes, extractRes] = await Promise.all([
         fetch(
           "https://d3gjsnfpy4.execute-api.us-east-1.amazonaws.com/dev/split",
@@ -100,8 +94,6 @@ export const useEOBLogic = () => {
         classifyRes.json(),
         extractRes.json(),
       ]);
-      console.log(splitData, classifyData, extractData, "data");
-      // ⭐ CLEAN MERGED RESULT FOR ACCORDIONS
       const finalOutput = {
         split: {
           letters: splitData?.data?.letters || [],
@@ -116,9 +108,7 @@ export const useEOBLogic = () => {
           analysis: extractData?.data?.analysis || {},
         },
       };
-
       console.log("Final Merged Pipeline Output:", finalOutput);
-
       setPipelineResult(finalOutput);
     } catch (error) {
       console.error(error);

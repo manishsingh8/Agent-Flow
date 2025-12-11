@@ -11,9 +11,6 @@ const initialNodes: Node[] = [
     position: { x: 16, y: 57 },
     data: { label: "Config", icon: "config" },
   },
-
-  // ---------------- Group 2 ----------------
-  // ---------------- Center Agents ----------------
   {
     id: "intake-orch",
     type: "agent",

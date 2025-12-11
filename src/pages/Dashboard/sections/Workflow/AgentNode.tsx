@@ -55,15 +55,15 @@ export default function AgentNode({ data }: AgentNodeProps) {
     <div
       className={`pointer-events-none flex items-center justify-center bg-card border border-card-border rounded-3xl shadow-md hover-elevate min-w-[200px] relative ${sizeClasses} w-[900px]`}
       style={{
-        backdropFilter: "blur(3.2908897399902344px)", // precise blur
-        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
-        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+        backdropFilter: "blur(3.2908897399902344px)",
+        WebkitBackdropFilter: "blur(3.2908897399902344px)",
+        boxShadow: "0px 0px 20.57px 0px #24956333",
       }}
     >
       <div className="pointer-events-auto w-full h-full flex items-center justify-center p-4">
         <div className="flex items-center gap-2">
           <span
-            className="text-lg font-semibold text-card-foreground font-medium"
+            className="text-lg font-semibold text-card-foreground"
             data-testid={`text-${data.label}`}
           >
             {data.label}

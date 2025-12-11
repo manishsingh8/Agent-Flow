@@ -8,13 +8,11 @@ export const useCashPostingQueueLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-06-01");
   const [to, setTo] = useState("2025-06-01");
-
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // Filtered data based on search and region filters
   const filteredData = useMemo(() => {
     return transactions.filter((t) => {
       const matchesBrand = selectedBrands.includes(t.region);
@@ -141,16 +139,12 @@ export const useCashPostingQueueLogic = () => {
       bodyClassName: "text-blue-600",
     },
   };
-
-  // Dynamically create columns for all keys
   const columns = (
     Object.keys(transactions[0]) as Array<keyof Cash_Posting_Transaction>
   )
     .filter((key) => key !== "id")
     .map((key) => {
       const rule = columnRules[String(key)] || {};
-
-      // Check if this is an amount field
       const amountFields = ["totalAmount", "postedAmount", "remittance"];
       const isAmountField = amountFields.includes(String(key));
 
@@ -165,8 +159,6 @@ export const useCashPostingQueueLogic = () => {
               return String(val ?? "");
             },
         isAmount: isAmountField,
-
-        // 👇 NEW ADDED PROPERTIES
         bodyClassName: rule.bodyClassName || "",
         conditionalClassName: rule.conditionalClassName || undefined,
       };

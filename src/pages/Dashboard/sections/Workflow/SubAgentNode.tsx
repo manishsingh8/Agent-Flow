@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import PlusIcon from "@/assets/icons/plus-icon.svg";
 import Logo from "@/assets/images/logo-icon.jpeg";
 
-type HandlePosition = keyof typeof Position; // 'Left' | 'Right' | 'Top' | 'Bottom'
+type HandlePosition = keyof typeof Position;
 
 interface HandleConfig {
   position: HandlePosition;
@@ -28,9 +28,9 @@ export default function SubAgentNode({ data }: SubAgentNodeProps) {
     <div
       className={`pointer-events-none flex items-center justify-center bg-card border border-card-border rounded-3xl shadow-md hover-elevate min-w-[200px] relative ${sizeClasses}`}
       style={{
-        backdropFilter: "blur(3.2908897399902344px)", // precise blur
-        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
-        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+        backdropFilter: "blur(3.2908897399902344px)",
+        WebkitBackdropFilter: "blur(3.2908897399902344px)",
+        boxShadow: "0px 0px 20.57px 0px #24956333",
       }}
     >
       <div className="pointer-events-auto w-full h-full flex items-center justify-center p-4">

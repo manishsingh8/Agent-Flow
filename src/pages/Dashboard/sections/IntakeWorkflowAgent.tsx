@@ -19,7 +19,7 @@ const initialNodes: Node[] = [
     type: "agent",
     position: { x: 380, y: 50 },
     data: {
-      label: "Intake Orchestrator Agent",
+      label: "Intake Workflow Agent",
       showLogo: true,
       showAddButton: true,
       // route: "/era-parser",
@@ -367,7 +367,7 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const IntakeOrchestratorAgent = () => {
+const IntakeWorkflowAgent = () => {
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mt-3">
@@ -396,4 +396,4 @@ const IntakeOrchestratorAgent = () => {
   );
 };
 
-export default IntakeOrchestratorAgent;
+export default IntakeWorkflowAgent;

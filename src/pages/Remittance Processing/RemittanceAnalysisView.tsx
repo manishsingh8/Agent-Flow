@@ -21,7 +21,6 @@ interface RemitResponse {
 
 export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
   if (!data || !data.result) return null;
-
   const { result } = data;
   const carcCodes = result.analysis?.claimAdjustmentReasonCodes ?? [];
   const rarcCodes = result.analysis?.remittanceAdviceRemarkCodes ?? [];
@@ -29,7 +28,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 max-w-[100%] overflow-x-auto">
-      {/* CLAIM SUMMARY */}
       {result.analysis?.claimLevelSummary && (
         <section>
           <h3 className="font-semibold text-lg mb-2">Claim Summary</h3>
@@ -38,8 +36,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
           </pre>
         </section>
       )}
-
-      {/* CARC CODES */}
       {carcCodes.length > 0 && (
         <section>
           <h3 className="font-semibold text-lg mb-2">
@@ -50,8 +46,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
           </pre>
         </section>
       )}
-
-      {/* RARC CODES */}
       {rarcCodes.length > 0 && (
         <section>
           <h3 className="font-semibold text-lg mb-2">
@@ -62,8 +56,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
           </pre>
         </section>
       )}
-
-      {/* PROVIDER LEVEL ADJUSTMENTS (PLB) */}
       {providerAdjustments.length > 0 && (
         <section>
           <h3 className="font-semibold text-lg mb-2">
@@ -74,8 +66,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
           </pre>
         </section>
       )}
-
-      {/* PAYMENT SUMMARY */}
       {result.analysis?.summary && (
         <section>
           <h3 className="font-semibold text-lg mb-2">Payment Summary</h3>
@@ -84,8 +74,6 @@ export const RemitAnalysisView = ({ data }: { data: RemitResponse }) => {
           </pre>
         </section>
       )}
-
-      {/* EXPERT NARRATIVE */}
       {result.expertReviewNarrative && (
         <section>
           <h3 className="font-semibold text-lg mb-2">Expert Review</h3>

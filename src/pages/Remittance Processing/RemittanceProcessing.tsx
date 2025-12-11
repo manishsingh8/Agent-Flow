@@ -11,8 +11,6 @@ export default function RemittanceProcessing() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
-
-  // 👉 This will now store the FULL API RESPONSE
   const [remitData, setRemitData] = useState<any | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -48,43 +46,32 @@ export default function RemittanceProcessing() {
       });
       return;
     }
-
     try {
       setIsProcessing(true);
-
       const formData = new FormData();
       formData.append("eraFile", file);
-
       const response = await fetch(
         "https://ibdk93jyg0.execute-api.us-east-1.amazonaws.com/Prod/upload",
         { method: "POST", body: formData }
       );
-
       if (!response.ok) throw new Error("Failed to process file");
-
       const data = await response.json();
-
-      // 👉 SAVE FULL RAW RESPONSE
       setRemitData(data);
-
       setIsProcessed(true);
       setIsProcessing(false);
     } catch (error) {
       console.error(error);
-
       toast({
         title: "Processing Failed",
         description: "Unable to process file. Try again later.",
         variant: "destructive",
       });
-
       setIsProcessing(false);
     }
   };
 
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      {/* HEADER */}
       <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] rounded-[14px] h-[80px]">
         <div className="text-[20px] font-[600] text-[#0A0A0A]">
           Smart Remittance Assistant
@@ -93,19 +80,16 @@ export default function RemittanceProcessing() {
           Upload ERA/EOB files to analyze payments and adjustments.
         </div>
       </div>
-
       <div>
         <Card className="border-slate-200 shadow-sm overflow-hidden">
           <CardContent className="p-0">
             <div className="grid grid-cols-1 lg:grid-cols-2">
-              {/* LEFT - UPLOAD */}
               <div className="p-4 space-y-8 border-r border-slate-100 bg-white">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-900">
                     ERA/EOB File
                   </label>
                   <div>Upload remittance file (.835, .eob)</div>
-
                   <div
                     className="flex items-center w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 cursor-pointer hover:bg-slate-100"
                     onClick={() => fileInputRef.current?.click()}
@@ -113,11 +97,9 @@ export default function RemittanceProcessing() {
                     <button className="bg-slate-200 text-slate-700 px-3 py-1 rounded text-xs mr-3">
                       Choose File
                     </button>
-
                     <span className="text-slate-600 truncate flex-1">
                       {file ? file.name : "No file chosen"}
                     </span>
-
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -127,8 +109,6 @@ export default function RemittanceProcessing() {
                     />
                   </div>
                 </div>
-
-                {/* PROCESS BUTTON */}
                 <Button
                   className="w-full md:w-auto bg-[#249563] hover:bg-[#249563] text-white font-medium"
                   size="lg"
@@ -148,8 +128,6 @@ export default function RemittanceProcessing() {
                   )}
                 </Button>
               </div>
-
-              {/* RIGHT - WORKFLOW */}
               <div className="p-8 bg-slate-50/50 flex flex-col justify-center min-h-[300px]">
                 {!isProcessed ? (
                   <div className="border-2 border-dashed border-slate-200 rounded-xl p-10 text-center">
@@ -208,8 +186,6 @@ export default function RemittanceProcessing() {
             </div>
           </CardContent>
         </Card>
-
-        {/* FULL ANALYSIS BELOW */}
         {isProcessed && remitData && (
           <div className="mt-6">
             <RemitAnalysisView data={remitData} />

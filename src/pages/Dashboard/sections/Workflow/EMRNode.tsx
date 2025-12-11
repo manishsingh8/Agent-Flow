@@ -1,7 +1,7 @@
 import { Handle, Position, type HandleType } from "reactflow";
 import EMRIcon from "@/assets/icons/emr.svg";
 
-type HandlePosition = keyof typeof Position; // 'Left' | 'Right' | 'Top' | 'Bottom'
+type HandlePosition = keyof typeof Position; 
 
 interface HandleConfig {
   position: HandlePosition;
@@ -23,9 +23,9 @@ export default function EMRNode({ data }: EMRNodeProps) {
     <div
       className="bg-card border border-card-border rounded-lg p-3 shadow-sm hover-elevate min-w-[90px]"
       style={{
-        backdropFilter: "blur(3.2908897399902344px)", // precise blur
-        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
-        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+        backdropFilter: "blur(3.2908897399902344px)", 
+        WebkitBackdropFilter: "blur(3.2908897399902344px)", 
+        boxShadow: "0px 0px 20.57px 0px #24956333", 
       }}
     >
       <div className="flex flex-col items-center gap-2">

@@ -1,9 +1,9 @@
 import MapImage from "@/assets/icons/trading-positive.svg";
 import MapMediumImg from "@/assets/icons/trading-med.svg";
 import MapNegative from "@/assets/icons/trading-negative.svg";
-export const RCM_MAESTRO_AGENT_DATA = [
+export const RCM_CENTRAL_ENGINE_DATA = [
   {
-    headerText: "Files Ingested",
+    headerText: "Total Files Ingested",
     percentage: 5,
     value: 126,
     status: "positive",
@@ -15,7 +15,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
     image: MapImage,
   },
   {
-    headerText: "Docs Parsed",
+    headerText: "Docs Analyzed",
     percentage: 8,
     status: "positive",
     value: 118,
@@ -27,7 +27,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
     image: MapImage,
   },
   {
-    headerText: "BAI",
+    headerText: "Bank File Count",
     status: "",
     percentage: -1,
     value: "12",
@@ -39,7 +39,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
     image: MapMediumImg,
   },
   {
-    headerText: "EDI 835",
+    headerText: "835 File Count",
     percentage: 3,
     value: "34",
     colorClass: {
@@ -51,7 +51,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
     status: "positive",
   },
   {
-    headerText: "EOB",
+    headerText: "EOB File Count",
     percentage: 6,
     value: "52",
     colorClass: {
@@ -63,7 +63,7 @@ export const RCM_MAESTRO_AGENT_DATA = [
     image: MapImage,
   },
   {
-    headerText: "EDI 837",
+    headerText: "837 File Count",
     percentage: -7,
     value: "9",
     colorClass: {
@@ -288,4 +288,11 @@ export const CASH_POSTING_DATA = [
     image: MapImage,
     status: "positive",
   },
+];
+
+export const TABS = [
+  { value: "rcm", label: "RCM Central Engine" },
+  { value: "intake", label: "Intake Workflow Agent" },
+  { value: "reconciliation", label: "Reconciliation Agent" },
+  { value: "cashPosting", label: "Cash Posting Agent" },
 ];

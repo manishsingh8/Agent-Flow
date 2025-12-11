@@ -13,9 +13,9 @@ export default function AgentToolNode({ data }: AgentToolNodeProps) {
     <div
       className="bg-white rounded-2xl shadow-md border-2 border-gray-200 px-4 py-3 min-w-[110px] text-center hover:shadow-lg transition-shadow cursor-none"
       style={{
-        backdropFilter: "blur(3.2908897399902344px)", // precise blur
-        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
-        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+        backdropFilter: "blur(3.2908897399902344px)", 
+        WebkitBackdropFilter: "blur(3.2908897399902344px)", 
+        boxShadow: "0px 0px 20.57px 0px #24956333", 
       }}
     >
       <Handle

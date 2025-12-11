@@ -6,12 +6,9 @@ import {
   buildKpiCards,
 } from "@/constants/RCMDashboardData";
 
-
 export default function useRCMDashboard() {
-  const [operationalMetrics, setOperationalMetrics] = useState<OperationalMetrics>(
-    initialOperationalMetrics
-  );
-
+  const [operationalMetrics, setOperationalMetrics] =
+    useState<OperationalMetrics>(initialOperationalMetrics);
   const [loading] = useState<boolean>(false);
   const [error] = useState<string | null>(null);
 
@@ -19,7 +16,6 @@ export default function useRCMDashboard() {
     return buildKpiCards(operationalMetrics);
   }, [operationalMetrics]);
 
- 
   const refresh = useCallback(() => {
     setOperationalMetrics(initialOperationalMetrics);
   }, []);
@@ -33,4 +29,3 @@ export default function useRCMDashboard() {
     setOperationalMetrics,
   };
 }
-

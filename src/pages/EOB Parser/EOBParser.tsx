@@ -27,12 +27,10 @@ export default function PdfPipelineViewer() {
     onDocumentLoadSuccess,
     clearFile,
   } = useEOBLogic();
-
-  console.log(pipelineResult, "result");
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
-        <div className="text-[20px] font-[600] text-[#0A0A0A]">
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+        <div className="text-[20px] font-semibold text-[#0A0A0A]">
           RCM Insight Extraction
         </div>
         <div className="flex items-center gap-2">
@@ -47,13 +45,13 @@ export default function PdfPipelineViewer() {
         {/* LEFT PANEL */}
         <div className="w-[40%] max-w-[500px]  overflow-auto">
           <Card
-            className={`w-[100%] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between ${
+            className={`w-full bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between ${
               pipelineResult ? "" : "h-full"
             }`}
           >
             <div>
               <div className="mb-4">
-                <div className="text-[20px] font-[600] text-[#0A0A0A]">
+                <div className="text-[20px] font-semibold text-[#0A0A0A]">
                   RCM Insight Extraction
                 </div>
                 <div className="flex items-center gap-2">
