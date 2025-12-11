@@ -41,7 +41,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
   const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
-  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Initialize speech recognition and call initial API
   useEffect(() => {
@@ -87,24 +87,38 @@ export function Chatbot({ onClose }: ChatbotProps) {
           setTypingMessageId(messageId);
           setTypingText("");
           setIsTyping(false);
+
+          // Add the assistant message with empty content to avoid flashing full text
           setMessages([
             {
               id: messageId,
               role: "assistant",
-              content: data.reply,
+              content: "",
             },
           ]);
 
-          // Start typing animation
+          // Start typing animation into that message
           let charIndex = 0;
           const fullText = data.reply;
 
-          const typingInterval = setInterval(() => {
+          if (typingIntervalRef.current) {
+            clearInterval(typingIntervalRef.current);
+          }
+
+          typingIntervalRef.current = setInterval(() => {
             if (charIndex <= fullText.length) {
-              setTypingText(fullText.slice(0, charIndex));
+              const partial = fullText.slice(0, charIndex);
+              setTypingText(partial);
+              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: partial } : m)));
               charIndex++;
+              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
             } else {
-              clearInterval(typingInterval);
+              if (typingIntervalRef.current) {
+                clearInterval(typingIntervalRef.current);
+                typingIntervalRef.current = null;
+              }
+              // ensure final full content is set
+              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: fullText } : m)));
               setTypingMessageId(null);
             }
           }, 20);
@@ -125,6 +139,16 @@ export function Chatbot({ onClose }: ChatbotProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // clear typing interval on unmount
+  useEffect(() => {
+    return () => {
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+        typingIntervalRef.current = null;
+      }
+    };
+  }, []);
 
   const handleSend = () => {
     if (!inputValue.trim()) return;
@@ -171,17 +195,17 @@ export function Chatbot({ onClose }: ChatbotProps) {
           setTypingText("");
           setIsTyping(false);
 
-          // Add the message with empty content first
+          // Add the message with empty content first to avoid flicker
           setMessages((prev) => [
             ...prev,
             {
               id: messageId,
               role: "assistant",
-              content: data.reply,
+              content: "",
             },
           ]);
 
-          // Start typing animation
+          // Start typing animation into that message
           let charIndex = 0;
           const fullText = data.reply;
 
@@ -191,10 +215,18 @@ export function Chatbot({ onClose }: ChatbotProps) {
 
           typingIntervalRef.current = setInterval(() => {
             if (charIndex <= fullText.length) {
-              setTypingText(fullText.slice(0, charIndex));
+              const partial = fullText.slice(0, charIndex);
+              setTypingText(partial);
+              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: partial } : m)));
               charIndex++;
+              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
             } else {
-              clearInterval(typingIntervalRef.current!);
+              if (typingIntervalRef.current) {
+                clearInterval(typingIntervalRef.current);
+                typingIntervalRef.current = null;
+              }
+              // ensure final full content is set
+              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: fullText } : m)));
               setTypingMessageId(null);
             }
           }, 20);
