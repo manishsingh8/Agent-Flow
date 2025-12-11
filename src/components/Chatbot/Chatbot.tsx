@@ -1,269 +1,29 @@
-import type React from "react";
-
-import { useState, useRef, useEffect } from "react";
 import { X, Mic, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { TypingIndicator } from "./TypingIndicator";
+import { useChatbot } from "./chatbot.hook";
 import ChatbotImg from "../../assets/images/chatbot.png";
-
-declare global {
-  interface Window {
-    SpeechRecognition: any;
-    webkitSpeechRecognition: any;
-  }
-}
 
 interface ChatbotProps {
   onClose: () => void;
 }
 
-interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-}
-
 export function Chatbot({ onClose }: ChatbotProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    // {
-    //   id: "1",
-    //   role: "assistant",
-    //   content:
-    //     "Hello! I'm your AI Assistant. You can talk to me, ask questions and perform tasks with text commands.",
-    // },
-  ]);
-  const [inputValue, setInputValue] = useState("");
-  const [isListening, setIsListening] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typingText, setTypingText] = useState("");
-  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
-  const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Initialize speech recognition and call initial API
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const SpeechRecognition =
-        window?.SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.onstart = () => setIsListening(true);
-        recognitionRef.current.onend = () => setIsListening(false);
-        recognitionRef.current.onresult = (event: any) => {
-          const transcript = Array.from(event.results)
-            .map((result: any) => result[0].transcript)
-            .join("");
-          setInputValue((prev) => prev + transcript);
-        };
-      }
-    }
-
-    // Call initial API when chatbot opens
-    const initializeChatbot = async () => {
-      try {
-        const payload = {
-          user_id: 8,
-          message: "Hello",
-        };
-        setIsTyping(true);
-        const response = await fetch(
-          "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/webhook",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-          }
-        );
-
-        const data = await response.json();
-        // Update the first message with the reply from API and add typing animation
-        if (data && data.reply) {
-          const messageId = "1";
-          setTypingMessageId(messageId);
-          setTypingText("");
-          setIsTyping(false);
-
-          // Add the assistant message with empty content to avoid flashing full text
-          setMessages([
-            {
-              id: messageId,
-              role: "assistant",
-              content: "",
-            },
-          ]);
-
-          // Start typing animation into that message
-          let charIndex = 0;
-          const fullText = data.reply;
-
-          if (typingIntervalRef.current) {
-            clearInterval(typingIntervalRef.current);
-          }
-
-          typingIntervalRef.current = setInterval(() => {
-            if (charIndex <= fullText.length) {
-              const partial = fullText.slice(0, charIndex);
-              setTypingText(partial);
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: partial } : m)));
-              charIndex++;
-              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            } else {
-              if (typingIntervalRef.current) {
-                clearInterval(typingIntervalRef.current);
-                typingIntervalRef.current = null;
-              }
-              // ensure final full content is set
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: fullText } : m)));
-              setTypingMessageId(null);
-            }
-          }, 20);
-        }
-      } catch (error) {
-        setIsTyping(false);
-        console.error("Error calling initial API:", error);
-      }
-    };
-
-    initializeChatbot();
-  }, []);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // clear typing interval on unmount
-  useEffect(() => {
-    return () => {
-      if (typingIntervalRef.current) {
-        clearInterval(typingIntervalRef.current);
-        typingIntervalRef.current = null;
-      }
-    };
-  }, []);
-
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: inputValue,
-    };
-    setMessages((prev) => [...prev, userMessage]);
-    const messageToSend = inputValue;
-    setInputValue("");
-
-    // Show typing indicator
-    setIsTyping(true);
-
-    // Call chat API with user message
-    const callChatAPI = async () => {
-      try {
-        const payload = {
-          user_id: 8,
-          message: messageToSend,
-        };
-
-        const response = await fetch(
-          "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/chat",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-          }
-        );
-
-        const data = await response.json();
-        console.log("Chat API Response:", data);
-
-        // Add assistant response with typing animation
-        if (data && data.reply) {
-          const messageId = (Date.now() + 1).toString();
-          setTypingMessageId(messageId);
-          setTypingText("");
-          setIsTyping(false);
-
-          // Add the message with empty content first to avoid flicker
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: messageId,
-              role: "assistant",
-              content: "",
-            },
-          ]);
-
-          // Start typing animation into that message
-          let charIndex = 0;
-          const fullText = data.reply;
-
-          if (typingIntervalRef.current) {
-            clearInterval(typingIntervalRef.current);
-          }
-
-          typingIntervalRef.current = setInterval(() => {
-            if (charIndex <= fullText.length) {
-              const partial = fullText.slice(0, charIndex);
-              setTypingText(partial);
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: partial } : m)));
-              charIndex++;
-              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            } else {
-              if (typingIntervalRef.current) {
-                clearInterval(typingIntervalRef.current);
-                typingIntervalRef.current = null;
-              }
-              // ensure final full content is set
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: fullText } : m)));
-              setTypingMessageId(null);
-            }
-          }, 20);
-        }
-      } catch (error) {
-        console.error("Error calling chat API:", error);
-        // Hide typing indicator
-        setIsTyping(false);
-        // Fallback error message
-        const errorMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: "Sorry, I encountered an error processing your request.",
-        };
-        setMessages((prev) => [...prev, errorMessage]);
-      }
-    };
-
-    callChatAPI();
-  };
-
-  const handleMicClick = () => {
-    if (recognitionRef.current) {
-      if (isListening) {
-        recognitionRef.current.stop();
-      } else {
-        recognitionRef.current.start();
-      }
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
+  const {
+    messages,
+    inputValue,
+    setInputValue,
+    isListening,
+    isTyping,
+    typingText,
+    typingMessageId,
+    messagesEndRef,
+    handleSend,
+    handleMicClick,
+    handleKeyPress,
+  } = useChatbot();
 
   return (
     <Card className="relative flex w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
