@@ -5,7 +5,6 @@ import { FileUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/card";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 import { useEOBLogic } from "./EOBParser.hook";
 import {
   Accordion,
@@ -14,6 +13,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 export default function PdfPipelineViewer() {
   const {
     file,
@@ -21,16 +22,35 @@ export default function PdfPipelineViewer() {
     numPages,
     isLoading,
     pipelineResult,
+    stageStatus,
     handleStartPipeline,
     handleFileSelect,
     onDocumentLoadError,
     onDocumentLoadSuccess,
     clearFile,
+    showAccordion,
   } = useEOBLogic();
 
-  console.log(pipelineResult, "result");
+  // Helper to render stage text
+  const renderStageText = (
+    stage: "stage1" | "stage2" | "stage3" | "stage4"
+  ) => {
+    const status = stageStatus[stage];
+    if (status === "processing")
+      return (
+        <span className="flex gap-2 text-gray-500">
+          <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          Processing...
+        </span>
+      );
+    if (status === "completed")
+      return <span className="text-green-600"> Completed</span>;
+    return <span className="text-gray-500"> </span>;
+  };
+
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
+      {/* HEADER */}
       <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
         <div className="text-[20px] font-[600] text-[#0A0A0A]">
           RCM Insight Extraction
@@ -43,15 +63,15 @@ export default function PdfPipelineViewer() {
         </div>
       </div>
 
-      <div className="w-full h-screen flex gap-6 bg-gray-50 overflow-hidden font-sans">
+      <div className=" h-screen flex gap-6 bg-gray-50 overflow-hidden font-sans">
         {/* LEFT PANEL */}
-        <div className="w-[40%] max-w-[500px]  overflow-auto">
+        <div className="w-[50%]  overflow-auto">
           <Card
-            className={`w-[100%] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between ${
-              pipelineResult ? "" : "h-full"
-            }`}
+            className={`w-[100%] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between 
+              "h-full"`}
           >
             <div>
+              {/* FILE UPLOAD */}
               <div className="mb-4">
                 <div className="text-[20px] font-[600] text-[#0A0A0A]">
                   RCM Insight Extraction
@@ -62,6 +82,7 @@ export default function PdfPipelineViewer() {
                   </span>
                 </div>
               </div>
+
               <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 hover:bg-gray-50/50 transition-colors relative">
                 {!file ? (
                   <>
@@ -119,149 +140,479 @@ export default function PdfPipelineViewer() {
                     >
                       Choose a different file
                     </Button>
-
-                    {/* ⭐ ACCORDION SHOWS WHEN PIPELINE RESULT IS AVAILABLE */}
                   </div>
                 )}
               </div>
-              {pipelineResult && (
+
+              {/* ⭐ ACCORDION SHOWS AFTER PIPELINE RESULT */}
+              {showAccordion && (
                 <div className="w-full mt-4 p-4">
                   <Accordion type="single" collapsible>
-                    {/* ---------- STAGE 1 → Split Analysis ---------- */}
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
-                        Stage 1: Quality Assessment & Page Analysis
+                        <span
+                          className={`flex flex-col items-start gap-2 ${
+                            stageStatus.stage1 === "completed"
+                              ? "text-green-600"
+                              : "text-black"
+                          }`}
+                        >
+                          Stage 1: Quality Assessment{" "}
+                          {renderStageText("stage1")}
+                        </span>
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4">
-                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                          {pipelineResult?.split?.analysis
-                            ? JSON.stringify(
-                                pipelineResult?.split?.analysis,
-                                null,
-                                2
-                              )
-                            : "No analysis found"}
-                        </pre>
+                      <AccordionContent>
+                        {stageStatus.stage1 === "completed" &&
+                        pipelineResult?.split ? (
+                          <div className="flex flex-col gap-4">
+                            {/* Summary */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Summary
+                              </h4>
+                              <p className="text-gray-700">
+                                {pipelineResult.split.analysis.summary}
+                              </p>
+                            </div>
+
+                            {/* Step by Step Reasoning */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Step by Step Reasoning
+                              </h4>
+                              <p className="text-gray-700">
+                                {
+                                  pipelineResult.split.analysis
+                                    .step_by_step_reasoning
+                                }
+                              </p>
+                            </div>
+
+                            {/* Page by Page Reasoning */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Page by Page Reasoning
+                              </h4>
+                              <ul className="list-disc list-inside text-gray-700">
+                                {pipelineResult.split.analysis.page_by_page_reasoning.map(
+                                  (item: string, index: number) => (
+                                    <li key={index}>{item}</li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
+                          </div>
+                        ) : stageStatus.stage1 === "processing" ? (
+                          "Processing Stage 1..."
+                        ) : (
+                          ""
+                        )}
                       </AccordionContent>
                     </AccordionItem>
-
-                    {/* ---------- STAGE 2 → Letters from Split API ---------- */}
                     <AccordionItem value="item-2">
-                      <AccordionTrigger>
-                        Stage 2: Document Boundary Detection & Grouping
+                      <AccordionTrigger
+                        disabled={stageStatus.stage1 !== "completed"}
+                      >
+                        <span
+                          className={`flex flex-col items-start gap-2 ${
+                            stageStatus.stage2 === "completed"
+                              ? "text-green-600"
+                              : "text-black"
+                          }`}
+                        >
+                          Stage 2: Boundary Detection{" "}
+                          {renderStageText("stage2")}
+                        </span>
                       </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4">
-                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                          {pipelineResult?.split?.letters
-                            ? JSON.stringify(
-                                pipelineResult?.split?.letters,
-                                null,
-                                2
-                              )
-                            : "No letters detected"}
-                        </pre>
+                      <AccordionContent>
+                        {stageStatus.stage2 === "completed" &&
+                        pipelineResult?.split ? (
+                          <div className="overflow-auto">
+                            <table className="w-full text-sm text-left border border-gray-200">
+                              <thead className="bg-gray-100">
+                                <tr>
+                                  <th className="px-4 py-2 border">
+                                    Letter Number
+                                  </th>
+                                  <th className="px-4 py-2 border">
+                                    Letter Context
+                                  </th>
+                                  <th className="px-4 py-2 border">
+                                    Letter Date
+                                  </th>
+                                  <th className="px-4 py-2 border">
+                                    Start Page
+                                  </th>
+                                  <th className="px-4 py-2 border">End Page</th>
+                                  <th className="px-4 py-2 border">
+                                    Total Letters
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {pipelineResult.split.letters.map(
+                                  (letter: any, index: number) => (
+                                    <tr key={index} className="even:bg-gray-50">
+                                      <td className="px-4 py-2 border">
+                                        {letter.letter_number}
+                                      </td>
+                                      <td className="px-4 py-2 border">
+                                        {letter.letter_context}
+                                      </td>
+                                      <td className="px-4 py-2 border">
+                                        {letter.letter_date}
+                                      </td>
+                                      <td className="px-4 py-2 border">
+                                        {letter.start_page}
+                                      </td>
+                                      <td className="px-4 py-2 border">
+                                        {letter.end_page}
+                                      </td>
+                                      <td className="px-4 py-2 border">
+                                        {pipelineResult.split.total_letters}
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : stageStatus.stage2 === "processing" ? (
+                          "Processing Stage 2..."
+                        ) : (
+                          "Waiting"
+                        )}
                       </AccordionContent>
                     </AccordionItem>
-
-                    {/* ---------- STAGE 3 → Classification Analysis ---------- */}
                     <AccordionItem value="item-3">
-                      <AccordionTrigger>
-                        Stage 3: Document Classification & Template Tagging
-                      </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4">
-                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                          {pipelineResult?.classify?.analysis
-                            ? JSON.stringify(
-                                pipelineResult.classify.analysis,
-                                null,
-                                2
-                              )
-                            : "Classification analysis unavailable"}
-                        </pre>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    {/* ---------- STAGE 4 → Extracted Service Lines ---------- */}
-                    <AccordionItem value="item-4">
-                      <AccordionTrigger>
-                        Stage 4: Comprehensive Data Extraction
-                      </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4">
-                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                          {pipelineResult?.extract?.analysis
-                            ? JSON.stringify(
-                                pipelineResult.extract.analysis,
-                                null,
-                                2
-                              )
-                            : "No service lines extracted"}
-                        </pre>
-                      </AccordionContent>
-                    </AccordionItem>
-                    {/* may needed later  */}
-                    {/* ---------- STAGE 5 → Category ---------- */}
-                    {/* <AccordionItem value="item-5">
-                      <AccordionTrigger>
-                        Stage 5: Summary Generation & Validation
-                      </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4">
-                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                          {pipelineResult?.classify?.category
-                            ? pipelineResult.classify.category
-                            : "No category detected"}
-                        </pre>
-                      </AccordionContent>
-                    </AccordionItem> */}
-
-                    {/* ---------- STAGE 6 → Extract Analysis ---------- */}
-                    {/* <AccordionItem value="item-6">
-                      <AccordionTrigger>
-                        Stage 6: Final Compilation & Telemetry
-                      </AccordionTrigger>
-                      <AccordionContent className="flex flex-col gap-4">
-                        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                          {pipelineResult?.extract?.analysis
-                            ? JSON.stringify(
-                                pipelineResult.extract.analysis,
-                                null,
-                                2
-                              )
-                            : "Extract analysis unavailable"}
-                        </pre>
-                      </AccordionContent>
-                    </AccordionItem> */}
-
-                    {/* ---------- STAGE 7 (Optional) ---------- */}
-                    {/* <AccordionItem value="item-7">
-                      <AccordionTrigger>
-                        Stage 7: Document Splitting & Export
+                      <AccordionTrigger
+                        disabled={stageStatus.stage2 !== "completed"}
+                      >
+                        <span
+                          className={`flex flex-col items-start gap-2 ${
+                            stageStatus.stage3 === "completed"
+                              ? "text-green-600"
+                              : "text-black"
+                          }`}
+                        >
+                          Stage 3: Classification {renderStageText("stage3")}
+                        </span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <p>No additional data assigned.</p>
-                      </AccordionContent>
-                    </AccordionItem> */}
+                        {stageStatus.stage3 === "completed" &&
+                        pipelineResult?.classify ? (
+                          <div className="flex flex-col gap-4">
+                            {/* Summary */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Summary
+                              </h4>
+                              <p className="text-gray-700">
+                                {pipelineResult.classify[0]?.analysis?.summary}
+                              </p>
+                            </div>
 
-                    {/* ---------- STAGE 8 (Optional) ---------- */}
-                    {/* <AccordionItem value="item-8">
-                      <AccordionTrigger>
-                        Stage 8: Professional Summary Generation
+                            {/* Step by Step Reasoning */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Step by Step Reasoning
+                              </h4>
+                              <p className="text-gray-700">
+                                {
+                                  pipelineResult.classify[0]?.analysis
+                                    ?.step_by_step_reasoning
+                                }
+                              </p>
+                            </div>
+
+                            {/* Reasoning */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Reasoning
+                              </h4>
+                              <p className="text-gray-700">
+                                {pipelineResult.classify[0]?.reasoning}
+                              </p>
+                            </div>
+
+                            {/* Category */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Category
+                              </h4>
+                              <p className="text-gray-700">
+                                {pipelineResult.classify[0]?.category}
+                              </p>
+                            </div>
+
+                            {/* Reasoning Steps */}
+                            <div>
+                              <h4 className="font-semibold text-gray-800">
+                                Reasoning Steps
+                              </h4>
+                              <ul className="list-disc list-inside text-gray-700">
+                                {pipelineResult.classify[0]?.analysis?.reasoning_steps?.map(
+                                  (step: string, index: number) => (
+                                    <li key={index}>{step}</li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
+                          </div>
+                        ) : stageStatus.stage3 === "processing" ? (
+                          "Processing Stage 3..."
+                        ) : (
+                          "Waiting"
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-4" className="max-w-[650px]">
+                      <AccordionTrigger
+                        disabled={stageStatus.stage3 !== "completed"}
+                      >
+                        <span
+                          className={`flex flex-col items-start gap-2 ${
+                            stageStatus.stage4 === "completed"
+                              ? "text-green-600"
+                              : "text-black"
+                          }`}
+                        >
+                          Stage 4: Extraction {renderStageText("stage4")}
+                        </span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <p>No additional data assigned.</p>
+                        {stageStatus.stage4 === "completed" &&
+                        pipelineResult?.extract ? (
+                          <div className="flex flex-col gap-6">
+                            {/* Service Lines Table */}
+                            <div className="w-full overflow-x-auto overflow-hidden">
+                              <table className="!w-[50px] min-w-max text-sm text-left border border-gray-200">
+                                <thead className="bg-gray-100">
+                                  <tr>
+                                    <th className="px-4 py-2 border">
+                                      Patient Name
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Visit ID
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Payer Name
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Claim Number
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Paid Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Check Number
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Check Date
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Service Start Date
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Service End Date
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Procedure Code
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Billed Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Allowed Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Covered Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Not Covered Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Discount Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Adjustment Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">Co-Pay</th>
+                                    <th className="px-4 py-2 border">
+                                      Co-Insurance
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Deductible Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Patient Responsibility
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Denied Amount
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Reason Codes
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Remark Codes
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                      Description
+                                    </th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  {pipelineResult.extract[0]?.service_lines.map(
+                                    (line: any, index: any) => (
+                                      <tr
+                                        key={index}
+                                        className="even:bg-gray-50"
+                                      >
+                                        <td className="px-4 py-2 border">
+                                          {line.patient_name}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.visit_id}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.payer_name}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.claim_number}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.paid_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.check_number}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.check_date}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.service_start_date}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.service_end_date}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.procedure_code}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.billed_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.allowed_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.covered_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.not_covered_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.discount_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.adjustment_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.co_pay}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.co_insurance}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.deductible_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.patient_responsibility}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.denied_amount}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.reason_codes}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.remark_codes}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                          {line.description}
+                                        </td>
+                                      </tr>
+                                    )
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
+
+                            {/* Extraction Analysis */}
+                            <div className="flex flex-col gap-4">
+                              <div>
+                                <h4 className="font-semibold text-gray-800">
+                                  Extraction Summary
+                                </h4>
+                                <p className="text-gray-700">
+                                  {
+                                    pipelineResult.extract[0]?.analysis
+                                      ?.extraction_summary
+                                  }
+                                </p>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-800">
+                                  Step by Step Reasoning
+                                </h4>
+                                <p className="text-gray-700">
+                                  {
+                                    pipelineResult.extract[0]?.analysis
+                                      ?.step_by_step_reasoning
+                                  }
+                                </p>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-800">
+                                  Continuity Check
+                                </h4>
+                                <p className="text-gray-700">
+                                  {
+                                    pipelineResult.extract[0]?.analysis
+                                      ?.continuity_check
+                                  }
+                                </p>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-800">
+                                  Structure Analysis
+                                </h4>
+                                <p className="text-gray-700">
+                                  {
+                                    pipelineResult.extract[0]?.analysis
+                                      ?.structure_analysis
+                                  }
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ) : stageStatus.stage4 === "processing" ? (
+                          "Processing Stage 4..."
+                        ) : (
+                          "Waiting"
+                        )}
                       </AccordionContent>
-                    </AccordionItem> */}
+                    </AccordionItem>
                   </Accordion>
                 </div>
               )}
             </div>
-            {/* <div className="text-xs text-gray-400 text-center">
-              Supported formats: PDF only
-            </div> */}
           </Card>
         </div>
+
         {/* RIGHT PANEL – DOCUMENT VIEWER */}
-        <Card className="w-[60%] flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-0 overflow-hidden flex flex-col">
-          <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
+        <Card className="w-[50%] flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-0 overflow-hidden flex flex-col">
+          <div className=" p-4 border-b border-gray-100 flex justify-between items-center bg-white">
             <div>
               <h2 className="text-sm font-semibold text-gray-900">
                 Document Preview
@@ -270,7 +621,6 @@ export default function PdfPipelineViewer() {
                 {numPages ? `${numPages} pages` : "No document loaded"}
               </p>
             </div>
-
             {isLoading && (
               <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
             )}
@@ -283,40 +633,36 @@ export default function PdfPipelineViewer() {
                 <p>No PDF Selected</p>
               </div>
             ) : (
-              <div>
-                <Document
-                  file={pdfUrl}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  onLoadError={onDocumentLoadError}
-                  loading={
-                    <div className="flex items-center gap-2 text-gray-500">
-                      <Loader2 className="w-4 h-4 animate-spin" /> Loading
-                      PDF...
-                    </div>
-                  }
-                  error={
-                    <div className="text-red-500 text-sm bg-red-50 p-4 rounded-lg">
-                      Failed to load PDF. Please try another file.
-                    </div>
-                  }
-                  className="shadow-lg"
-                >
-                  {Array.from(new Array(numPages || 0), (_, index) => (
-                    <Page
-                      key={index}
-                      pageNumber={index + 1}
-                      renderAnnotationLayer={false}
-                      renderTextLayer={false}
-                      className="mb-4 shadow-sm bg-white"
-                      width={600}
-                    />
-                  ))}
-                </Document>
-              </div>
+              <Document
+                file={pdfUrl}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onLoadError={onDocumentLoadError}
+                loading={
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Loader2 className="w-4 h-4 animate-spin" /> Loading PDF...
+                  </div>
+                }
+                error={
+                  <div className="text-red-500 text-sm bg-red-50 p-4 rounded-lg">
+                    Failed to load PDF. Please try another file.
+                  </div>
+                }
+                className="shadow-lg"
+              >
+                {Array.from(new Array(numPages || 0), (_, index) => (
+                  <Page
+                    key={index}
+                    pageNumber={index + 1}
+                    renderAnnotationLayer={false}
+                    renderTextLayer={false}
+                    className="mb-4 shadow-sm bg-white"
+                    width={600}
+                  />
+                ))}
+              </Document>
             )}
           </div>
         </Card>
-        <div></div>
       </div>
     </div>
   );
