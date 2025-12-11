@@ -191,9 +191,9 @@ export function Chatbot({ onClose }: ChatbotProps) {
   };
 
   return (
-    <Card className="relative flex w-80 flex-col border-0 border-r rounded-none p-0">
+    <Card className="relative flex w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between border-b bg-white p-4 h-16">
+      <div className="shrink-0 flex items-center justify-between border-b bg-white p-4 h-16">
         <h2 className="font-semibold text-foreground">AI Assistant</h2>
         <Button
           variant="ghost"
@@ -267,12 +267,10 @@ export function Chatbot({ onClose }: ChatbotProps) {
 
         {isTyping && <TypingIndicator />}
         <div ref={messagesEndRef} />
-
-        
       </div>
 
       {/* Input Area */}
-      <div className="border-t bg-white p-4 space-y-3">
+      <div className="shrink-0 border-t bg-white p-4 space-y-3">
         <div className="flex gap-2">
           <Input
             type="text"
