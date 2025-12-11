@@ -19,7 +19,7 @@ interface RemitResponse {
   };
 }
 
-const RenderTable = ({ data }) => {
+const RenderTable = ({ data: any }) => {
   if (!data || (Array.isArray(data) && data.length === 0)) return null;
 
   // If array, show index + key/value per item

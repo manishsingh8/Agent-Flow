@@ -464,7 +464,7 @@ export default function PdfPipelineViewer() {
 
                                 <tbody>
                                   {pipelineResult.extract[0]?.service_lines.map(
-                                    (line, index) => (
+                                    (line: any, index: any) => (
                                       <tr
                                         key={index}
                                         className="even:bg-gray-50"
