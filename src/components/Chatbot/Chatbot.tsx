@@ -27,12 +27,12 @@ interface Message {
 
 export function Chatbot({ onClose }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      role: "assistant",
-      content:
-        "Hello! I'm your AI Assistant. You can talk to me, ask questions and perform tasks with text commands.",
-    },
+    // {
+    //   id: "1",
+    //   role: "assistant",
+    //   content:
+    //     "Hello! I'm your AI Assistant. You can talk to me, ask questions and perform tasks with text commands.",
+    // },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -65,7 +65,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
           user_id: 8,
           message: "Hello",
         };
-
+        setIsTyping(true);
         const response = await fetch(
           "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/webhook",
           {
@@ -78,8 +78,6 @@ export function Chatbot({ onClose }: ChatbotProps) {
         );
 
         const data = await response.json();
-        console.log("Initial API Response:", data);
-
         // Update the first message with the reply from API
         if (data && data.reply) {
           setMessages([
@@ -90,7 +88,9 @@ export function Chatbot({ onClose }: ChatbotProps) {
             },
           ]);
         }
+        setIsTyping(false);
       } catch (error) {
+        setIsTyping(false);
         console.error("Error calling initial API:", error);
       }
     };
@@ -207,12 +207,40 @@ export function Chatbot({ onClose }: ChatbotProps) {
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 1 && (
+        {/* {messages.length === 1 && ( */}
           <div className="flex flex-col items-center justify-center gap-4">
             <img src={ChatbotImg} alt="chatbot image" />
           </div>
-        )}
+        {/* )} */}
 
+        {/* {messages.length === 1 && ( */}
+          <div className="text-sm">
+            <div className="text-xs text-muted-foreground text-left">
+              You can talk to me, ask questions and perform tasks with text
+              commands.
+            </div>
+            <ul className="list-disc pl-4 text-[#171717] marker:text-[#171717]">
+              <li>
+                <p className="text-xs text-muted-foreground text-left">
+                  I can generate dynamic data analytics dashboards customized to
+                  your needs.
+                </p>
+              </li>
+              <li>
+                <p className="text-xs text-muted-foreground text-left">
+                  I can help you with jobs, queries and any tasks you would like
+                  to create, execute or assign.
+                </p>
+              </li>
+              <li>
+                <p className="text-xs text-muted-foreground text-left">
+                  I can scan and analyze your data and provide you with all the
+                  answers .
+                </p>
+              </li>
+            </ul>
+          </div>
+        {/* )} */}
         {messages.map((message) => (
           <div
             key={message.id}
@@ -240,34 +268,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
         {isTyping && <TypingIndicator />}
         <div ref={messagesEndRef} />
 
-        {messages.length === 1 && (
-          <div className="text-sm">
-            <div className="text-xs text-muted-foreground text-left">
-              You can talk to me, ask questions and perform tasks with text
-              commands.
-            </div>
-            <ul className="list-disc pl-4 text-[#171717] marker:text-[#171717]">
-              <li>
-                <p className="text-xs text-muted-foreground text-left">
-                  I can generate dynamic data analytics dashboards customized to
-                  your needs.
-                </p>
-              </li>
-              <li>
-                <p className="text-xs text-muted-foreground text-left">
-                  I can help you with jobs, queries and any tasks you would like
-                  to create, execute or assign.
-                </p>
-              </li>
-              <li>
-                <p className="text-xs text-muted-foreground text-left">
-                  I can scan and analyze your data and provide you with all the
-                  answers .
-                </p>
-              </li>
-            </ul>
-          </div>
-        )}
+        
       </div>
 
       {/* Input Area */}
