@@ -37,8 +37,11 @@ export function Chatbot({ onClose }: ChatbotProps) {
   const [inputValue, setInputValue] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [typingText, setTypingText] = useState("");
+  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
+  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize speech recognition and call initial API
   useEffect(() => {
@@ -78,17 +81,34 @@ export function Chatbot({ onClose }: ChatbotProps) {
         );
 
         const data = await response.json();
-        // Update the first message with the reply from API
+        // Update the first message with the reply from API and add typing animation
         if (data && data.reply) {
+          const messageId = "1";
+          setTypingMessageId(messageId);
+          setTypingText("");
+          setIsTyping(false);
           setMessages([
             {
-              id: "1",
+              id: messageId,
               role: "assistant",
               content: data.reply,
             },
           ]);
+
+          // Start typing animation
+          let charIndex = 0;
+          const fullText = data.reply;
+
+          const typingInterval = setInterval(() => {
+            if (charIndex <= fullText.length) {
+              setTypingText(fullText.slice(0, charIndex));
+              charIndex++;
+            } else {
+              clearInterval(typingInterval);
+              setTypingMessageId(null);
+            }
+          }, 20);
         }
-        setIsTyping(false);
       } catch (error) {
         setIsTyping(false);
         console.error("Error calling initial API:", error);
@@ -144,17 +164,40 @@ export function Chatbot({ onClose }: ChatbotProps) {
         const data = await response.json();
         console.log("Chat API Response:", data);
 
-        // Hide typing indicator
-        setIsTyping(false);
-
-        // Add assistant response to messages
+        // Add assistant response with typing animation
         if (data && data.reply) {
-          const assistantMessage: Message = {
-            id: (Date.now() + 1).toString(),
-            role: "assistant",
-            content: data.reply,
-          };
-          setMessages((prev) => [...prev, assistantMessage]);
+          const messageId = (Date.now() + 1).toString();
+          setTypingMessageId(messageId);
+          setTypingText("");
+          setIsTyping(false);
+
+          // Add the message with empty content first
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: messageId,
+              role: "assistant",
+              content: data.reply,
+            },
+          ]);
+
+          // Start typing animation
+          let charIndex = 0;
+          const fullText = data.reply;
+
+          if (typingIntervalRef.current) {
+            clearInterval(typingIntervalRef.current);
+          }
+
+          typingIntervalRef.current = setInterval(() => {
+            if (charIndex <= fullText.length) {
+              setTypingText(fullText.slice(0, charIndex));
+              charIndex++;
+            } else {
+              clearInterval(typingIntervalRef.current!);
+              setTypingMessageId(null);
+            }
+          }, 20);
         }
       } catch (error) {
         console.error("Error calling chat API:", error);
@@ -260,7 +303,9 @@ export function Chatbot({ onClose }: ChatbotProps) {
                   : "bg-gray-100 text-foreground"
               }`}
             >
-              <p className="text-sm">{message.content}</p>
+              <p className="text-sm whitespace-pre-wrap">
+                {typingMessageId === message.id ? typingText : message.content}
+              </p>
             </div>
           </div>
         ))}
