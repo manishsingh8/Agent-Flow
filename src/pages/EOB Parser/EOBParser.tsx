@@ -118,7 +118,7 @@ export default function PdfPipelineViewer() {
                     <Button
                       onClick={handleStartPipeline}
                       disabled={isLoading}
-                      className="w-full mb-3 bg-[#249563] hover:bg-[#249563]"
+                      className="w-full mb-3 bg-[#249563] hover:bg-[#249563] max-w-[200px]"
                     >
                       {isLoading ? (
                         <span className="flex items-center gap-2">
