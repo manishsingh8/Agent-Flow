@@ -1,8 +1,7 @@
 // src/routes/PublicRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
+import { isAuthenticated } from "@/utils/auth";
 
 export const PublicRoute = () => {
-  const isAuthenticated = localStorage.getItem("token");
-
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+  return !isAuthenticated() ? <Outlet /> : <Navigate to="/" replace />;
 };

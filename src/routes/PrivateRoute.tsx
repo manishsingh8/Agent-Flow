@@ -1,8 +1,7 @@
 // src/routes/PrivateRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
+import { isAuthenticated } from "@/utils/auth";
 
 export const PrivateRoute = () => {
-  const isAuthenticated = true; // or use context/zustand
-
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return isAuthenticated() ? <Outlet /> : <Navigate to="/login" replace />;
 };
