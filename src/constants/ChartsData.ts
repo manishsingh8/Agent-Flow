@@ -1,25 +1,25 @@
 export const HCD_CARDS = [
   {
     id: 1,
-    headerText: "Processed Docs",
+    headerText: "Total Document Processed",
     amount: "1432",
     border: true,
   },
   {
     id: 2,
-    headerText: "Machine-Classified",
+    headerText: "Auto-Classification Accuracy",
     amount: "43%",
     border: true,
   },
   {
     id: 3,
-    headerText: "Under Review",
+    headerText: "Documents Awaiting Review",
     amount: "89",
     border: true,
   },
   {
     id: 4,
-    headerText: "Processing Time Average",
+    headerText: "Mean Processing Time",
     amount: "3.2 min",
     border: true,
   },

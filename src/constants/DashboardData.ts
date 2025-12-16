@@ -78,7 +78,7 @@ export const RCM_CENTRAL_ENGINE_DATA = [
 
 export const INTAKE_ORCHESTRATOR_DATA = [
   {
-    headerText: "BAI Files",
+    headerText: "Bank File Count",
     percentage: "12",
     value: "982",
     colorClass: {
@@ -90,7 +90,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "positive",
   },
   {
-    headerText: "Remits",
+    headerText: "Remit File Count",
     percentage: "9",
     value: "870",
     colorClass: {
@@ -102,7 +102,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "positive",
   },
   {
-    headerText: "Correspondence Documents",
+    headerText: "Correspondence File Count",
     percentage: "-4",
     value: "112",
     colorClass: {
@@ -114,7 +114,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "",
   },
   {
-    headerText: "Cash Posting Documents",
+    headerText: "Cash Posting File Count",
     percentage: "-2",
     value: "25",
     colorClass: {
@@ -154,7 +154,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
 
 export const RECONCILIATION_DATA = [
   {
-    headerText: "Total Transactions",
+    headerText: "Overall Transaction Count",
     percentage: "5",
     value: "684",
     colorClass: {
@@ -178,7 +178,7 @@ export const RECONCILIATION_DATA = [
     status: "positive",
   },
   {
-    headerText: "Matched Amount",
+    headerText: "Reconciled Amount",
     percentage: "-1",
     value: "$14,50,236",
     colorClass: {
@@ -190,7 +190,7 @@ export const RECONCILIATION_DATA = [
     status: "",
   },
   {
-    headerText: "Unmatched Amount",
+    headerText: "Non Reconciled Amount",
     percentage: "3",
     value: "$2,819.11",
     colorClass: {
@@ -201,35 +201,11 @@ export const RECONCILIATION_DATA = [
     image: MapImage,
     status: "positive",
   },
-  {
-    headerText: "Partial Match",
-    percentage: "-6",
-    value: "9012.1",
-    colorClass: {
-      text: "text-teal-600",
-      border: "border-teal-600",
-      chart: "stroke-teal-600",
-    },
-    image: MapImage,
-    status: "positive",
-  },
-  {
-    headerText: "Variance ABS",
-    percentage: "-7",
-    value: "1211.1",
-    colorClass: {
-      text: "text-rose-500",
-      border: "border-rose-500",
-      chart: "stroke-rose-500",
-    },
-    image: MapNegative,
-    status: "negative",
-  },
 ];
 
 export const CASH_POSTING_DATA = [
   {
-    headerText: "Post Ready Amount",
+    headerText: "Ready-to-Post Amount",
     percentage: "5",
     value: "$8,20,345",
     colorClass: {
@@ -241,7 +217,7 @@ export const CASH_POSTING_DATA = [
     status: "positive",
   },
   {
-    headerText: "Post Ready Count",
+    headerText: "Ready-to-Post Count",
     percentage: "8",
     value: "311",
     colorClass: {
@@ -253,7 +229,7 @@ export const CASH_POSTING_DATA = [
     status: "positive",
   },
   {
-    headerText: "Posted Amount",
+    headerText: "Successfully Posted Amount",
     percentage: "-1",
     value: "$6,12,441.22",
     colorClass: {
@@ -265,7 +241,7 @@ export const CASH_POSTING_DATA = [
     status: "",
   },
   {
-    headerText: "Posted Count ",
+    headerText: "Successfully Posted Count ",
     percentage: "3",
     value: "221",
     colorClass: {
@@ -277,7 +253,7 @@ export const CASH_POSTING_DATA = [
     status: "positive",
   },
   {
-    headerText: "Failures",
+    headerText: "Failed Posting Count",
     percentage: "-6",
     value: "8",
     colorClass: {
@@ -294,5 +270,5 @@ export const TABS = [
   { value: "rcm", label: "RCM Central Engine" },
   { value: "intake", label: "Intake Workflow Agent" },
   { value: "reconciliation", label: "Reconciliation Agent" },
-  { value: "cashPosting", label: "Cash Posting Agent" },
+  { value: "cashPosting", label: "Payment Posting Agent" },
 ];

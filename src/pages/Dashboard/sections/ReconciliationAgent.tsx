@@ -34,7 +34,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 200, y: 300 },
     data: {
-      label: "Smart Matcher Agent",
+      label: "Smart Matching Agent",
       showLogo: false,
       showAddButton: true,
       handles: [
@@ -48,7 +48,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 530, y: 300 },
     data: {
-      label: "Exception Finder Agent",
+      label: "Exception Identification Agent",
       showAddButton: true,
       showLogo: false,
       handles: [
@@ -76,7 +76,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 1200, y: 300 },
     data: {
-      label: "Validator Agent",
+      label: "Data Validation Agent",
       showAddButton: true,
       showLogo: false,
       handles: [

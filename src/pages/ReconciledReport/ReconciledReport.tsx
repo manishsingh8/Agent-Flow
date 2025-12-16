@@ -49,10 +49,12 @@ const ReconciledReport = () => {
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
         <div className="text-[20px] font-semibold text-[#0A0A0A]">
-          Reconciled Report
+          Reconciliation Summary Report
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#737373]">Reconciled Report</span>
+          <span className="text-sm text-[#737373]">
+            Reconciliation Summary Report
+          </span>
         </div>
       </div>
       <div className="grid grid-cols-5 gap-4">

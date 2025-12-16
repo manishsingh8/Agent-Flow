@@ -56,7 +56,7 @@ export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
 
   return [
     {
-      title: "Auto-Post Rate",
+      title: "Automated Posting Index",
       value: `${transactionPosting.autoPostRate.toFixed(1)}%`,
       description: `${transactionPosting.autoPostedCount.toLocaleString()} of ${transactionPosting.totalTransactionsPosted.toLocaleString()} auto-posted`,
       iconName: "TrendingUp",
@@ -70,7 +70,7 @@ export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
       trend: performance.mtdComparison.percentageChange < 0 ? "down" : "up",
     },
     {
-      title: "Quality Rate",
+      title: "Quality Compliance Index",
       value: `${(100 - postingReports.exceptionRate).toFixed(1)}%`,
       description: `${postingReports.totalExceptions} exceptions in reports`,
       iconName: "ShieldCheck",

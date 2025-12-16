@@ -56,7 +56,7 @@ export default function WorkflowPage({
         tabValue = "intake";
       } else if (data.label === "Reconciliation Agent") {
         tabValue = "reconciliation";
-      } else if (data.label === "Cash Posting Agent") {
+      } else if (data.label === "Payment Posting Agent") {
         tabValue = "cashPosting";
       }
 

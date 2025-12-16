@@ -13,7 +13,7 @@ const RCMDashboard = () => {
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
         <div className="text-[20px] font-semibold text-[#0A0A0A]">
           <AreaChart className="mr-3 h-6 w-6 mb-2 text-primary inline-block" />{" "}
-          RCM Dashboard
+          Revenue Cycle Intelligence Dashboard
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-[#737373]">
@@ -43,7 +43,7 @@ const RCMDashboard = () => {
       <div className="grid grid-cols-1 gap-4">
         <Card>
           <CardHeader>
-            <p className="text-md font-medium">User Productivity</p>
+            <p className="text-md font-medium">Workforce Performance Overview</p>
           </CardHeader>
           <CardContent>
             <UserProductivityTable />

@@ -60,7 +60,7 @@ const initialNodes: Node[] = [
     position: { x: 25, y: 25 },
     parentId: "group-intake",
     extent: "parent",
-    data: { label: "Inbox", icon: "inbox" },
+    data: { label: "Email", icon: "inbox" },
   },
   {
     id: "sftp",
@@ -76,7 +76,7 @@ const initialNodes: Node[] = [
     position: { x: 25, y: 265 },
     parentId: "group-intake",
     extent: "parent",
-    data: { label: "Amazon S3", icon: "amazon" },
+    data: { label: "Cloud Storage", icon: "amazon" },
   },
 
   // ---------------- Center Agents ----------------
@@ -138,7 +138,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 1200, y: 300 },
     data: {
-      label: "Cash Posting Agent",
+      label: "Payment Posting Agent",
       showAddButton: true,
       showLogo: false,
       isSetTab: true,

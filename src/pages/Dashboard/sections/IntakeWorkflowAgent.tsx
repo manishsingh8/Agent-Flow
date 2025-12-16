@@ -37,7 +37,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 200, y: 300 },
     data: {
-      label: "BAI Agent",
+      label: "BAI Processing Agent",
       showLogo: false,
       showAddButton: true,
       handles: [
@@ -51,7 +51,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 530, y: 300 },
     data: {
-      label: "EDI Parser Agent",
+      label: "EDI Processing Agent",
       showAddButton: true,
       showLogo: false,
       route: "/era-parser",
@@ -66,7 +66,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 870, y: 300 },
     data: {
-      label: "Correspondence Agent",
+      label: "Correspondence Processing Agent",
       showAddButton: true,
       showLogo: false,
       handles: [
@@ -80,7 +80,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 1200, y: 300 },
     data: {
-      label: "CP for EMR1",
+      label: "Payment Posting Agent",
       showAddButton: true,
       showLogo: false,
       handles: [

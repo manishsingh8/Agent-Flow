@@ -30,7 +30,7 @@ export default function IntegrationNode({ data }: IntegrationNodeProps) {
           <div className="text-3xl">{getIcon(data.icon)}</div>
         </div>
         <span
-          className="text-md font-medium text-foreground text-center break-words"
+          className="text-md font-medium text-foreground text-center whitespace-normal break-words "
           data-testid={`text-${data.label}`}
         >
           {data.label}

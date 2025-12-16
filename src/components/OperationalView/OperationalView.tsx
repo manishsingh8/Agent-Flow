@@ -90,10 +90,9 @@ export default function OperationalView() {
     <Card className="w-full">
       <CardHeader className="flex items-start justify-between">
         <div>
-          <p className="text-lg font-semibold">Operational View</p>
+          <p className="text-lg font-semibold">Operational Performance View</p>
           <p className="text-sm text-muted-foreground">
-            Comprehensive operational metrics for bank statements, remits,
-            transaction posting, and reporting performance
+            Presents holistic operational metrics and efficiency.
           </p>
         </div>
       </CardHeader>
@@ -102,12 +101,14 @@ export default function OperationalView() {
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 py-1 px-2 h-12 ">
             <TabsTrigger value="overview" className="h-10">
-              Overview
+              Executive Summery
             </TabsTrigger>
-            <TabsTrigger value="bank-statements">Bank Statements</TabsTrigger>
-            <TabsTrigger value="remits">Remits</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
-            <TabsTrigger value="reports">Reports & Performance</TabsTrigger>
+            <TabsTrigger value="bank-statements">
+              Bank Statements Operations
+            </TabsTrigger>
+            <TabsTrigger value="remits">Remittance Operations</TabsTrigger>
+            <TabsTrigger value="transactions">Transactions Processing</TabsTrigger>
+            <TabsTrigger value="reports">Performance Analytics</TabsTrigger>
           </TabsList>
 
           {/* ================= OVERVIEW ================= */}
@@ -115,7 +116,7 @@ export default function OperationalView() {
             <div className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <KpiCard
-                  title="Bank Statements (MTD)"
+                  title="Bank Statements Processed Month-To-Date"
                   value={`${data.bankStatements.mtd.statementsProcessed}`}
                   description={`${formatNumber(
                     data.bankStatements.mtd.transactionsProcessed
@@ -124,7 +125,7 @@ export default function OperationalView() {
                   trend="up"
                 />
                 <KpiCard
-                  title="Remits Processed (MTD)"
+                  title="Remittance Completed Month-To-Date"
                   value={`${data.remits.mtd.totalRemitsProcessed}`}
                   description={`${formatCurrency(
                     data.remits.mtd.totalAmount
@@ -133,7 +134,7 @@ export default function OperationalView() {
                   trend="up"
                 />
                 <KpiCard
-                  title="Transactions Posted (MTD)"
+                  title=" Posted Transactions Month-To-Date"
                   value={`${formatNumber(
                     data.transactionPosting.mtd.totalTransactionsPosted
                   )}`}
@@ -147,7 +148,7 @@ export default function OperationalView() {
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <KpiCard
-                  title="Auto-Post Rate"
+                  title="Automated Posting Index"
                   value={`${data.transactionPosting.autoPostRate.toFixed(1)}%`}
                   description={`${formatNumber(
                     data.transactionPosting.autoPostedCount
@@ -160,7 +161,7 @@ export default function OperationalView() {
                   }
                 />
                 <KpiCard
-                  title="Posting Reports (MTD)"
+                  title="Posting Report Count (MTD)"
                   value={`${formatNumber(
                     data.postingReports.mtd.totalReportsGenerated
                   )}`}
@@ -171,7 +172,7 @@ export default function OperationalView() {
                   trend={data.postingReports.exceptionRate < 5 ? "up" : "down"}
                 />
                 <KpiCard
-                  title="Avg Processing Time"
+                  title="Average Processing Duration"
                   value={`${data.performance.avgProcessingTimeMinutes.toFixed(
                     1
                   )} min`}
@@ -183,7 +184,7 @@ export default function OperationalView() {
 
               <Card>
                 <CardHeader>
-                  <p className="text-sm font-medium">Combined Volume Trends</p>
+                  <p className="text-sm font-medium">Consolidated Throughput Trends</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     Combined view of statements, remits and postings over time
                   </p>
