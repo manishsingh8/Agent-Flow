@@ -2,9 +2,6 @@ import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useCashPostingQueueLogic } from "./CashPostingQueue.hook";
 import { BRANDS } from "@/constants/TableData";
-import { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
-
 const CashPostingQueue = () => {
   const {
     toggle,
@@ -29,24 +26,17 @@ const CashPostingQueue = () => {
     rowsPerPage,
     setRowsPerPage,
   } = useCashPostingQueueLogic();
-
-  const [open, setOpen] = useState(false);
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      {/* Header */}
-      <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
-        <div
-          className="text-[20px] font-[600] text-[#0A0A0A]"
-          onClick={() => setOpen(true)}
-        >
-          Cash Posting Queue
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+        <div className="text-[20px] font-semibold text-[#0A0A0A]">
+          Payment Posting Queue
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#249563]">Cash Posting Queue</span>
+          <span className="text-sm text-[#249563]">Payment Posting Queue</span>
         </div>
       </div>
-      {/* Filter/Search */}
-      <div className="border-[1px] border-[#E6ECF0] p-[4px] rounded-[14px]">
+      <div className="border border-[#E6ECF0] p-1 rounded-[14px]">
         <FilterSearchBar
           toggleOptions={[
             { value: "List", label: "List" },
@@ -63,7 +53,7 @@ const CashPostingQueue = () => {
           onAdvancedSearch={() => console.log("adv search")}
         />
       </div>
-      <div className="border-[1px] border-[#E6ECF0] p-[16px] rounded-[14px]">
+      <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
         <DataTable
           data={paginatedData}
           columns={columns}
@@ -90,9 +80,6 @@ const CashPostingQueue = () => {
           }}
         />
       </div>
-
-      {/* modal */}
-      <Dialog open={open} />
     </div>
   );
 };

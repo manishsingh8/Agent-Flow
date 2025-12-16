@@ -2,8 +2,6 @@ import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useCashPostingLogic } from "./CashPosting.hook";
 import { BRANDS } from "@/constants/TableData";
-import { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
 
 const CashPostingPage = () => {
   const {
@@ -29,24 +27,19 @@ const CashPostingPage = () => {
     rowsPerPage,
     setRowsPerPage,
   } = useCashPostingLogic();
-
-  const [open, setOpen] = useState(false);
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      {/* Header */}
-      <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
-        <div
-          className="text-[20px] font-[600] text-[#0A0A0A]"
-          onClick={() => setOpen(true)}
-        >
-          Cash Posting Report
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+        <div className="text-[20px] font-semibold text-[#0A0A0A]">
+          Payment Posting Activity Report
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#249563]">Cash Posting Report</span>
+          <span className="text-sm text-[#249563]">
+            Payment Posting Activity Report
+          </span>
         </div>
       </div>
-      {/* Filter/Search */}
-      <div className="border-[1px] border-[#E6ECF0] p-[4px] rounded-[14px]">
+      <div className="border border-[#E6ECF0] p-1 rounded-[14px]">
         <FilterSearchBar
           toggleOptions={[
             { value: "List", label: "List" },
@@ -57,13 +50,13 @@ const CashPostingPage = () => {
           enableDateRange
           fromDate={from}
           onFromDateChange={setFrom}
-          toDate={to} 
+          toDate={to}
           onToDateChange={setTo}
           showAdvancedSearch
           onAdvancedSearch={() => console.log("adv search")}
         />
       </div>
-      <div className="border-[1px] border-[#E6ECF0] p-[16px] rounded-[14px]">
+      <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
         <DataTable
           data={paginatedData}
           columns={columns}
@@ -90,9 +83,6 @@ const CashPostingPage = () => {
           }}
         />
       </div>
-
-      {/* modal */}
-      <Dialog open={open} />
     </div>
   );
 };

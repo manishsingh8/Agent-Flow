@@ -1,15 +1,15 @@
-import { cdaCardsData } from "@/constants/CDADashboard";
+import { HCD_CARDS } from "@/constants/ChartsData";
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import CustomDoughnutChart from "@/components/CustomDoughnutChart/CustomDoughnutChart";
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
 import { AlertTriangle } from "lucide-react";
 import CustomAreaChart from "@/components/CustomAreaChart/CustomAreaChart";
 import {
-  parentData,
-  data,
-  data1,
-  stackedData,
-  stackSegments,
+  AVG_TIME_CHART_DATA,
+  TOP_EXCEPTION_CHART_DATA,
+  DAILY_DOCS_CHART_DATA,
+  DOCUMENT_STATUS_CHART_DATA,
+  DAILY_DOCS_SEGMENTS_DATA,
   agentData,
   processingTimeData,
   slaComplianceData,
@@ -19,34 +19,33 @@ import {
 const Dashboard2 = () => {
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
-        <div className="text-[20px] font-[600] text-[#0A0A0A]">
-          HCD Dashboard
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+        <div className="text-[20px] font-semibold text-[#0A0A0A]">
+          Healthcare Correspondence Document Intelligence Dashboard
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#737373]">HCD Dashboard</span>
-          {/* <img src={RightArrow} alt="right-arrow" className="mt-[6px]" />
-          <span className="text-sm text-[#249563]">List</span> */}
+          <span className="text-sm text-[#737373]">
+            {" "}
+            Healthcare Correspondence Document Intelligence Dashboard
+          </span>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
-        {cdaCardsData.map((card) => (
+        {HCD_CARDS.map((card) => (
           <PaymentCard
             key={card.id}
             headerText={card.headerText}
             amount={card.amount}
             border={card.border}
             borderColor="#E5E5E5"
-            // icon={card.icon}
-            // textColor="#0A0A0A"
           />
         ))}
       </div>
       <div className="flex gap-4">
         <CustomBarChart
-          title="Average Processing Time (min)"
-          description="Average time (in minutes) to process documents by workflow."
-          data={parentData}
+          title="Document Processing Duration (min)"
+          description="Processing duration trends across documents types."
+          data={AVG_TIME_CHART_DATA}
           xKey="workflow"
           dataKey="time"
           color="#249563"
@@ -54,27 +53,27 @@ const Dashboard2 = () => {
           tooltipLabel="Processing Time"
         />
         <CustomDoughnutChart
-          title="Top Exception Reasons"
-          description="Breakdown of documents that failed automated processing."
+          title="Exception Category Overview"
+          description="Categorization of to exception types in document workflows."
           icon={AlertTriangle}
-          data={data1}
-          legendPosition="right" // or "bottom"
+          data={TOP_EXCEPTION_CHART_DATA}
+          legendPosition="right"
         />
       </div>
       <div className="flex gap-4">
         <CustomBarChart
-          title="Daily Document Volume by Type (Oct 2025)"
-          description="Breakdown of document types processed daily"
-          data={stackedData}
+          title="Daily Processing Volume by Category"
+          description="Daily distribution of processed document types"
+          data={DAILY_DOCS_CHART_DATA}
           xKey="date"
-          segments={stackSegments}
+          segments={DAILY_DOCS_SEGMENTS_DATA}
           barSize={20}
         />
         <CustomDoughnutChart
-          title="Documents by Status"
+          title="Document Status Overview"
           description=""
-          data={data}
-          legendPosition="right" // or "bottom"
+          data={DOCUMENT_STATUS_CHART_DATA}
+          legendPosition="right"
         />
       </div>
       <div className="flex gap-4">
@@ -106,7 +105,7 @@ const Dashboard2 = () => {
       <div className="flex gap-4">
         <div className="w-[50%]">
           <CustomAreaChart
-            title="SLA Compliance Over Time (Documents Processed)"
+            title="SLA Achievements Analysis "
             data={slaComplianceData}
             xKey="date"
             segments={slaSegments}

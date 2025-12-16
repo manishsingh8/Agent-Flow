@@ -37,8 +37,7 @@ export default function WorkflowPage({
   initialNodes,
   initialEdges,
   setActiveTab,
-}: // onNavigateTab,
-WorkFlowProps) {
+}: WorkFlowProps) {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -46,22 +45,18 @@ WorkFlowProps) {
 
   const onNodeClick: NodeMouseHandler = (_, node) => {
     const data = node?.data;
-
-    // Navigation route
     if (data?.route) {
       navigate(data.route);
       return;
     }
-
-    // Update tab based on label
     if (data?.label && data?.isSetTab) {
       let tabValue = data.label;
 
-      if (data.label === "Intake Orchestrator Agent") {
+      if (data.label === "Intake Workflow Agent") {
         tabValue = "intake";
       } else if (data.label === "Reconciliation Agent") {
         tabValue = "reconciliation";
-      } else if (data.label === "Cash Posting Agent") {
+      } else if (data.label === "Payment Posting Agent") {
         tabValue = "cashPosting";
       }
 
@@ -106,7 +101,7 @@ WorkFlowProps) {
             width: "100%",
             height: "100%",
             backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover", // or 'contain' depending on your needs
+            backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >

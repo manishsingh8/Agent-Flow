@@ -31,10 +31,10 @@ export default function WorkQueueVolumeChart({ data = workQueueData }: Props) {
     <Card className="w-full">
       <CardHeader className="flex flex-col items-start gap-1">
         <p className="text-sm font-medium">
-          Work Queue Volume Trends
+          Work Queue Activity Analysis
         </p>
         <div className="text-xs text-muted-foreground">
-          Daily volume of new, completed, and rollover items in the work queue.
+          Daily Activity summary showing in the queue.
         </div>
       </CardHeader>
 

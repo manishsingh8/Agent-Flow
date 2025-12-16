@@ -9,22 +9,20 @@ const iconMap = {
   sftp: Database,
   amazon_s3: Package,
 };
-
 interface IntegrationNodeProps {
   data: {
     label: string;
     icon: keyof typeof iconMap;
   };
 }
-
 export default function IntegrationNode({ data }: IntegrationNodeProps) {
   return (
     <div
       className="bg-card border border-card-border rounded-lg p-3 shadow-sm hover-elevate min-w-[120px]"
       style={{
-        backdropFilter: "blur(3.2908897399902344px)", // precise blur
-        WebkitBackdropFilter: "blur(3.2908897399902344px)", // Safari support
-        boxShadow: "0px 0px 20.57px 0px #24956333", // custom shadow
+        backdropFilter: "blur(3.2908897399902344px)",
+        WebkitBackdropFilter: "blur(3.2908897399902344px)",
+        boxShadow: "0px 0px 20.57px 0px #24956333",
       }}
     >
       <div className="flex flex-col items-center gap-2">
@@ -32,7 +30,7 @@ export default function IntegrationNode({ data }: IntegrationNodeProps) {
           <div className="text-3xl">{getIcon(data.icon)}</div>
         </div>
         <span
-          className="text-md font-medium text-foreground text-center break-words"
+          className="text-md font-medium text-foreground text-center whitespace-normal break-words "
           data-testid={`text-${data.label}`}
         >
           {data.label}

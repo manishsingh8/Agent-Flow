@@ -19,7 +19,7 @@ const initialNodes: Node[] = [
     type: "agent",
     position: { x: 400, y: 50 },
     data: {
-      label: "Cash Posting Agent",
+      label: "Payment Posting Agent",
       showLogo: true,
       showAddButton: true,
       // route: "/cash-posting-queue",
@@ -37,7 +37,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 200, y: 300 },
     data: {
-      label: "CP for EMR1",
+      label: "Posting Agent-EMR1",
       showLogo: false,
       showAddButton: true,
       handles: [
@@ -53,7 +53,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 530, y: 300 },
     data: {
-      label: "CP for EMR2",
+      label: "Posting Agent-EMR2",
       showAddButton: true,
       showLogo: false,
       isSecondHandle: true,
@@ -68,7 +68,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 870, y: 300 },
     data: {
-      label: "CP for EMR3",
+      label: "Posting Agent-EMR3",
       showAddButton: true,
       showLogo: false,
       handles: [
@@ -82,7 +82,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 1200, y: 300 },
     data: {
-      label: "CP for EMRn",
+      label: "Posting Agent-EMR Series",
       showAddButton: true,
       showLogo: false,
       isSecondHandle: true,

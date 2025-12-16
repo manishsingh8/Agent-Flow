@@ -1,22 +1,44 @@
-export const parentData = [
+export const HCD_CARDS = [
+  {
+    id: 1,
+    headerText: "Total Document Processed",
+    amount: "1432",
+    border: true,
+  },
+  {
+    id: 2,
+    headerText: "Auto-Classification Accuracy",
+    amount: "43%",
+    border: true,
+  },
+  {
+    id: 3,
+    headerText: "Documents Awaiting Review",
+    amount: "89",
+    border: true,
+  },
+  {
+    id: 4,
+    headerText: "Mean Processing Time",
+    amount: "3.2 min",
+    border: true,
+  },
+];
+
+export const AVG_TIME_CHART_DATA = [
   { workflow: "Referrals", time: 25 },
   { workflow: "Lab Results", time: 15 },
   { workflow: "Clinical Notes", time: 30 },
   { workflow: "Prescriptions", time: 20 },
 ];
-export const data = [
-  { label: "Completed", value: 120, color: "#1D4ED8" },
-  { label: "In Progress", value: 45, color: "#F59E0B" },
-  { label: "Ready", value: 30, color: "#249563" },
-  { label: "Archived", value: 12, color: "#DC2626" },
-];
-export const data1 = [
+export const TOP_EXCEPTION_CHART_DATA = [
   { label: "Missing Patient ID", value: 45, color: "#DC2626" },
   { label: "Unrecognized Document Type", value: 22, color: "#F59E0B" },
   { label: "Invalid Date Formate", value: 15, color: "#1D4ED8" },
   { label: "OCR Confidence Low", value: 12, color: "#249563" },
 ];
-export const stackedData = [
+
+export const DAILY_DOCS_CHART_DATA = [
   { date: "2025-10-01", authForm: 3, eob: 20, letter: 6, medicalRecord: 16 },
   { date: "2025-10-02", authForm: 5, eob: 6, letter: 3, medicalRecord: 13 },
   { date: "2025-10-03", authForm: 3, eob: 13, letter: 12, medicalRecord: 15 },
@@ -47,13 +69,19 @@ export const stackedData = [
   { date: "2025-10-28", authForm: 3, eob: 13, letter: 6, medicalRecord: 13 },
   { date: "2025-10-29", authForm: 4, eob: 19, letter: 7, medicalRecord: 12 },
 ];
-
-export const stackSegments = [
-  { dataKey: "authForm", color: "#0047ba", label: "Authorization Form" }, // Blue
-  { dataKey: "eob", color: "#e69f00", label: "EOB" }, // Yellow/Orange
-  { dataKey: "letter", color: "#009e73", label: "Letter - Appeal" }, // Green
-  { dataKey: "medicalRecord", color: "#d55e00", label: "Medical Record" }, // Dark Orange/Red
+export const DAILY_DOCS_SEGMENTS_DATA = [
+  { dataKey: "authForm", color: "#0047ba", label: "Authorization Form" }, 
+  { dataKey: "eob", color: "#e69f00", label: "EOB" }, 
+  { dataKey: "letter", color: "#009e73", label: "Letter - Appeal" }, 
+  { dataKey: "medicalRecord", color: "#d55e00", label: "Medical Record" }, 
 ];
+export const DOCUMENT_STATUS_CHART_DATA = [
+  { label: "Completed", value: 120, color: "#1D4ED8" },
+  { label: "In Progress", value: 45, color: "#F59E0B" },
+  { label: "Ready", value: 30, color: "#249563" },
+  { label: "Archived", value: 12, color: "#DC2626" },
+];
+
 
 // 3. Data for Agent Performance Chart
 export const agentData = [

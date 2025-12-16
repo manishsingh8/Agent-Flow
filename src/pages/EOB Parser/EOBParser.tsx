@@ -73,7 +73,7 @@ export default function PdfPipelineViewer() {
             <div>
               {/* FILE UPLOAD */}
               <div className="mb-4">
-                <div className="text-[20px] font-[600] text-[#0A0A0A]">
+                <div className="text-[20px] font-semibold text-[#0A0A0A]">
                   RCM Insight Extraction
                 </div>
                 <div className="flex items-center gap-2">

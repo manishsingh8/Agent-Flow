@@ -1,4 +1,3 @@
-// import RightArrow from "../../assets/icons/right-arrow.svg";
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import { paymentCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
@@ -6,7 +5,6 @@ import { usePaymentLogic } from "./VarianceQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
-// import { BRANDS } from "@/constants/TableData";
 
 interface Task {
   id: string;
@@ -62,22 +60,6 @@ const mockUsers = [
   { id: "user-5", name: "Charlie Wilson", avatar: undefined },
 ];
 
-// const columns: Column<Task>[] = [
-//   { key: "title", label: "Task" },
-//   {
-//     key: "status",
-//     label: "Status",
-//     bodyClassName: "font-medium",
-//     conditionalClassName: (value) => {
-//       if (value === "Done") return "text-green-600";
-//       if (value === "In Progress") return "text-blue-600";
-//       return "text-muted-foreground";
-//     },
-//   },
-//   { key: "priority", label: "Priority" },
-//   { key: "assignee", label: "Assignee" },
-// ];
-
 const Payment = () => {
   const {
     toggle,
@@ -96,19 +78,13 @@ const Payment = () => {
     handleEditCancel,
     handleEditSubmit,
     handleFieldChange,
-    // handleEditClick,
     handleExport,
-    // handleBrandToggle,
     handleSelectAll,
     handleRowSelect,
-    // totalPages,
     isEditModalOpen,
-    // setSearchTerm,
     setRowsPerPage,
     paginatedData,
     selectedRows,
-    // searchTerm,
-    // selectedBrands,
     currentPage,
     setCurrentPage,
     rowsPerPage,
@@ -134,19 +110,14 @@ const Payment = () => {
 
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      {/* Header */}
-      <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
-        <div className="text-[20px] font-[600] text-[#0A0A0A]">
-          Variance Queue
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+        <div className="text-[20px] font-semibold text-[#0A0A0A]">
+          Non-Reconciled Queue
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#737373]">Variance Queue</span>
-          {/* <img src={RightArrow} alt="right-arrow" className="mt-[6px]" />
-          <span className="text-sm text-[#249563]">List</span> */}
+          <span className="text-sm text-[#737373]">Non-Reconciled Queue</span>
         </div>
       </div>
-
-      {/* Payment Cards */}
       <div className="grid grid-cols-5 gap-4">
         {paymentCardsData.map((card) => (
           <PaymentCard
@@ -157,9 +128,7 @@ const Payment = () => {
           />
         ))}
       </div>
-
-      {/* Filter/Search */}
-      <div className="border-[1px] border-[#E6ECF0] p-[4px] rounded-[14px]">
+      <div className="border border-[#E6ECF0] p-1 rounded-[14px]">
         <FilterSearchBar
           toggleOptions={[
             { value: "dateRange", label: "Date Range" },
@@ -184,8 +153,7 @@ const Payment = () => {
           onAdvancedSearch={() => console.log("adv search")}
         />
       </div>
-      {/* DataTable */}
-      <div className="border-[1px] border-[#E6ECF0] p-[16px] rounded-[14px]">
+      <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
         <DataTable
           data={paginatedData}
           columns={columns}
@@ -219,8 +187,6 @@ const Payment = () => {
           }}
         />
       </div>
-
-      {/* Edit Modal */}
       <EditModal
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}

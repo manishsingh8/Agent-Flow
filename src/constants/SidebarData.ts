@@ -38,7 +38,7 @@ export const SIDEBAR_DATA = {
   ],
   navMain: [
     {
-      title: "RCM Flows",
+      title: "RCM Operational Flows",
       url: "/",
       icon: WavesLadder,
     },
@@ -48,11 +48,11 @@ export const SIDEBAR_DATA = {
       icon: House,
       items: [
         {
-          title: "RCM Dashboard",
+          title: "Revenue Cycle Intelligence Dashboard",
           url: "/dashboard/rcm-dashboard",
         },
         {
-          title: "HCD Dashboard",
+          title: "Healthcare Correspondence Document Intelligence Dashboard",
           url: "/dashboard/hcd-dashboard",
         },
       ],
@@ -63,26 +63,26 @@ export const SIDEBAR_DATA = {
       icon: PieChart,
       items: [
         {
-          title: "Variance Queue",
+          title: "Non-Reconciled Queue",
           url: "/variance-queue",
         },
         {
-          title: "Reconciled Report",
+          title: "Reconciliation Summary Report",
           url: "/reconciled-report",
         },
       ],
     },
     {
-      title: "Cash Posting",
+      title: "Payment Posting",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Cash Posting Queue",
+          title: "Payment Posting Queue",
           url: "/cash-posting-queue",
         },
         {
-          title: "Cash Posting Report",
+          title: "Payment Posting Activity Report",
           url: "/cash-posting",
         },
       ],
@@ -93,7 +93,7 @@ export const SIDEBAR_DATA = {
       icon: BrainCircuit,
       items: [
         {
-          title: "ERA Parser",
+          title: "ERA Document Parser",
           url: "/era-parser",
         },
         {

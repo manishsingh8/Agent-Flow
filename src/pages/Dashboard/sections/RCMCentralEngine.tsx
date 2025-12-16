@@ -1,5 +1,5 @@
 import MapCard from "@/components/MapCard/MapCard";
-import { RCM_MAESTRO_AGENT_DATA } from "@/constants/DashboardData";
+import { RCM_CENTRAL_ENGINE_DATA } from "@/constants/DashboardData";
 import WorkflowPage from "./Workflow/WorkFlow";
 import { type Node, type Edge, MarkerType } from "reactflow";
 
@@ -60,7 +60,7 @@ const initialNodes: Node[] = [
     position: { x: 25, y: 25 },
     parentId: "group-intake",
     extent: "parent",
-    data: { label: "Inbox", icon: "inbox" },
+    data: { label: "Email", icon: "inbox" },
   },
   {
     id: "sftp",
@@ -76,7 +76,7 @@ const initialNodes: Node[] = [
     position: { x: 25, y: 265 },
     parentId: "group-intake",
     extent: "parent",
-    data: { label: "Amazon S3", icon: "amazon" },
+    data: { label: "Cloud Storage", icon: "amazon" },
   },
 
   // ---------------- Center Agents ----------------
@@ -85,7 +85,7 @@ const initialNodes: Node[] = [
     type: "agent",
     position: { x: 490, y: 0 },
     data: {
-      label: "RCM Maestro Agent",
+      label: "RCM Central Engine",
       showAddButton: true,
       showLogo: true,
       isSecondLeftHandle: "true",
@@ -104,7 +104,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 400, y: 300 },
     data: {
-      label: "Intake Orchestrator Agent",
+      label: "Intake Workflow Agent",
       showLogo: false,
       showAddButton: true,
       // route: "/era-parser",
@@ -138,7 +138,7 @@ const initialNodes: Node[] = [
     type: "subAgent",
     position: { x: 1200, y: 300 },
     data: {
-      label: "Cash Posting Agent",
+      label: "Payment Posting Agent",
       showAddButton: true,
       showLogo: false,
       isSetTab: true,
@@ -523,11 +523,11 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const RCMMaestroAgent = ({ setActiveTab }: any) => {
+const RCMCentralEngine = ({ setActiveTab }: any) => {
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mt-3">
-        {RCM_MAESTRO_AGENT_DATA.map((item, index) => (
+        {RCM_CENTRAL_ENGINE_DATA.map((item, index) => (
           <MapCard
             key={index}
             headerText={item.headerText}
@@ -557,4 +557,4 @@ const RCMMaestroAgent = ({ setActiveTab }: any) => {
   );
 };
 
-export default RCMMaestroAgent;
+export default RCMCentralEngine;
