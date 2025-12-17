@@ -14,7 +14,6 @@ const Login = () => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
-
     if (!value) {
       setEmailError("");
     } else if (!validateEmail(value)) {
