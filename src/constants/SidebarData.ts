@@ -70,6 +70,10 @@ export const SIDEBAR_DATA = {
           title: "Reconciliation Summary Report",
           url: "/reconciled-report",
         },
+        {
+          title: "Adjustments",
+          url: "/adjustments",
+        },
       ],
     },
     {

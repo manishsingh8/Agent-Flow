@@ -20,10 +20,6 @@ export const useEOBLogic = () => {
 
   const wait = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
-
-  // -----------------------------------------------------
-  // FILE HANDLING
-  // -----------------------------------------------------
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const pdfFile = e.target.files?.[0];
     if (pdfFile) {
