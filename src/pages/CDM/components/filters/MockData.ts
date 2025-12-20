@@ -1,0 +1,55 @@
+
+export const MOCK_FILTER_DATA = {
+  classification: [
+    { id: 1, classificationType: "EOB" },
+    { id: 2, classificationType: "ERA" },
+    { id: 3, classificationType: "Correspondence" },
+    { id: 4, classificationType: "Medical Records" },
+    { id: 5, classificationType: "Appeal" },
+    { id: 6, classificationType: "Other" },
+  ],
+  payerPortals: [
+    { id: 1, payerName: "UHC" },
+    { id: 2, payerName: "Aetna" },
+    { id: 3, payerName: "Blue Cross Blue Shield" },
+    { id: 4, payerName: "Cigna" },
+    { id: 5, payerName: "Medicare" },
+    { id: 6, payerName: "Medicaid" },
+    { id: 7, payerName: "Humana" },
+    { id: 8, payerName: "Kaiser Permanente" },
+  ],
+  tags: [
+    "Urgent",
+    "Review Required",
+    "Follow-up",
+    "Completed",
+    "Pending Info",
+    "Escalated",
+    "Duplicate",
+  ],
+  status: [
+    { id: 1, statusName: "Processed" },
+    { id: 2, statusName: "Ready to Process" },
+    { id: 3, statusName: "Waiting for User Validation" },
+    { id: 4, statusName: "Found-Not Posted" },
+    { id: 5, statusName: "Not Found-Not Posted" },
+    { id: 6, statusName: "Found-Partially Posted" },
+  ],
+  users: [
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+    { id: 3, name: "Robert Wilson" },
+    { id: 4, name: "Sarah Johnson" },
+    { id: 5, name: "Michael Brown" },
+    { id: 6, name: "Emily Davis" },
+    { id: 7, name: "Chris Miller" },
+    { id: 8, name: "Amanda Lee" },
+  ],
+  searchField: [
+    "File Name",
+    "Payer Name",
+    "Claim ID",
+    "Patient Name",
+    "Provider Name",
+  ]
+};
