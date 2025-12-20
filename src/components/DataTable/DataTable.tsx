@@ -14,7 +14,7 @@ import { useState } from "react";
 
 export interface Column<T> {
   key: keyof T;
-  label: string;
+  label: React.ReactNode;
   render?: (value: unknown, row: T) => React.ReactNode;
   className?: string;
   bodyClassName?: string;
