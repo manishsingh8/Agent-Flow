@@ -1,8 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { CDMDocument } from "@/pages/CDM/types";
 
 interface CdmState {
   payloadData: any;
-  letterListTableData: any[];
+  letterListTableData: CDMDocument[];
   selectedUsers: any[];
   selectedCategories: any[];
   selectedStatus: any[];

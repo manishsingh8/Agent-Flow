@@ -1,6 +1,5 @@
-
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Calendar } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface DateSelectionProps {
   fromDate: string;

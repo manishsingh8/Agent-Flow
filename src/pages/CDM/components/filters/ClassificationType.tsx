@@ -1,4 +1,4 @@
-
+import type { MouseEvent } from 'react';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +29,7 @@ const ClassificationType = ({ selectedClassifications, setSelectedClassification
     }
   };
 
-  const removeClassification = (e: React.MouseEvent, value: string) => {
+  const removeClassification = (e: MouseEvent, value: string) => {
     e.stopPropagation();
     setSelectedClassifications(selectedClassifications.filter(c => c !== value));
   };

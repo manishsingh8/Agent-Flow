@@ -14,13 +14,15 @@ import FilterPopover from "./components/filters/FilterPopover";
 import { BulkAssign } from "./components/BulkAssign";
 import { COOKED_CDM_DATA } from "./components/filters/CookedData";
 
-import { setPayload, setLetterListTableData, setTotalNoOfDocs } from "@/redux/slices/cdmSlice";
+import { setPayload, setLetterListTableData } from "@/redux/slices/cdmSlice";
 import type { RootState } from "@/redux/store";
+import { type Column } from "@/components/DataTable/DataTable";
+import { type CDMDocument } from "./types";
 
 const CDMDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { payloadData, letterListTableData, totalNoOfDocs } = useSelector((state: RootState) => state.cdm);
+  const { payloadData, letterListTableData } = useSelector((state: RootState) => state.cdm);
 
   const [bulkAssignDialogOpen, setBulkAssignDialogOpen] = useState(false);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
@@ -46,14 +48,13 @@ const CDMDashboard = () => {
     }
     
     // Inject cooked data for demonstration
-    dispatch(setLetterListTableData(COOKED_CDM_DATA));
-    dispatch(setTotalNoOfDocs(COOKED_CDM_DATA.length));
+    dispatch(setLetterListTableData(COOKED_CDM_DATA as CDMDocument[]));
     
     // Original fetch logic commented out for "cooked data" usage
     // fetchData(initialPayload);
   }, []);
 
-  const columns = useMemo(() => [
+  const columns: Column<CDMDocument>[] = useMemo(() => [
     {
       key: "splitFileName",
       label: (
@@ -62,7 +63,7 @@ const CDMDashboard = () => {
            <span>Split File Name</span>
         </div>
       ),
-      render: (value: any, row: any) => (
+      render: (value: any, row: CDMDocument) => (
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -137,9 +138,9 @@ const CDMDashboard = () => {
            <span>Tags</span>
         </div>
       ),
-      render: (tags: string[]) => (
+      render: (tags: any) => (
         <div className="flex gap-1 flex-wrap">
-          {tags && tags.map(tag => (
+          {(tags as string[])?.map(tag => (
              <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">{tag}</Badge>
           ))}
         </div>
@@ -153,15 +154,16 @@ const CDMDashboard = () => {
            <span>Status</span>
         </div>
       ),
-      render: (val: string) => {
+      render: (val: any) => {
+        const statusVal = String(val);
         let colorClass = "bg-green-100 text-green-800";
         let Icon = CheckCircle;
         
-        if(val === "Ready to Process") {
+        if(statusVal === "Ready to Process") {
             colorClass = "bg-blue-100 text-blue-800";
             Icon = Clock;
         }
-        else if(val === "Waiting for User Validation") {
+        else if(statusVal === "Waiting for User Validation") {
             colorClass = "bg-orange-100 text-orange-800";
             Icon = AlertCircle;
         }
@@ -169,12 +171,12 @@ const CDMDashboard = () => {
         return (
             <Badge className={`${colorClass} hover:${colorClass} font-normal border-0 flex w-fit items-center gap-1 text-[10px] py-0`}>
                 <Icon className="w-3 h-3" />
-                {val}
+                {statusVal}
             </Badge>
         )
       }
     }
-  ], []);
+  ], [navigate]);
 
   return (
     <div className="flex-1 min-w-0 flex flex-col bg-slate-50/50 p-4 md:p-6 space-y-6 overflow-hidden">

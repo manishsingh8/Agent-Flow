@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, type UIEvent } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format, subDays } from 'date-fns';
 
@@ -111,7 +110,7 @@ const FilterPopover = ({ handlePopoverClose, fetchData, loading }: FilterPopover
   };
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     setIsScrolled(e.currentTarget.scrollTop > 0);
   };
 
