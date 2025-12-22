@@ -5,10 +5,10 @@ import RCMCentralEngine from "./sections/RCMCentralEngine";
 import ReconciliationAgent from "./sections/ReconciliationAgent";
 import { ChevronDown } from "lucide-react";
 import { TABS } from "@/constants/DashboardData";
-import { useDashboardLogic } from "./Dashboard.hook";
+import { useRCMFlowsLogic } from "./RCMFlows.hook";
 
-const Dashboard = () => {
-  const { activeTab, setActiveTab } = useDashboardLogic();
+const RCMFlows = () => {
+  const { activeTab, setActiveTab } = useRCMFlowsLogic();
   return (
     <div
       className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto"
@@ -58,4 +58,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default RCMFlows;

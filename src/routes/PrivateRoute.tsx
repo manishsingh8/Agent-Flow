@@ -1,4 +1,3 @@
-// src/routes/PrivateRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
 import { isAuthenticated } from "@/utils/auth";
 
