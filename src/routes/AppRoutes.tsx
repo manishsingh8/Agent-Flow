@@ -4,7 +4,7 @@ import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 import { MainLayout } from "@/layout/MainLayout";
 import LoginPage from "@/pages/Login/Login";
-import DashboardPage from "@/pages/Dashboard/Dashboard";
+import RCMFlows from "@/pages/RCMFlows/RCMFlows";
 import Payment from "@/pages/VarianceQueue/VarianceQueue";
 import CashPostingPage from "@/pages/CashPosting Report/CashPostingPage";
 import CashPostingQueue from "@/pages/CashPosting Queue/CashPostingQueue";
@@ -28,7 +28,7 @@ export const AppRoutes = () => {
       {/* Private Routes */}
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/rcm-flows" element={<RCMFlows />} />
           <Route path="/variance-queue" element={<Payment />} />
           <Route path="/cash-posting" element={<CashPostingPage />} />
           <Route path="/cash-posting-queue" element={<CashPostingQueue />} />

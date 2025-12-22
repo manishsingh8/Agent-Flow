@@ -306,7 +306,7 @@ export const BRANDS = [
 ];
 
 export interface Cash_Posting_Transaction {
-  id: string;
+  cashPostingId: number;
   cheque: string;
   payer: string;
   region: string;

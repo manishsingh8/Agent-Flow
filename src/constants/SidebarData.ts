@@ -39,7 +39,7 @@ export const SIDEBAR_DATA = {
   navMain: [
     {
       title: "RCM Operational Flows",
-      url: "/",
+      url: "/rcm-flows",
       icon: WavesLadder,
     },
     {

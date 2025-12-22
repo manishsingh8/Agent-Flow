@@ -20,7 +20,6 @@ export function useChatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const [typingText, setTypingText] = useState("");
   const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
-
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const recognitionRef = useRef<any>(null);
   const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -48,7 +47,7 @@ export function useChatbot() {
         const payload = { user_id: 2, message: "Hello" };
         setIsTyping(true);
         const response = await fetch(
-          "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/webhook",
+          "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/webhook",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -64,20 +63,23 @@ export function useChatbot() {
           setIsTyping(false);
 
           // add empty assistant message then type into it to avoid flicker
-          setMessages([
-            { id: messageId, role: "assistant", content: "" },
-          ]);
+          setMessages([{ id: messageId, role: "assistant", content: "" }]);
 
           let charIndex = 0;
           const fullText = data.reply;
 
-          if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+          if (typingIntervalRef.current)
+            clearInterval(typingIntervalRef.current);
 
           typingIntervalRef.current = setInterval(() => {
             if (charIndex <= fullText.length) {
               const partial = fullText.slice(0, charIndex);
               setTypingText(partial);
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: partial } : m)));
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === messageId ? { ...m, content: partial } : m
+                )
+              );
               charIndex++;
               messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
             } else {
@@ -85,7 +87,11 @@ export function useChatbot() {
                 clearInterval(typingIntervalRef.current);
                 typingIntervalRef.current = null;
               }
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: fullText } : m)));
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === messageId ? { ...m, content: fullText } : m
+                )
+              );
               setTypingMessageId(null);
             }
           }, 20);
@@ -120,8 +126,12 @@ export function useChatbot() {
     try {
       const payload = { user_id: 2, message: messageToSend };
       const response = await fetch(
-        "https://vbc9tkh6z2.execute-api.us-east-1.amazonaws.com/chat",
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+        "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/chat",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
       );
 
       const data = await response.json();
@@ -135,7 +145,11 @@ export function useChatbot() {
   const handleSend = () => {
     if (!inputValue.trim()) return;
 
-    const userMessage: Message = { id: Date.now().toString(), role: "user", content: inputValue };
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: inputValue,
+    };
     setMessages((prev) => [...prev, userMessage]);
     const messageToSend = inputValue;
     setInputValue("");
@@ -159,13 +173,18 @@ export function useChatbot() {
           let charIndex = 0;
           const fullText = data.reply;
 
-          if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+          if (typingIntervalRef.current)
+            clearInterval(typingIntervalRef.current);
 
           typingIntervalRef.current = setInterval(() => {
             if (charIndex <= fullText.length) {
               const partial = fullText.slice(0, charIndex);
               setTypingText(partial);
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: partial } : m)));
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === messageId ? { ...m, content: partial } : m
+                )
+              );
               charIndex++;
               messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
             } else {
@@ -173,14 +192,25 @@ export function useChatbot() {
                 clearInterval(typingIntervalRef.current);
                 typingIntervalRef.current = null;
               }
-              setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, content: fullText } : m)));
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === messageId ? { ...m, content: fullText } : m
+                )
+              );
               setTypingMessageId(null);
             }
           }, 20);
         }
       } catch (err) {
         setIsTyping(false);
-        setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: "assistant", content: "Sorry, I encountered an error processing your request." }]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            role: "assistant",
+            content: "Sorry, I encountered an error processing your request.",
+          },
+        ]);
       }
     })();
   };
