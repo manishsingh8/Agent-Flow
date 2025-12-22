@@ -35,6 +35,7 @@ export const useCashPostingQueueLogic = () => {
       if (!response.ok) throw new Error("Failed to fetch table data");
       const tableRes = await response.json();
       setTableData(tableRes?.data ?? []);
+      console.log(tableRes, "tres");
     } catch (error) {
       console.error("Table API error:", error);
       setTableData([]);
@@ -48,9 +49,8 @@ export const useCashPostingQueueLogic = () => {
   }, [from, to]);
 
   const filteredData = useMemo(() => {
-    return tableData.filter((t) => {
+    return tableData?.filter((t) => {
       const matchesBrand = !t.region || selectedBrands.includes(t.region);
-
       const matchesSearch = t.payer
         ?.toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -65,6 +65,7 @@ export const useCashPostingQueueLogic = () => {
     startIndex,
     startIndex + rowsPerPage
   );
+  console.log(paginatedData, "pdata");
   const handleRowSelect = (id: string) => {
     setSelectedRows((prev) => {
       const updated = new Set(prev);
@@ -193,5 +194,6 @@ export const useCashPostingQueueLogic = () => {
     rowsPerPage,
     setRowsPerPage,
     tableLoading,
+    tableData,
   };
 };

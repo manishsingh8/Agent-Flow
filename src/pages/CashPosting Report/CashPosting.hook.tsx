@@ -14,8 +14,6 @@ export const useCashPostingLogic = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [tableData, setTableData] = useState<Cash_Posting_Transaction[]>([]);
   const [tableLoading, setTableLoading] = useState(false);
-  const getRowId = (row: Cash_Posting_Transaction) =>
-    String(row?.cashPostingId);
   const fetchTable = async () => {
     try {
       setTableLoading(true);
@@ -60,10 +58,7 @@ export const useCashPostingLogic = () => {
     startIndex,
     startIndex + rowsPerPage
   );
-  const handleRowSelect = (row: Cash_Posting_Transaction) => {
-    console.log("row selected");
-    const id = getRowId(row);
-    console.log(id, "rowid", row);
+  const handleRowSelect = (id: string) => {
     setSelectedRows((prev) => {
       const updated = new Set(prev);
       updated.has(id) ? updated.delete(id) : updated.add(id);
@@ -78,7 +73,7 @@ export const useCashPostingLogic = () => {
     ) {
       setSelectedRows(new Set());
     } else {
-      setSelectedRows(new Set(paginatedData.map(getRowId)));
+      setSelectedRows(new Set(paginatedData.map((row) => String(row.cashPostingId))));
     }
   };
   const handleExport = () => {
@@ -171,7 +166,6 @@ export const useCashPostingLogic = () => {
     setCurrentPage,
     rowsPerPage,
     setRowsPerPage,
-    getRowId,
     tableLoading,
   };
 };

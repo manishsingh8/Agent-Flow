@@ -4,10 +4,14 @@ import { type Transaction } from "@/constants/TableData";
 import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
 
 type VarianceWidgetResponse = {
-  totalClaims: number;
-  totalAmount: number;
-  pendingCount: number;
-  exceptionCount: number;
+  data?: {
+    headerText: string;
+    amount: string;
+  }[];
+  totalClaims?: number;
+  totalAmount?: number;
+  pendingCount?: number;
+  exceptionCount?: number;
 };
 
 const headerTextMap = {

@@ -27,7 +27,6 @@ const CashPostingPage = () => {
     setCurrentPage,
     rowsPerPage,
     setRowsPerPage,
-    getRowId,
     tableLoading,
   } = useCashPostingLogic();
   return (
@@ -84,7 +83,7 @@ const CashPostingPage = () => {
             // onFilterChange={handleBrandToggle}
             exportEnabled
             onExport={handleExport}
-            idKey={getRowId}
+            idKey="cashPostingId"
             pageInfo={{
               currentPage,
               totalPages,
