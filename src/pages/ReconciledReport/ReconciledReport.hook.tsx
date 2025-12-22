@@ -1,25 +1,30 @@
-import { useState, useMemo, type ReactNode } from "react";
+import { useState, useMemo, type ReactNode, useEffect } from "react";
 import { type Column } from "@/components/DataTable/DataTable";
 import {
   DUMMY_RECONCILED_TABLE_DATA as transactions,
   type ReconciledTransaction,
 } from "@/constants/TableData";
+import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
 
-const payerOptions = [
-  { value: "all", label: "All Payers" },
-  { value: "payer1", label: "Payer 1" },
-  { value: "payer2", label: "Payer 2" },
-];
-const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-];
+const headerTextMap = {
+  "Bank Deposit": "Bank Deposit Amount",
+  Remittance: "Remittance Amount",
+  "Cash Posting": "Posted Amount",
+  "Pay Variance": "Variance With Remit",
+  "Post Variance": "Variance With Posting",
+};
+
+const WIDGET_API_URL =
+  "http://13.205.33.24:8101/claimService/api/reconciledReport/reconciledReportWidget";
+const TABLE_URL =
+  "http://13.205.33.24:8101/api/reconciledReport/getReconciledReportData";
+const PAYER_API_URL =
+  "http://13.205.33.24:8101/claimService/api/master/getPayers";
 
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
-  const [from, setFrom] = useState("2025-06-01");
-  const [to, setTo] = useState("2025-06-01");
+  const [from, setFrom] = useState("2025-01-01");
+  const [to, setTo] = useState("2025-10-30");
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
@@ -31,9 +36,92 @@ export const useReconciledReportLogic = () => {
   const [editedData, setEditedData] = useState<
     Partial<ReconciledTransaction>[]
   >([]);
+  const [widgetData, setWidgetData] = useState<null>(null);
+  const [widgetLoading, setWidgetLoading] = useState(false);
+  const [payerOptions, setPayerOptions] = useState([
+    { value: "all", label: "All Payers" },
+  ]);
+  const [tableData, setTableData] = useState<ReconciledTransaction[]>([]);
+
+  const fetchPayers = async () => {
+    try {
+      const res = await fetch(PAYER_API_URL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      });
+      if (!res.ok) throw new Error("Payer API failed");
+      const payerOptions = await res.json();
+      console.log(payerOptions?.data, "map");
+      const mapped =
+        payerOptions?.data?.map((payer: any) => ({
+          value: payer.name,
+          label: payer.name,
+        })) ?? [];
+
+      setPayerOptions([{ value: "all", label: "All Payers" }, ...mapped]);
+    } catch (error) {
+      console.error("Payer API error", error);
+    }
+  };
+
+  const fetchVarianceWidget = async () => {
+    try {
+      setWidgetLoading(true);
+
+      const payload = {
+        fromDate: from,
+        toDate: to,
+        payerIds: [1, 2, 3],
+        statusIds: null,
+        pageNo: 1,
+        pageSize: 10,
+      };
+
+      const res = await fetch(WIDGET_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const response = await fetch(TABLE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Failed to fetch widget data");
+      const widgetRes = await res.json();
+      const tableRes = await response.json();
+
+      setWidgetData(widgetRes);
+      setTableData(tableRes?.data || []);
+    } catch (error) {
+      console.error("Widget API error:", error);
+    } finally {
+      setWidgetLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayers();
+  }, []);
+
+  useEffect(() => {
+    fetchVarianceWidget();
+  }, [from, to, selectedPayer, selectedStatus]);
+
+  const reconciledCardsData = useMemo(() => {
+    if (!widgetData?.data) return [];
+    return mapPaymentCardsWithBg(widgetData?.data, headerTextMap);
+  }, [widgetData]);
 
   const filteredData = useMemo(() => {
-    return transactions.filter((t) => {
+    return tableData.filter((t) => {
       const matchesBrand = selectedBrands.includes(t.region);
       const matchesSearch =
         t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -78,7 +166,7 @@ export const useReconciledReportLogic = () => {
   };
 
   const handleExport = () => {
-    const headers = Object.keys(transactions[0]);
+    const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
       headers.map((key) => t[key as keyof typeof t])
     );
@@ -87,7 +175,7 @@ export const useReconciledReportLogic = () => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "transactions.csv";
+    a.download = "tableData.csv";
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -192,33 +280,46 @@ export const useReconciledReportLogic = () => {
       bodyClassName: "text-blue-600",
     },
   };
-  const columns: Column<ReconciledTransaction>[] = (
-    Object.keys(transactions[0]) as Array<keyof ReconciledTransaction>
-  )
-    .filter((key) => key !== "id")
-    .map((key) => {
-      const rule = columnRules[String(key)] || {};
+  // const columns: Column<ReconciledTransaction>[] = (
+  //   Object.keys(tableData[0]) as Array<keyof ReconciledTransaction>
+  // )
+  //   .filter((key) => key !== "id")
+  //   .map((key) => {
+  //     const rule = columnRules[String(key)] || {};
 
-      return {
-        key,
-        label: key
-          .replace(/([A-Z])/g, " $1")
-          .replace(/^./, (str) => str.toUpperCase()),
-        render: (val: unknown): ReactNode => {
-          if (typeof val === "number") return `$${val.toFixed(2)}`;
-          return String(val);
-        },
-        bodyClassName: rule.bodyClassName || "",
-        conditionalClassName: rule.conditionalClassName || undefined,
-      };
-    });
+  //     return {
+  //       key,
+  //       label: key
+  //         .replace(/([A-Z])/g, " $1")
+  //         .replace(/^./, (str) => str.toUpperCase()),
+  //       render: (val: unknown): ReactNode => {
+  //         if (typeof val === "number") return `$${val.toFixed(2)}`;
+  //         return String(val);
+  //       },
+  //       bodyClassName: rule.bodyClassName || "",
+  //       conditionalClassName: rule.conditionalClassName || undefined,
+  //     };
+  //   });
+  const columns: Column<Transaction>[] = tableData.length
+    ? (Object.keys(tableData[0]) as Array<keyof Transaction>)
+        .filter((key) => key !== "id")
+        .map((key) => ({
+          key,
+          label: key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase()),
+          render: (val: unknown): ReactNode => {
+            if (typeof val === "number") return `$${val.toFixed(2)}`;
+            return String(val ?? "-");
+          },
+        }))
+    : [];
 
   return {
     toggle,
     from,
     to,
     payerOptions,
-    statusOptions,
     selectedPayer,
     selectedStatus,
     setSelectedPayer,
@@ -249,5 +350,6 @@ export const useReconciledReportLogic = () => {
     rowsPerPage,
     setIsEditModalOpen,
     editedData,
+    reconciledCardsData,
   };
 };

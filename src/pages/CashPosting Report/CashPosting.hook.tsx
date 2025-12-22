@@ -50,7 +50,7 @@ export const useCashPostingLogic = () => {
     if (!searchTerm) return tableData;
 
     return tableData.filter((t) =>
-      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase())
+      t.payer?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [tableData, searchTerm]);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);

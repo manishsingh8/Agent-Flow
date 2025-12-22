@@ -51,7 +51,7 @@ export const useCashPostingQueueLogic = () => {
     return tableData.filter((t) => {
       const matchesBrand = !t.region || selectedBrands.includes(t.region);
 
-      const matchesSearch = t.payerName
+      const matchesSearch = t.payer
         ?.toLowerCase()
         .includes(searchTerm.toLowerCase());
 
@@ -152,7 +152,7 @@ export const useCashPostingQueueLogic = () => {
     if (!tableData.length) return [];
     const amountFields = ["totalAmount", "postedAmount", "remittance"];
     return (Object.keys(tableData[0]) as Array<keyof Cash_Posting_Transaction>)
-      .filter((key) => key !== "id")
+      .filter((key) => key !== "cashPostingId")
       .map((key) => {
         const rule = columnRules[String(key)] || {};
         return {

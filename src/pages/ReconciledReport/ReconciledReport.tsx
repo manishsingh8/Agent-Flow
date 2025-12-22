@@ -1,5 +1,5 @@
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
-import { reconciledCardsData } from "@/constants/PaymentsCardData";
+// import { reconciledCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { useReconciledReportLogic } from "./ReconciledReport.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
@@ -13,7 +13,6 @@ const ReconciledReport = () => {
     from,
     to,
     payerOptions,
-    statusOptions,
     selectedPayer,
     selectedStatus,
     setSelectedPayer,
@@ -43,6 +42,7 @@ const ReconciledReport = () => {
     rowsPerPage,
     setIsEditModalOpen,
     editedData,
+    reconciledCardsData,
   } = useReconciledReportLogic();
 
   return (
@@ -84,7 +84,6 @@ const ReconciledReport = () => {
           payerOptions={payerOptions}
           selectedPayer={selectedPayer}
           onPayerChange={setSelectedPayer}
-          statusOptions={statusOptions}
           selectedStatus={selectedStatus}
           onStatusChange={setSelectedStatus}
           showAdvancedSearch
