@@ -10,7 +10,11 @@ interface CdmState {
   selectedTagsFilter: any[];
   totalNoOfDocs: number;
   usersListForAssign: any[];
-  availableTags: any[];
+  availableTags: string[];
+  currentTags: string[];
+  data: any;
+  selectedUserAssigned: any;
+  editClick: boolean;
 }
 
 const initialState: CdmState = {
@@ -34,8 +38,21 @@ const initialState: CdmState = {
   selectedStatus: [],
   selectedTagsFilter: [],
   totalNoOfDocs: 0,
-  usersListForAssign: [],
-  availableTags: [],
+  usersListForAssign: [
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+    { id: 3, name: "Robert Wilson" },
+    { id: 4, name: "Sarah Johnson" },
+    { id: 5, name: "Michael Brown" },
+    { id: 6, name: "Emily Davis" },
+    { id: 7, name: "Chris Miller" },
+    { id: 8, name: "Amanda Lee" },
+  ],
+  availableTags: ["Urgent", "Review Required", "Follow-up", "Pending Info", "Completed", "Escalated"],
+  currentTags: [],
+  data: {},
+  selectedUserAssigned: null,
+  editClick: false,
 };
 
 const cdmSlice = createSlice({
@@ -51,6 +68,24 @@ const cdmSlice = createSlice({
     setTotalNoOfDocs: (state, action: PayloadAction<number>) => {
       state.totalNoOfDocs = action.payload;
     },
+    setAvailableTags: (state, action: PayloadAction<string[]>) => {
+      state.availableTags = action.payload;
+    },
+    setTags: (state, action: PayloadAction<string[]>) => {
+      state.currentTags = action.payload;
+    },
+    setData: (state, action: PayloadAction<any>) => {
+      state.data = action.payload;
+    },
+    setSelectedUserAssigne: (state, action: PayloadAction<any>) => {
+      state.selectedUserAssigned = action.payload;
+    },
+    setUsersListForAssign: (state, action: PayloadAction<any[]>) => {
+      state.usersListForAssign = action.payload;
+    },
+    setEditClick: (state, action: PayloadAction<boolean>) => {
+      state.editClick = action.payload;
+    },
   },
 });
 
@@ -58,6 +93,12 @@ export const {
   setPayload,
   setLetterListTableData,
   setTotalNoOfDocs,
+  setAvailableTags,
+  setTags,
+  setData,
+  setSelectedUserAssigne,
+  setUsersListForAssign,
+  setEditClick,
 } = cdmSlice.actions;
 
 export default cdmSlice.reducer;

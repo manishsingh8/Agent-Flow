@@ -12,6 +12,8 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import { DocumentMetrics } from "./components/DocumentMetrics";
 import FilterPopover from "./components/filters/FilterPopover";
 import { BulkAssign } from "./components/BulkAssign";
+import TagCell from "./components/TagCell";
+import AssigneeSelect from "./components/AssigneeSelect";
 import { COOKED_CDM_DATA } from "./components/filters/CookedData";
 
 import { setPayload, setLetterListTableData } from "@/redux/slices/cdmSlice";
@@ -110,7 +112,14 @@ const CDMDashboard = () => {
            <span>Assignee</span>
         </div>
       ),
-      render: (val: any) => val || "Unassigned"
+      render: (_val: any, row: CDMDocument) => (
+        <AssigneeSelect 
+          rowData={row} 
+          assignUser={(_isBulk, _payload, row, user) => {
+            console.log("Assigning user", user.name, "to", row.id);
+          }}
+        />
+      )
     },
     {
       key: "batchDate",
@@ -138,12 +147,14 @@ const CDMDashboard = () => {
            <span>Tags</span>
         </div>
       ),
-      render: (tags: any) => (
-        <div className="flex gap-1 flex-wrap">
-          {(tags as string[])?.map(tag => (
-             <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">{tag}</Badge>
-          ))}
-        </div>
+      render: (tags: any, row: CDMDocument) => (
+        <TagCell 
+          value={tags} 
+          row={row} 
+          assignUser={(_isBulk, payload) => {
+            console.log("Assigning tags for", row.id, payload);
+          }}
+        />
       )
     },
     {
