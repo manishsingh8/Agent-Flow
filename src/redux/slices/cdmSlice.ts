@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { CDMDocument } from "@/pages/CDM/types";
+import type { CDMDocument } from "@/pages/CDM/CDMDashboard.hook";
 
 interface CdmState {
   payloadData: any;

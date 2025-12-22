@@ -1,7 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { format, subDays } from "date-fns";
+import { useMemo } from "react";
 import { Filter, FileText, LayoutGrid, User, Calendar, Tag, AtSign, CheckCircle, Clock, AlertCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
@@ -9,52 +6,26 @@ import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/Tooltip";
 import { DataTable } from "@/components/DataTable/DataTable"; 
-import { DocumentMetrics } from "./components/DocumentMetrics";
-import FilterPopover from "./components/filters/FilterPopover";
-import { BulkAssign } from "./components/BulkAssign";
-import TagCell from "./components/TagCell";
-import AssigneeSelect from "./components/AssigneeSelect";
-import { COOKED_CDM_DATA } from "./components/filters/CookedData";
+import { DocumentMetrics } from "@/components/CDM/DocumentMetrics/DocumentMetrics";
+import FilterPopover from "@/components/CDM/filters/FilterPopover";
+import { BulkAssign } from "@/components/CDM/BulkAssign";
+import TagCell from "@/components/CDM/TagCell";
+import AssigneeSelect from "@/components/CDM/AssigneeSelect";
 
-import { setPayload, setLetterListTableData } from "@/redux/slices/cdmSlice";
-import type { RootState } from "@/redux/store";
 import { type Column } from "@/components/DataTable/DataTable";
-import { type CDMDocument } from "./types";
+import { useCDMDashboard, type CDMDocument } from "./CDMDashboard.hook";
 
 const CDMDashboard = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { payloadData, letterListTableData } = useSelector((state: RootState) => state.cdm);
-
-  const [bulkAssignDialogOpen, setBulkAssignDialogOpen] = useState(false);
-  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-
-  // Fetch Logic
-  const fetchData = async (payload: any) => {
-    console.log("Simulating fetch with payload:", payload);
-    // Simple simulation delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-  };
-
-  useEffect(() => {
-    let initialPayload = { ...payloadData };
-    if (!initialPayload.fromDate) {
-      const today = new Date();
-      const yesterday = subDays(today, 1);
-      initialPayload = {
-        ...initialPayload,
-        fromDate: format(yesterday, "MM-dd-yyyy"),
-        toDate: format(today, "MM-dd-yyyy"),
-      };
-      dispatch(setPayload(initialPayload));
-    }
-    
-    // Inject cooked data for demonstration
-    dispatch(setLetterListTableData(COOKED_CDM_DATA as CDMDocument[]));
-    
-    // Original fetch logic commented out for "cooked data" usage
-    // fetchData(initialPayload);
-  }, []);
+  const {
+    navigate,
+    letterListTableData,
+    bulkAssignDialogOpen,
+    setBulkAssignDialogOpen,
+    rowSelection,
+    fetchData,
+    handleRowSelect,
+    handleSelectAll,
+  } = useCDMDashboard();
 
   const columns: Column<CDMDocument>[] = useMemo(() => [
     {
@@ -232,26 +203,8 @@ const CDMDashboard = () => {
              selectable={true}
              idKey="id"
              selectedRows={new Set(Object.keys(rowSelection))}
-              onRowSelect={(id) => {
-                const newSelection = {...rowSelection};
-                if (newSelection[String(id)]) {
-                    delete newSelection[String(id)];
-                } else {
-                    newSelection[String(id)] = true;
-                }
-                setRowSelection(newSelection);
-             }}
-             onSelectAll={() => {
-                if (Object.keys(rowSelection).length === letterListTableData.length) {
-                    setRowSelection({});
-                } else {
-                    const allSelected: Record<string, boolean> = {};
-                    letterListTableData.forEach(row => {
-                        allSelected[String(row.id)] = true;
-                    });
-                    setRowSelection(allSelected);
-                }
-             }}
+              onRowSelect={handleRowSelect}
+              onSelectAll={handleSelectAll}
            />
         </div>
 

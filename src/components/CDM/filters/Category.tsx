@@ -4,51 +4,51 @@ import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { MoreHorizontal, Search, X, Check } from "lucide-react";
-import { MOCK_FILTER_DATA } from './MockData';
+import { MOCK_FILTER_DATA } from '@/pages/CDM/data/MockData';
 
-interface TagsProps {
-  selectedTags: string[];
-  setSelectedTags: (tags: string[]) => void;
+interface CategoryProps {
+  selectedCategories: { id: number; payerName: string }[];
+  setSelectedCategories: (categories: { id: number; payerName: string }[]) => void;
 }
 
-const Tags = ({ selectedTags, setSelectedTags }: TagsProps) => {
+const Category = ({ selectedCategories, setSelectedCategories }: CategoryProps) => {
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
 
-  const tags = MOCK_FILTER_DATA.tags;
+  const categories = MOCK_FILTER_DATA.payerPortals;
   const initialDisplayCount = 5;
 
-  const toggleTag = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter(t => t !== tag));
+  const toggleCategory = (category: { id: number; payerName: string }) => {
+    if (selectedCategories.some(c => c.id === category.id)) {
+      setSelectedCategories(selectedCategories.filter(c => c.id !== category.id));
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      setSelectedCategories([...selectedCategories, category]);
     }
   };
 
-  const clearTags = () => setSelectedTags([]);
+  const clearCategories = () => setSelectedCategories([]);
 
-  const filteredTags = tags.filter(t => 
-    t.toLowerCase().includes(search.toLowerCase())
+  const filteredCategories = categories.filter(c => 
+    c.payerName.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="mb-4">
       <div className="flex items-center gap-2 mb-2">
-        <h4 className="font-medium text-sm text-slate-700">Tag ({selectedTags.length})</h4>
-        {selectedTags.length > 0 && (
-           <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-slate-100 rounded-full" onClick={clearTags}>
+        <h4 className="font-medium text-sm text-slate-700">Category ({selectedCategories.length})</h4>
+        {selectedCategories.length > 0 && (
+           <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-slate-100 rounded-full" onClick={clearCategories}>
              <X className="h-3 w-3 text-slate-500" />
            </Button>
         )}
       </div>
 
       <div className="flex flex-wrap gap-2 items-center">
-         {tags.slice(0, initialDisplayCount).map(tag => {
-            const isSelected = selectedTags.includes(tag);
+         {categories.slice(0, initialDisplayCount).map(category => {
+            const isSelected = selectedCategories.some(c => c.id === category.id);
             return (
                <Badge 
-                 key={tag}
+                 key={category.id}
                  variant="secondary"
                  className={`cursor-pointer px-3 py-1 rounded-full text-xs font-medium border-2 transition-colors
                     ${isSelected 
@@ -56,14 +56,14 @@ const Tags = ({ selectedTags, setSelectedTags }: TagsProps) => {
                         : 'bg-slate-50 border-transparent hover:bg-slate-100 text-slate-600'
                     }
                  `}
-                 onClick={() => toggleTag(tag)}
+                 onClick={() => toggleCategory(category)}
                >
-                 {tag}
+                 {category.payerName}
                </Badge>
             )
          })}
 
-         {tags.length > initialDisplayCount && (
+         {categories.length > initialDisplayCount && (
             <Popover open={open} onOpenChange={setOpen}>
                <PopoverTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full bg-slate-100 hover:bg-slate-200">
@@ -81,25 +81,26 @@ const Tags = ({ selectedTags, setSelectedTags }: TagsProps) => {
                      />
                   </div>
                   <div className="max-h-[200px] overflow-y-auto space-y-1">
-                     {filteredTags.slice(initialDisplayCount).length > 0 ? (
-                        filteredTags.slice(initialDisplayCount).map(tag => {
-                            const isSelected = selectedTags.includes(tag);
+                     {filteredCategories.slice(initialDisplayCount).length > 0 ? (
+                        filteredCategories.slice(initialDisplayCount).map(category => {
+                            const isSelected = selectedCategories.some(c => c.id === category.id);
                             return (
                                 <div 
-                                    key={tag}
+                                    key={category.id}
                                     className={`flex items-center justify-between px-3 py-2 rounded-full cursor-pointer text-sm transition-colors
                                         ${isSelected ? 'bg-blue-50 border-2 border-blue-500 text-blue-700' : 'bg-slate-50 border-2 border-transparent text-slate-600 hover:bg-slate-100'}
                                     `}
-                                    onClick={() => toggleTag(tag)}
+                                    onClick={() => toggleCategory(category)}
                                 >
-                                    <span>{tag}</span>
+                                    <span>{category.payerName}</span>
                                     {isSelected && <Check className="h-3 w-3 text-blue-600" />}
                                 </div>
                             )
                         })
                      ) : (
-                        <p className="text-xs text-slate-400 text-center py-2">No more tags found</p>
+                        <p className="text-xs text-slate-400 text-center py-2">No more categories found</p>
                      )}
+                     {/* If searching, show matching ones from initial list too if needed, but for now sticking to more popover */}
                   </div>
                </PopoverContent>
             </Popover>
@@ -109,4 +110,4 @@ const Tags = ({ selectedTags, setSelectedTags }: TagsProps) => {
   );
 };
 
-export default Tags;
+export default Category;

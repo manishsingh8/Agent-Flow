@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/Tooltip";
 import { setAvailableTags, setLetterListTableData, setTags, setData } from "@/redux/slices/cdmSlice";
 import type { RootState } from "@/redux/store";
-import type { CDMDocument } from "../types";
+import type { CDMDocument } from "@/pages/CDM/CDMDashboard.hook";
 
 interface TagCellProps {
   value: string[];

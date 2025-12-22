@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MoreHorizontal, Search, X, Check } from "lucide-react";
-import { MOCK_FILTER_DATA } from './MockData';
+import { MOCK_FILTER_DATA } from '@/pages/CDM/data/MockData';
 
 interface StatusProps {
   selectedStatus: { id: number; statusName: string }[];

@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, X, Check } from "lucide-react";
-import { MOCK_FILTER_DATA } from './MockData';
+import { MOCK_FILTER_DATA } from '@/pages/CDM/data/MockData';
 
 interface ClassificationTypeProps {
   selectedClassifications: string[];

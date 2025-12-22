@@ -1,7 +1,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
-import { MOCK_FILTER_DATA } from './MockData';
+import { MOCK_FILTER_DATA } from '@/pages/CDM/data/MockData';
 
 interface SearchProps {
   searchType: string;

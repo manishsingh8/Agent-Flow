@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { setLetterListTableData, setSelectedUserAssigne } from "@/redux/slices/cdmSlice";
 import type { RootState } from "@/redux/store";
 import { cn } from "@/lib/utils";
-import type { CDMDocument } from "../types";
+import type { CDMDocument } from "@/pages/CDM/CDMDashboard.hook";
 
 // Function to get initials from the name
 const getAvatarInitials = (name: string) => {
