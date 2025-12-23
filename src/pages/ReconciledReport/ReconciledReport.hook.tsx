@@ -55,10 +55,10 @@ export const useReconciledReportLogic = () => {
         },
       });
       if (!res.ok) throw new Error("Payer API failed");
-      const payerOptions = await res.json();
+      const response = await res.json();
       const mapped =
-        payerOptions?.data?.map((payer: any) => ({
-          value: payer.name,
+        response?.data?.map((payer: any) => ({
+          value: payer.id, // ✅ store ID
           label: payer.name,
         })) ?? [];
 
@@ -67,11 +67,18 @@ export const useReconciledReportLogic = () => {
       console.error("Payer API error", error);
     }
   };
+  const getPayerIds = () => {
+    if (selectedPayer === "all") {
+      return payerOptions.filter((p) => p.value !== "all").map((p) => p.value);
+    }
+    return [selectedPayer];
+  };
+
   const fetchVarianceWidget = async () => {
     const payload = {
       fromDate: "2025-01-01",
       toDate: "2025-10-30",
-      payerIds: [1, 2, 3],
+      payerIds: getPayerIds(),
       statusIds: null,
       pageNo: 1,
       pageSize: 10,
@@ -100,7 +107,6 @@ export const useReconciledReportLogic = () => {
       const widgetData = await widgetRes.json();
       const tableData = await tableRes.json();
       setWidgetData(widgetData);
-      console.log(tableData, "tdata");
       setTableData(tableData?.data || []);
     } catch (error) {
       console.error("Variance API error:", error);
@@ -141,7 +147,6 @@ export const useReconciledReportLogic = () => {
     startIndex,
     startIndex + rowsPerPage
   );
-  console.log(filteredData, "pdata");
 
   const reconciledCardsData = useMemo(() => {
     if (!widgetData?.data) return [];

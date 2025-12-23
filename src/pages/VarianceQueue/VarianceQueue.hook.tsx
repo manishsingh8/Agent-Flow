@@ -58,10 +58,12 @@ export const usePaymentLogic = () => {
         },
       });
       if (!res.ok) throw new Error("Payer API failed");
-      const payerOptions = await res.json();
+
+      const response = await res.json();
+
       const mapped =
-        payerOptions?.data?.map((payer: any) => ({
-          value: payer.name,
+        response?.data?.map((payer: any) => ({
+          value: payer.id, // ✅ store ID
           label: payer.name,
         })) ?? [];
 
@@ -80,10 +82,12 @@ export const usePaymentLogic = () => {
         },
       });
       if (!res.ok) throw new Error("Status API failed");
-      const statusOption = await res.json();
+
+      const response = await res.json();
+
       const mapped =
-        statusOption?.data?.map((status: any) => ({
-          value: status.id,
+        response?.data?.map((status: any) => ({
+          value: status.id, // ✅ already ID
           label: status.name,
         })) ?? [];
 
@@ -93,18 +97,32 @@ export const usePaymentLogic = () => {
     }
   };
 
+  const getPayerIds = () => {
+    if (selectedPayer === "all") {
+      return payerOptions.filter((p) => p.value !== "all").map((p) => p.value);
+    }
+    return [selectedPayer];
+  };
+
+  const getStatusIds = () => {
+    if (selectedStatus === "all") return null;
+    return [selectedStatus];
+  };
+
   const fetchVarianceWidget = async () => {
     const payload = {
       fromDate: from,
       toDate: to,
-      payerIds: [1, 2, 3],
-      statusIds: null,
-      pageNo: 1,
-      pageSize: 10,
+      payerIds: getPayerIds(), // ✅ dynamic
+      statusIds: getStatusIds(), // ✅ dynamic
+      pageNo: currentPage,
+      pageSize: rowsPerPage,
     };
+
     try {
       setWidgetLoading(true);
       setTableLoading(true);
+
       const [widgetRes, tableRes] = await Promise.all([
         fetch(API_ENDPOINTS.VARIANCE_WIDGET, {
           method: "POST",
@@ -121,10 +139,13 @@ export const usePaymentLogic = () => {
           body: JSON.stringify(payload),
         }),
       ]);
+
       if (!widgetRes.ok) throw new Error("Failed to fetch widget data");
       if (!tableRes.ok) throw new Error("Failed to fetch table data");
+
       const widgetData = await widgetRes.json();
       const tableData = await tableRes.json();
+
       setWidgetData(widgetData);
       setTableData(tableData?.data || []);
     } catch (error) {
@@ -134,6 +155,7 @@ export const usePaymentLogic = () => {
       setTableLoading(false);
     }
   };
+
   useEffect(() => {
     fetchPayers();
     fetchStatuses();
