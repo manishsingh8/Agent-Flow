@@ -1,8 +1,6 @@
 import { useState, useMemo, type ReactNode, useEffect } from "react";
 import { type Cash_Posting_Transaction } from "@/constants/TableData";
-
-const TABLE_URL =
-  "http://13.205.33.24:8101/claimService/api/cashPosting/getCashPostingReport";
+import { API_ENDPOINTS } from "@/config/api";
 
 export const useCashPostingLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -23,7 +21,7 @@ export const useCashPostingLogic = () => {
         pageNo: 1,
         pageSize: 10,
       };
-      const response = await fetch(TABLE_URL, {
+      const response = await fetch(API_ENDPOINTS.CASH_POSTING_REPORT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -73,7 +71,9 @@ export const useCashPostingLogic = () => {
     ) {
       setSelectedRows(new Set());
     } else {
-      setSelectedRows(new Set(paginatedData.map((row) => String(row.cashPostingId))));
+      setSelectedRows(
+        new Set(paginatedData.map((row) => String(row.cashPostingId)))
+      );
     }
   };
   const handleExport = () => {

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-const LOGIN_API = "http://13.205.33.24:8101/claimService/api/auth/login";
+import { API_ENDPOINTS } from "@/config/api";
 
 export const useLoginLogic = () => {
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ export const useLoginLogic = () => {
     if (!password) return;
     try {
       setLoading(true);
-      const response = await fetch(LOGIN_API, {
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",

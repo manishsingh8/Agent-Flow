@@ -2,6 +2,7 @@ import { useState, useMemo, type ReactNode, useEffect } from "react";
 import { type Column } from "@/components/DataTable/DataTable";
 import { type Transaction } from "@/constants/TableData";
 import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
+import { API_ENDPOINTS } from "@/config/api";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -21,15 +22,6 @@ const headerTextMap = {
   "Pay Variance": "Variance With Remit",
   "Post Variance": "Variance With Posting",
 };
-
-const WIDGET_API_URL =
-  "http://13.205.33.24:8101/claimService/api/varianceQueue/varianceWidget";
-const TABLE_URL =
-  "http://13.205.33.24:8101/claimService/api/varianceQueue/getVarianceQueueData";
-const PAYER_API_URL =
-  "http://13.205.33.24:8101/claimService/api/master/getPayers";
-const STATUS_API_URL =
-  "http://13.205.33.24:8101/claimService/api/master/getTransactionStatuses";
 
 export const usePaymentLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -59,7 +51,7 @@ export const usePaymentLogic = () => {
 
   const fetchPayers = async () => {
     try {
-      const res = await fetch(PAYER_API_URL, {
+      const res = await fetch(API_ENDPOINTS.PAYERS, {
         method: "GET",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -67,7 +59,6 @@ export const usePaymentLogic = () => {
       });
       if (!res.ok) throw new Error("Payer API failed");
       const payerOptions = await res.json();
-      console.log(payerOptions?.data, "map");
       const mapped =
         payerOptions?.data?.map((payer: any) => ({
           value: payer.name,
@@ -82,7 +73,7 @@ export const usePaymentLogic = () => {
 
   const fetchStatuses = async () => {
     try {
-      const res = await fetch(STATUS_API_URL, {
+      const res = await fetch(API_ENDPOINTS.TRANSACTION_STATUSES, {
         method: "GET",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -115,14 +106,14 @@ export const usePaymentLogic = () => {
       setWidgetLoading(true);
       setTableLoading(true);
       const [widgetRes, tableRes] = await Promise.all([
-        fetch(WIDGET_API_URL, {
+        fetch(API_ENDPOINTS.VARIANCE_WIDGET, {
           method: "POST",
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
           },
           body: JSON.stringify(payload),
         }),
-        fetch(TABLE_URL, {
+        fetch(API_ENDPOINTS.VARIANCE_TABLE, {
           method: "POST",
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
@@ -343,8 +334,6 @@ export const usePaymentLogic = () => {
           },
         }))
     : [];
-
-  console.log(payerOptions, "payerOptions");
 
   return {
     toggle,
