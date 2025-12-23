@@ -1,20 +1,25 @@
-import { useState, useMemo, type ReactNode } from "react";
+import { useState, useMemo, type ReactNode, useEffect } from "react";
 import { type Column } from "@/components/DataTable/DataTable";
-import {
-  DUMMY_RECONCILED_TABLE_DATA as transactions,
-  type ReconciledTransaction,
-} from "@/constants/TableData";
+import { type ReconciledTransaction } from "@/constants/TableData";
+import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
+import { API_ENDPOINTS } from "@/config/api";
 
-const payerOptions = [
-  { value: "all", label: "All Payers" },
-  { value: "payer1", label: "Payer 1" },
-  { value: "payer2", label: "Payer 2" },
-];
-const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-];
+type VarianceWidgetResponse = {
+  data?: {
+    headerText: string;
+    amount: string;
+  }[];
+  totalClaims?: number;
+  totalAmount?: number;
+  pendingCount?: number;
+  exceptionCount?: number;
+};
+
+const headerTextMap = {
+  "Bank Deposit": "Bank Deposit Amount",
+  Remittance: "Remittance Amount",
+  "Cash Posting": "Posted Amount",
+};
 
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -31,17 +36,104 @@ export const useReconciledReportLogic = () => {
   const [editedData, setEditedData] = useState<
     Partial<ReconciledTransaction>[]
   >([]);
+  const [payerOptions, setPayerOptions] = useState([
+    { value: "all", label: "All Payers" },
+  ]);
+  const [widgetData, setWidgetData] = useState<VarianceWidgetResponse | null>(
+    null
+  );
+  const [widgetLoading, setWidgetLoading] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [tableData, setTableData] = useState<ReconciledTransaction[]>([]);
+
+  const fetchPayers = async () => {
+    try {
+      const res = await fetch(API_ENDPOINTS.PAYERS, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      });
+      if (!res.ok) throw new Error("Payer API failed");
+      const payerOptions = await res.json();
+      const mapped =
+        payerOptions?.data?.map((payer: any) => ({
+          value: payer.name,
+          label: payer.name,
+        })) ?? [];
+
+      setPayerOptions([{ value: "all", label: "All Payers" }, ...mapped]);
+    } catch (error) {
+      console.error("Payer API error", error);
+    }
+  };
+  const fetchVarianceWidget = async () => {
+    const payload = {
+      fromDate: "2025-01-01",
+      toDate: "2025-10-30",
+      payerIds: [1, 2, 3],
+      statusIds: null,
+      pageNo: 1,
+      pageSize: 10,
+    };
+    try {
+      setWidgetLoading(true);
+      setTableLoading(true);
+      const [widgetRes, tableRes] = await Promise.all([
+        fetch(API_ENDPOINTS.RECONCILED_WIDGET, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(payload),
+        }),
+        fetch(API_ENDPOINTS.RECONCILED_TABLE, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(payload),
+        }),
+      ]);
+      if (!widgetRes.ok) throw new Error("Failed to fetch widget data");
+      if (!tableRes.ok) throw new Error("Failed to fetch table data");
+      const widgetData = await widgetRes.json();
+      const tableData = await tableRes.json();
+      setWidgetData(widgetData);
+      console.log(tableData, "tdata");
+      setTableData(tableData?.data || []);
+    } catch (error) {
+      console.error("Variance API error:", error);
+    } finally {
+      setWidgetLoading(false);
+      setTableLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchPayers();
+  }, []);
+  useEffect(() => {
+    fetchVarianceWidget();
+  }, [from, to, selectedPayer, selectedStatus]);
 
   const filteredData = useMemo(() => {
-    return transactions.filter((t) => {
-      const matchesBrand = selectedBrands.includes(t.region);
+    return tableData.filter((t) => {
+      const matchesBrand =
+        !t.region || selectedBrands.includes(String(t.region));
       const matchesSearch =
-        t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.payer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.account.toLowerCase().includes(searchTerm.toLowerCase());
+        String(t.transactionNo || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        String(t.payer || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        String(t.account || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
       return matchesBrand && matchesSearch;
     });
-  }, [selectedBrands, searchTerm]);
+  }, [tableData, selectedBrands, searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -49,6 +141,12 @@ export const useReconciledReportLogic = () => {
     startIndex,
     startIndex + rowsPerPage
   );
+  console.log(filteredData, "pdata");
+
+  const reconciledCardsData = useMemo(() => {
+    if (!widgetData?.data) return [];
+    return mapPaymentCardsWithBg(widgetData?.data, headerTextMap);
+  }, [widgetData]);
 
   const handleRowSelect = (id: string) => {
     const newSelected = new Set(selectedRows);
@@ -78,7 +176,7 @@ export const useReconciledReportLogic = () => {
   };
 
   const handleExport = () => {
-    const headers = Object.keys(transactions[0]);
+    const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
       headers.map((key) => t[key as keyof typeof t])
     );
@@ -87,7 +185,7 @@ export const useReconciledReportLogic = () => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "transactions.csv";
+    a.download = "tableData.csv";
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -192,33 +290,32 @@ export const useReconciledReportLogic = () => {
       bodyClassName: "text-blue-600",
     },
   };
-  const columns: Column<ReconciledTransaction>[] = (
-    Object.keys(transactions[0]) as Array<keyof ReconciledTransaction>
-  )
-    .filter((key) => key !== "id")
-    .map((key) => {
-      const rule = columnRules[String(key)] || {};
-
-      return {
-        key,
-        label: key
-          .replace(/([A-Z])/g, " $1")
-          .replace(/^./, (str) => str.toUpperCase()),
-        render: (val: unknown): ReactNode => {
-          if (typeof val === "number") return `$${val.toFixed(2)}`;
-          return String(val);
-        },
-        bodyClassName: rule.bodyClassName || "",
-        conditionalClassName: rule.conditionalClassName || undefined,
-      };
-    });
+  const columns: Column<ReconciledTransaction>[] = tableData?.length
+    ? (Object.keys(tableData[0]) as Array<keyof ReconciledTransaction>)
+        .filter((key) => key !== "id")
+        .map((key) => {
+          const rule = columnRules[String(key)] || {};
+          return {
+            key,
+            label: String(key)
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase()),
+            render: (val: unknown): ReactNode => {
+              if (typeof val === "number") return `$${val.toFixed(2)}`;
+              return String(val);
+            },
+            bodyClassName: rule.bodyClassName || "",
+            conditionalClassName: rule.conditionalClassName || undefined,
+          };
+        })
+    : [];
 
   return {
     toggle,
     from,
     to,
     payerOptions,
-    statusOptions,
+    // statusOptions,
     selectedPayer,
     selectedStatus,
     setSelectedPayer,
@@ -249,5 +346,10 @@ export const useReconciledReportLogic = () => {
     rowsPerPage,
     setIsEditModalOpen,
     editedData,
+    widgetData,
+    widgetLoading,
+    tableData,
+    tableLoading,
+    reconciledCardsData,
   };
 };

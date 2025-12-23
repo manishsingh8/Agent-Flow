@@ -1,8 +1,6 @@
 import { useState, useMemo, type ReactNode, useEffect } from "react";
 import { type Cash_Posting_Transaction } from "@/constants/TableData";
-
-const TABLE_URL =
-  "http://13.205.33.24:8101/claimService/api/cashPosting/getCashPostingQueue";
+import { API_ENDPOINTS } from "@/config/api";
 
 export const useCashPostingQueueLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -25,7 +23,7 @@ export const useCashPostingQueueLogic = () => {
         pageNo: 1,
         pageSize: 10,
       };
-      const response = await fetch(TABLE_URL, {
+      const response = await fetch(API_ENDPOINTS.CASH_POSTING_QUEUE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
