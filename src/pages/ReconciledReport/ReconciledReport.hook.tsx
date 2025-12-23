@@ -76,8 +76,8 @@ export const useReconciledReportLogic = () => {
 
   const fetchVarianceWidget = async () => {
     const payload = {
-      fromDate: "2025-01-01",
-      toDate: "2025-10-30",
+      fromDate: from,
+      toDate: to,
       payerIds: getPayerIds(),
       statusIds: null,
       pageNo: 1,
