@@ -10,7 +10,7 @@ import {
 
 export interface Column<T> {
   key: keyof T;
-  label: string;
+  label: React.ReactNode;
 }
 
 interface EditModalProps<T extends object> {
