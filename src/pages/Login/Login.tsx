@@ -1,5 +1,6 @@
 import RevPlus from "@/assets/icons/rp-logo.svg";
 import { useLoginLogic } from "./Login.hook";
+import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const Login = () => {
   const {
@@ -54,14 +55,23 @@ const Login = () => {
 
         <button
           onClick={handleLogin}
-          disabled={!email || !password || !!emailError}
-          className={`w-full py-2 rounded-lg font-medium transition ${
-            email && password && !emailError
-              ? "bg-[#249563] text-white cursor-pointer"
+          disabled={loading || !email || !password || !!emailError}
+          className={`w-full py-2 rounded-lg font-medium transition cursor-pointer ${
+            loading
+              ? "bg-[#249563] text-white cursor-not-allowed"
+              : email && password && !emailError
+              ? "bg-[#249563] text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
-          {loading ? "LoggingIn..." : "Login"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2 text-white">
+              Signing you in…
+              <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+            </span>
+          ) : (
+            "Sign in"
+          )}
         </button>
       </div>
     </div>

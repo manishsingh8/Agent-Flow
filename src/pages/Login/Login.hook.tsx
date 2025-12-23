@@ -30,13 +30,16 @@ export const useLoginLogic = () => {
 
   const handleLogin = async () => {
     setApiError("");
+
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address");
       return;
     }
     if (!password) return;
+
     try {
       setLoading(true);
+
       const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
         headers: {
@@ -45,7 +48,7 @@ export const useLoginLogic = () => {
         },
         body: JSON.stringify({
           username: email,
-          password: password,
+          password,
         }),
       });
 
@@ -54,14 +57,17 @@ export const useLoginLogic = () => {
       if (!response.ok) {
         throw new Error(result?.message || "Login failed");
       }
+
       sessionStorage.setItem("authToken", result.data.token);
       sessionStorage.setItem("tokenType", result.data.tokenType);
       sessionStorage.setItem("username", result.data.username);
       sessionStorage.setItem("fullName", result.data.fullName);
+
       navigate("/rcm-flows", { replace: true });
+
+      return; // ⬅️ IMPORTANT: stop execution here
     } catch (error: any) {
       setApiError(error.message || "Something went wrong");
-    } finally {
       setLoading(false);
     }
   };
