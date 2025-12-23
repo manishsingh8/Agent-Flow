@@ -44,8 +44,6 @@ const ReconciledReport = () => {
     setIsEditModalOpen,
     editedData,
     widgetLoading,
-    tableData,
-    tableLoading,
     reconciledCardsData,
   } = useReconciledReportLogic();
 
