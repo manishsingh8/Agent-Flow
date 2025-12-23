@@ -68,12 +68,11 @@ export function FilterSearchBar({
   statusOptions = [],
   selectedStatus,
   onStatusChange,
-
-  // showAdvancedSearch,
-  // promptSearchValue,
-  // onPromptSearchChange,
-  // onAdvancedSearch,
-}: FilterSearchBarProps) {
+}: // showAdvancedSearch,
+// promptSearchValue,
+// onPromptSearchChange,
+// onAdvancedSearch,
+FilterSearchBarProps) {
   const [payerOpen, setPayerOpen] = useState(false);
   const [statusOpen, setStatusOpen] = useState(false);
   // const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
@@ -114,7 +113,10 @@ export function FilterSearchBar({
                   size="sm"
                   className="text-xs w-40 flex justify-between shadow-none focus-visible:ring-0"
                 >
-                  <span>{selectedPayer}</span>
+                  <span>
+                    {payerOptions.find((p) => p.value === selectedPayer)
+                      ?.label ?? "All Payers"}
+                  </span>
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${
                       payerOpen ? "rotate-180" : ""
@@ -127,7 +129,7 @@ export function FilterSearchBar({
                 {payerOptions.map((opt) => (
                   <DropdownMenuItem
                     key={opt.value}
-                    onClick={() => onPayerChange?.(opt.label)}
+                    onClick={() => onPayerChange?.(opt.value)} // ✅ ID sent
                     className="!bg-transparent !shadow-none hover:!bg-gray-100"
                   >
                     {opt.label}
@@ -137,7 +139,6 @@ export function FilterSearchBar({
             </DropdownMenu>
           </div>
         )}
-
         {/* ------- Status Filter -------- */}
         {enableStatus && (
           <div className="flex items-center gap-1">
@@ -150,7 +151,10 @@ export function FilterSearchBar({
                   size="sm"
                   className="text-xs w-40 flex justify-between shadow-none focus-visible:ring-0"
                 >
-                  <span>{selectedStatus}</span>
+                  <span>
+                    {statusOptions.find((s) => s.value === selectedStatus)
+                      ?.label ?? "All Status"}
+                  </span>
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${
                       statusOpen ? "rotate-180" : ""
@@ -163,7 +167,7 @@ export function FilterSearchBar({
                 {statusOptions.map((opt) => (
                   <DropdownMenuItem
                     key={opt.value}
-                    onClick={() => onStatusChange?.(opt.label)}
+                    onClick={() => onStatusChange?.(opt.value)} // ✅ ID sent
                     className="!bg-transparent !shadow-none hover:!bg-gray-100"
                   >
                     {opt.label}
