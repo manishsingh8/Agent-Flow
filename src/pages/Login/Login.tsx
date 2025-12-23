@@ -9,6 +9,7 @@ const Login = () => {
     emailError,
     handleLogin,
     handleEmailChange,
+    loading,
   } = useLoginLogic();
 
   return (
@@ -50,6 +51,7 @@ const Login = () => {
             Forgot password?
           </button>
         </div>
+
         <button
           onClick={handleLogin}
           disabled={!email || !password || !!emailError}
@@ -59,7 +61,7 @@ const Login = () => {
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
-          Login
+          {loading ? "LoggingIn..." : "Login"}
         </button>
       </div>
     </div>
