@@ -12,7 +12,7 @@ const CashPostingQueue = () => {
     setFrom,
     to,
     setTo,
-    // paginatedData,
+    paginatedData,
     columns,
     selectedRows,
     handleRowSelect,
@@ -28,7 +28,6 @@ const CashPostingQueue = () => {
     rowsPerPage,
     setRowsPerPage,
     tableLoading,
-    tableData,
   } = useCashPostingQueueLogic();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -67,7 +66,7 @@ const CashPostingQueue = () => {
       ) : (
         <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
           <DataTable
-            data={tableData}
+            data={paginatedData}
             columns={columns}
             selectable
             selectedRows={selectedRows}
@@ -82,7 +81,7 @@ const CashPostingQueue = () => {
             onFilterChange={handleBrandToggle}
             exportEnabled
             onExport={handleExport}
-            idKey="id"
+            idKey="cashPostingId"
             pageInfo={{
               currentPage,
               totalPages,

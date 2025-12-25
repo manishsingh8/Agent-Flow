@@ -1,10 +1,14 @@
 import KpiCard from "@/components/KpiCard/KpiCard";
 import { AreaChart } from "lucide-react";
 import useRCMDashboard from "./RCMDashboard.hook";
-import { Card, CardContent, CardHeader } from "@/components/KpiCard/UI/Card";
+import { Card, CardContent } from "@/components/KpiCard/UI/Card";
 import UserProductivityTable from "@/components/UserProductivityTable/UserProductivityTable";
-import WorkQueueVolumeChart from "@/components/WorkQueueVolumeChart/WorkQueueVolumeChart";
 import OperationalView from "@/components/OperationalView/OperationalView";
+import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
+import {
+  workQueueData,
+} from "@/constants/RCMDashboardData";
+import { workQueueSegments } from "@/constants/RCMDashboardData";
 
 const RCMDashboard = () => {
   const { kpiCards, loading } = useRCMDashboard();
@@ -42,14 +46,22 @@ const RCMDashboard = () => {
       </div>
       <div className="grid grid-cols-1 gap-4">
         <Card>
-          <CardHeader>
+          {/* <CardHeader>
             <p className="text-md font-medium">Workforce Performance Overview</p>
-          </CardHeader>
+          </CardHeader> */}
           <CardContent>
             <UserProductivityTable />
           </CardContent>
         </Card>
-        <WorkQueueVolumeChart />
+        <CustomBarChart
+          title="Work Queue Activity Analysis"
+          description="Daily Activity summary showing in the queue."
+          data={workQueueData}
+          xKey="date"
+          segments={workQueueSegments}
+          barSize={30}
+        />
+        {/* <WorkQueueVolumeChart /> */}
       </div>
       <OperationalView />
     </div>

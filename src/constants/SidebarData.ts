@@ -102,10 +102,10 @@ export const SIDEBAR_DATA = {
         },
       ],
     },
-    {
-      title: "CDM",
-      url: "/cdm",
-      icon: AudioWaveform,
-    },
+    // {
+    //   title: "CDM",
+    //   url: "/cdm",
+    //   icon: AudioWaveform,
+    // },
   ],
 };

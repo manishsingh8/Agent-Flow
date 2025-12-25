@@ -129,7 +129,7 @@ const ReconciledReport = () => {
             onFilterChange={handleBrandToggle}
             exportEnabled
             onExport={handleExport}
-            idKey="id"
+            idKey="ReconciledDataId"
             pageInfo={{
               currentPage,
               totalPages,

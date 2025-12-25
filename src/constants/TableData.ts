@@ -19,13 +19,14 @@ export interface ReconciledTransaction {
   transactionNo: string;
   transactionType: string;
   region: string;
-  payer: string;
+  payerName?: string;
   account: string;
   depositDate: string;
   bankDeposit: number;
   remittance: number;
   EMR: number;
   GL: number;
+  payer?: string;
 }
 
 export const EDITABLE_FIELDS: (keyof Transaction)[] = [
@@ -309,7 +310,7 @@ export interface Cash_Posting_Transaction {
   id: string;
   cashPostingId: number;
   cheque: string;
-  payer: string;
+  payerName: string;
   region: string;
   postingType: string;
   totalAmount: number;

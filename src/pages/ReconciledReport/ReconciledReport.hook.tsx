@@ -23,8 +23,8 @@ const headerTextMap = {
 
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
-  const [from, setFrom] = useState("2025-06-01");
-  const [to, setTo] = useState("2025-06-01");
+  const [from, setFrom] = useState("2025-01-01");
+  const [to, setTo] = useState("2025-12-24");
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
@@ -81,12 +81,14 @@ export const useReconciledReportLogic = () => {
       payerIds: getPayerIds(),
       statusIds: null,
       pageNo: 1,
-      pageSize: 10,
+      pageSize: rowsPerPage,
     };
+
     try {
       setWidgetLoading(true);
       setTableLoading(true);
-      const [widgetRes, tableRes] = await Promise.all([
+
+      const [widgetRes, tableRes] = await Promise.allSettled([
         fetch(API_ENDPOINTS.RECONCILED_WIDGET, {
           method: "POST",
           headers: {
@@ -102,12 +104,21 @@ export const useReconciledReportLogic = () => {
           body: JSON.stringify(payload),
         }),
       ]);
-      if (!widgetRes.ok) throw new Error("Failed to fetch widget data");
-      if (!tableRes.ok) throw new Error("Failed to fetch table data");
-      const widgetData = await widgetRes.json();
-      const tableData = await tableRes.json();
-      setWidgetData(widgetData);
-      setTableData(tableData?.data || []);
+
+      if (widgetRes.status === "fulfilled" && widgetRes.value.ok) {
+        const widgetData = await widgetRes.value.json();
+        setWidgetData(widgetData);
+      } else {
+        console.error("Widget API failed", widgetRes);
+        setWidgetData(null);
+      }
+      if (tableRes.status === "fulfilled" && tableRes.value.ok) {
+        const tableData = await tableRes.value.json();
+        setTableData(tableData?.data || []);
+      } else {
+        console.error("Table API failed", tableRes);
+        setTableData([]);
+      }
     } catch (error) {
       console.error("Variance API error:", error);
     } finally {
@@ -115,34 +126,35 @@ export const useReconciledReportLogic = () => {
       setTableLoading(false);
     }
   };
+
   useEffect(() => {
     fetchPayers();
   }, []);
   useEffect(() => {
     fetchVarianceWidget();
-  }, [from, to, selectedPayer, selectedStatus]);
+  }, [from, to, selectedPayer, selectedStatus, rowsPerPage]);
 
   const filteredData = useMemo(() => {
     return tableData.filter((t) => {
-      const matchesBrand =
-        !t.region || selectedBrands.includes(String(t.region));
       const matchesSearch =
         String(t.transactionNo || "")
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        String(t.payer || "")
+        String(t.payerName || "")
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         String(t.account || "")
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
 
-      return matchesBrand && matchesSearch;
+      return matchesSearch;
     });
   }, [tableData, selectedBrands, searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
+
+  // Slice for pagination
   const paginatedData = filteredData.slice(
     startIndex,
     startIndex + rowsPerPage
