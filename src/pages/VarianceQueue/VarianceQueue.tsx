@@ -94,6 +94,8 @@ const Payment = () => {
     paymentCardsData,
     tableLoading,
     widgetLoading,
+    searchTerm,
+    setSearchTerm,
   } = usePaymentLogic();
 
   const handleAssign = (userId: string, selectedRowIds: string[]) => {
@@ -180,17 +182,16 @@ const Payment = () => {
             onSelectAll={handleSelectAll}
             exportEnabled={true}
             searchEnabled
-            searchTerm={""}
-            onSearchChange={() => {}}
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
             onExport={handleExport}
-            idKey="id"
+            idKey="nonReconciledDataId"
             pageInfo={{
               currentPage,
               totalPages: Math.ceil(mockTasks.length / rowsPerPage),
               onPageChange: setCurrentPage,
               rowsPerPage,
               onRowsPerPageChange: setRowsPerPage,
-              rowsPerPageOptions: [5, 10, 15],
             }}
             assignmentFeature={{
               enabled: true,

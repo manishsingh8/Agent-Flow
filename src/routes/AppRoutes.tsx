@@ -39,8 +39,11 @@ export const AppRoutes = () => {
           <Route path="/dashboard/hcd-dashboard" element={<Dashboard2 />} />
           <Route path="/era-parser" element={<RemittanceProcessing />} />
           <Route path="/eob-parser" element={<EOBParser />} />
-          <Route path="/cdm" element={<CDMDashboard />} />
-          <Route path="/correspondence_cdm/letterDetails/:id" element={<UnderConstruction />} />
+          {/* <Route path="/cdm" element={<CDMDashboard />} /> */}
+          <Route
+            path="/correspondence_cdm/letterDetails/:id"
+            element={<UnderConstruction />}
+          />
         </Route>
       </Route>
 

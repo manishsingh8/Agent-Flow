@@ -44,7 +44,7 @@ interface DataTableProps<T> {
   onFilterChange?: (value: string) => void;
   exportEnabled?: boolean;
   onExport?: () => void;
-  idKey?: keyof T;
+  idKey?: string;
   pageInfo?: {
     currentPage: number;
     totalPages: number;
@@ -98,7 +98,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
   filtersEnabled = false,
   exportEnabled = false,
   onExport,
-  idKey = "id" as keyof T,
+  idKey = "",
   pageInfo,
   editRow,
   assignmentFeature,
@@ -112,7 +112,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
   const showEditButton = editRow?.enabled && selectable && hasSelectedRows;
   const showActionBar =
     assignmentFeature?.enabled && selectable && hasSelectedRows;
-
   const handleEditClick = () => {
     if (selectedRows.size > 0) {
       if (editRow?.onEditClick) {
@@ -224,7 +223,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
                   />
                 </TableHead>
               )}
-
               {columns.map((col) => (
                 <TableHead
                   key={String(col.key)}
@@ -318,7 +316,9 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 className="border border-border rounded px-2 py-1 text-xs bg-background cursor-pointer"
                 data-testid="select-rows-per-page"
               >
-                {(pageInfo.rowsPerPageOptions || [5, 10, 15]).map((opt) => (
+                {(
+                  pageInfo.rowsPerPageOptions || [5, 10, 15, 20, 25, 50, 100]
+                ).map((opt) => (
                   <option key={opt} value={opt}>
                     {opt}
                   </option>

@@ -103,7 +103,6 @@ export const usePaymentLogic = () => {
     }
     return [selectedPayer];
   };
-
   const getStatusIds = () => {
     if (selectedStatus === "all") return null;
     return [selectedStatus];
@@ -113,8 +112,8 @@ export const usePaymentLogic = () => {
     const payload = {
       fromDate: from,
       toDate: to,
-      payerIds: getPayerIds(), // ✅ dynamic
-      statusIds: getStatusIds(), // ✅ dynamic
+      payerIds: getPayerIds(),
+      statusIds: getStatusIds(),
       pageNo: currentPage,
       pageSize: rowsPerPage,
     };
@@ -123,7 +122,7 @@ export const usePaymentLogic = () => {
       setWidgetLoading(true);
       setTableLoading(true);
 
-      const [widgetRes, tableRes] = await Promise.all([
+      const [widgetRes, tableRes] = await Promise.allSettled([
         fetch(API_ENDPOINTS.VARIANCE_WIDGET, {
           method: "POST",
           headers: {
@@ -139,15 +138,20 @@ export const usePaymentLogic = () => {
           body: JSON.stringify(payload),
         }),
       ]);
-
-      if (!widgetRes.ok) throw new Error("Failed to fetch widget data");
-      if (!tableRes.ok) throw new Error("Failed to fetch table data");
-
-      const widgetData = await widgetRes.json();
-      const tableData = await tableRes.json();
-
-      setWidgetData(widgetData);
-      setTableData(tableData?.data || []);
+      if (widgetRes.status === "fulfilled" && widgetRes.value.ok) {
+        const widgetData = await widgetRes.value.json();
+        setWidgetData(widgetData);
+      } else {
+        console.error("Widget API failed", widgetRes);
+        setWidgetData(null);
+      }
+      if (tableRes.status === "fulfilled" && tableRes.value.ok) {
+        const tableData = await tableRes.value.json();
+        setTableData(tableData?.data || []);
+      } else {
+        console.error("Table API failed", tableRes);
+        setTableData([]);
+      }
     } catch (error) {
       console.error("Variance API error:", error);
     } finally {
@@ -162,19 +166,15 @@ export const usePaymentLogic = () => {
   }, []);
   useEffect(() => {
     fetchVarianceWidget();
-  }, [from, to, selectedPayer, selectedStatus]);
+  }, [from, to, selectedPayer, selectedStatus, rowsPerPage]);
 
   const paymentCardsData = useMemo(() => {
     if (!widgetData?.data) return [];
     return mapPaymentCardsWithBg(widgetData?.data, headerTextMap);
   }, [widgetData]);
 
-  // ✅ USE API TABLE DATA INSTEAD OF DUMMY DATA
   const filteredData = useMemo(() => {
     return tableData.filter((t) => {
-      const matchesBrand =
-        !t.region || selectedBrands.includes(String(t.region));
-
       const matchesSearch =
         String(t.transactionNo || "")
           .toLowerCase()
@@ -186,7 +186,7 @@ export const usePaymentLogic = () => {
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
 
-      return matchesBrand && matchesSearch;
+      return matchesSearch;
     });
   }, [tableData, selectedBrands, searchTerm]);
 

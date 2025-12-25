@@ -19,7 +19,7 @@ export const useCashPostingLogic = () => {
         fromDate: from,
         toDate: to,
         pageNo: 1,
-        pageSize: 10,
+        pageSize: rowsPerPage,
       };
       const response = await fetch(API_ENDPOINTS.CASH_POSTING_REPORT, {
         method: "POST",
@@ -41,12 +41,11 @@ export const useCashPostingLogic = () => {
 
   useEffect(() => {
     fetchTable();
-  }, [from, to]);
+  }, [from, to, rowsPerPage]);
   const filteredData = useMemo(() => {
     if (!searchTerm) return tableData;
-
     return tableData.filter((t) =>
-      t.payer?.toLowerCase().includes(searchTerm.toLowerCase())
+      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [tableData, searchTerm]);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);

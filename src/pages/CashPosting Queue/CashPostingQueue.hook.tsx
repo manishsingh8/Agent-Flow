@@ -21,7 +21,7 @@ export const useCashPostingQueueLogic = () => {
         fromDate: from,
         toDate: to,
         pageNo: 1,
-        pageSize: 10,
+        pageSize: rowsPerPage,
       };
       const response = await fetch(API_ENDPOINTS.CASH_POSTING_QUEUE, {
         method: "POST",
@@ -44,17 +44,13 @@ export const useCashPostingQueueLogic = () => {
 
   useEffect(() => {
     fetchTable();
-  }, [from, to]);
+  }, [from, to, rowsPerPage]);
 
   const filteredData = useMemo(() => {
-    return tableData?.filter((t) => {
-      const matchesBrand = !t.region || selectedBrands.includes(t.region);
-      const matchesSearch = t.payer
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
-
-      return matchesBrand && matchesSearch;
-    });
+    if (!searchTerm) return tableData;
+    return tableData.filter((t) =>
+      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   }, [tableData, selectedBrands, searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -63,7 +59,6 @@ export const useCashPostingQueueLogic = () => {
     startIndex,
     startIndex + rowsPerPage
   );
-  console.log(paginatedData, "pdata");
   const handleRowSelect = (id: string) => {
     setSelectedRows((prev) => {
       const updated = new Set(prev);
