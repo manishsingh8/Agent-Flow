@@ -19,7 +19,7 @@ export interface ReconciledTransaction {
   transactionNo: string;
   transactionType: string;
   region: string;
-  payerName: string;
+  payerName?: string;
   account: string;
   depositDate: string;
   bankDeposit: number;
