@@ -28,6 +28,10 @@ export interface AssignmentUser {
   avatar?: string;
 }
 
+interface TableRow {
+  [key: string]: any;
+}
+
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
@@ -239,7 +243,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
           <TableBody>
             {data.length > 0 ? (
               data.map((row) => {
-                const rowId = String(row[idKey]);
+                const rowId = String((row as TableRow)[idKey]);
                 return (
                   <TableRow
                     key={rowId}

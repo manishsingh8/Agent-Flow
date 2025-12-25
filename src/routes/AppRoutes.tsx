@@ -13,7 +13,7 @@ import Dashboard1 from "@/pages/RCMDashboard/RCMDashboard";
 import Dashboard2 from "@/pages/HCDDashboard/HCDDashboard";
 import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
 import EOBParser from "@/pages/EOB Parser/EOBParser";
-import CDMDashboard from "@/pages/CDM/CDMDashboard";
+// import CDMDashboard from "@/pages/CDM/CDMDashboard";
 import UnderConstruction from "@/pages/UnderConstruction/UnderConstruction";
 
 export const AppRoutes = () => {
