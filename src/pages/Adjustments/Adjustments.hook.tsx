@@ -13,7 +13,7 @@ export const useAdjustmentsLogic = () => {
     {
       key: "id",
       label: "Actions",
-      render: (_, row) => (
+      render: (_: any, row: any) => (
         <RowActions rowId={row.id} onOpenModal={setActiveModal} />
       ),
     },

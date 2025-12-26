@@ -1,4 +1,3 @@
-import React from "react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useAdjustmentsLogic } from "./Adjustments.hook";
 import { ICANModal } from "./layout/ICANModal";

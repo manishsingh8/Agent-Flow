@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  MoreHorizontal,
-  Bot,
-  FileText,
-  AlertTriangle,
-  Eye,
-} from "lucide-react";
+import { MoreHorizontal, Bot, Eye } from "lucide-react";
 type ActionModalType = "ican" | "note" | "exception" | "source" | null;
 
 interface RowActionsProps {
