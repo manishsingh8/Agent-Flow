@@ -2,6 +2,9 @@ import { RowActions } from "./layout/ActionModal";
 import { useState, useMemo } from "react";
 import { DUMMY_LEDGER_DATA } from "@/constants/AdjustmentsData";
 
+import { Column } from "@/components/DataTable/DataTable";
+import { LedgerRow } from "@/constants/AdjustmentsData";
+
 type ActionModalType = "ican" | "note" | "exception" | "source" | null;
 
 export const useAdjustmentsLogic = () => {
@@ -9,7 +12,7 @@ export const useAdjustmentsLogic = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeModal, setActiveModal] = useState<ActionModalType>(null);
 
-  const ledgerColumns = [
+  const ledgerColumns: Column<LedgerRow>[] = [
     {
       key: "id",
       label: "Actions",
