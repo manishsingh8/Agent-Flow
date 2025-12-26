@@ -2,8 +2,8 @@ import { RowActions } from "./layout/ActionModal";
 import { useState, useMemo } from "react";
 import { DUMMY_LEDGER_DATA } from "@/constants/AdjustmentsData";
 
-import { Column } from "@/components/DataTable/DataTable";
-import { LedgerRow } from "@/constants/AdjustmentsData";
+import { type Column } from "@/components/DataTable/DataTable";
+import { type LedgerRow } from "@/constants/AdjustmentsData";
 
 type ActionModalType = "ican" | "note" | "exception" | "source" | null;
 
