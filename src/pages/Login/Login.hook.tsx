@@ -65,7 +65,7 @@ export const useLoginLogic = () => {
 
       navigate("/rcm-flows", { replace: true });
 
-      return; // ⬅️ IMPORTANT: stop execution here
+      return;
     } catch (error: any) {
       setApiError(error.message || "Something went wrong");
       setLoading(false);

@@ -31,7 +31,7 @@ export const useReconciledReportLogic = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedData, setEditedData] = useState<
     Partial<ReconciledTransaction>[]

@@ -9,7 +9,7 @@ export const useCashPostingLogic = () => {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [tableData, setTableData] = useState<Cash_Posting_Transaction[]>([]);
   const [tableLoading, setTableLoading] = useState(false);
   const fetchTable = async () => {
