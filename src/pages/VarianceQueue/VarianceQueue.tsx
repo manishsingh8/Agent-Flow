@@ -1,10 +1,11 @@
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
-import { paymentCardsData } from "@/constants/PaymentsCardData";
+// import { paymentCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { usePaymentLogic } from "./VarianceQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
+import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 interface Task {
   id: string;
@@ -90,24 +91,25 @@ const Payment = () => {
     rowsPerPage,
     setIsEditModalOpen,
     editedData,
+    paymentCardsData,
+    tableLoading,
+    widgetLoading,
+    searchTerm,
+    setSearchTerm,
   } = usePaymentLogic();
 
   const handleAssign = (userId: string, selectedRowIds: string[]) => {
     console.log(`Assigned user ${userId} to tasks:`, selectedRowIds);
   };
-
   const handleChangeStatus = (selectedRowIds: string[]) => {
     console.log("Change status for tasks:", selectedRowIds);
   };
-
   const handleWatchOptions = (selectedRowIds: string[]) => {
     console.log("Watch options for tasks:", selectedRowIds);
   };
-
   const handleDelete = (selectedRowIds: string[]) => {
     console.log("Delete tasks:", selectedRowIds);
   };
-
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
@@ -118,16 +120,25 @@ const Payment = () => {
           <span className="text-sm text-[#737373]">Non-Reconciled Queue</span>
         </div>
       </div>
-      <div className="grid grid-cols-5 gap-4">
-        {paymentCardsData.map((card) => (
-          <PaymentCard
-            key={card.id}
-            headerText={card.headerText}
-            amount={card.amount}
-            bgColor={card.bgColor}
-          />
-        ))}
-      </div>
+      {widgetLoading ? (
+        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+          <span className="flex items-center gap-2 text-gray-500">
+            Loading...
+            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          </span>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {paymentCardsData.map((card) => (
+            <PaymentCard
+              key={card.id}
+              headerText={card.headerText}
+              amount={card.amount}
+              bgColor={card.bgColor}
+            />
+          ))}
+        </div>
+      )}
       <div className="border border-[#E6ECF0] p-1 rounded-[14px]">
         <FilterSearchBar
           toggleOptions={[
@@ -153,40 +164,48 @@ const Payment = () => {
           onAdvancedSearch={() => console.log("adv search")}
         />
       </div>
-      <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
-        <DataTable
-          data={paginatedData}
-          columns={columns}
-          selectable={true}
-          selectedRows={selectedRows}
-          onRowSelect={handleRowSelect}
-          onSelectAll={handleSelectAll}
-          exportEnabled={true}
-          searchEnabled
-          searchTerm={""}
-          onSearchChange={() => {}}
-          onExport={handleExport}
-          idKey="id"
-          pageInfo={{
-            currentPage,
-            totalPages: Math.ceil(mockTasks.length / rowsPerPage),
-            onPageChange: setCurrentPage,
-            rowsPerPage,
-            onRowsPerPageChange: setRowsPerPage,
-            rowsPerPageOptions: [5, 10, 15],
-          }}
-          assignmentFeature={{
-            enabled: true,
-            onAssign: handleAssign,
-            users: mockUsers,
-            quickActions: true,
-            currentUserId: "user-1",
-            onChangeStatus: handleChangeStatus,
-            onWatchOptions: handleWatchOptions,
-            onDelete: handleDelete,
-          }}
-        />
-      </div>
+      {tableLoading ? (
+        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+          <span className="flex items-center gap-2 text-gray-500">
+            Loading...
+            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          </span>
+        </div>
+      ) : (
+        <div className="border border-[#E6ECF0] p-4 rounded-[14px] w-[1230px]">
+          <DataTable
+            data={paginatedData}
+            columns={columns}
+            selectable={true}
+            selectedRows={selectedRows}
+            onRowSelect={handleRowSelect}
+            onSelectAll={handleSelectAll}
+            exportEnabled={true}
+            searchEnabled
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            onExport={handleExport}
+            idKey="nonReconciledDataId"
+            pageInfo={{
+              currentPage,
+              totalPages: Math.ceil(mockTasks.length / rowsPerPage),
+              onPageChange: setCurrentPage,
+              rowsPerPage,
+              onRowsPerPageChange: setRowsPerPage,
+            }}
+            assignmentFeature={{
+              enabled: true,
+              onAssign: handleAssign,
+              users: mockUsers,
+              quickActions: true,
+              currentUserId: "user-1",
+              onChangeStatus: handleChangeStatus,
+              onWatchOptions: handleWatchOptions,
+              onDelete: handleDelete,
+            }}
+          />
+        </div>
+      )}
       <EditModal
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}

@@ -1,11 +1,11 @@
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
-import { reconciledCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { useReconciledReportLogic } from "./ReconciledReport.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_RECONCILED_FIELDS } from "@/constants/TableData";
 import { BRANDS } from "@/constants/TableData";
+import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const ReconciledReport = () => {
   const {
@@ -13,7 +13,7 @@ const ReconciledReport = () => {
     from,
     to,
     payerOptions,
-    statusOptions,
+    // statusOptions,
     selectedPayer,
     selectedStatus,
     setSelectedPayer,
@@ -43,6 +43,9 @@ const ReconciledReport = () => {
     rowsPerPage,
     setIsEditModalOpen,
     editedData,
+    widgetLoading,
+    tableLoading,
+    reconciledCardsData,
   } = useReconciledReportLogic();
 
   return (
@@ -57,16 +60,26 @@ const ReconciledReport = () => {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-5 gap-4">
-        {reconciledCardsData.map((card) => (
-          <PaymentCard
-            key={card.id}
-            headerText={card.headerText}
-            amount={card.amount}
-            bgColor={card.bgColor}
-          />
-        ))}
-      </div>
+      {widgetLoading ? (
+        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+          <span className="flex items-center gap-2 text-gray-500">
+            Loading...
+            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          </span>
+        </div>
+      ) : (
+        <div className="grid grid-cols-5 gap-4">
+          {reconciledCardsData.map((card) => (
+            <PaymentCard
+              key={card.id}
+              headerText={card.headerText}
+              amount={card.amount}
+              bgColor={card.bgColor}
+            />
+          ))}
+        </div>
+      )}
+
       <div className="border border-[#E6ECF0] p-1 rounded-[14px]">
         <FilterSearchBar
           toggleOptions={[
@@ -84,44 +97,53 @@ const ReconciledReport = () => {
           payerOptions={payerOptions}
           selectedPayer={selectedPayer}
           onPayerChange={setSelectedPayer}
-          statusOptions={statusOptions}
+          // statusOptions={statusOptions}
           selectedStatus={selectedStatus}
           onStatusChange={setSelectedStatus}
           showAdvancedSearch
           onAdvancedSearch={() => console.log("adv search")}
         />
       </div>
-      <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
-        <DataTable
-          data={paginatedData}
-          columns={columns}
-          selectable
-          selectedRows={selectedRows}
-          onRowSelect={handleRowSelect}
-          onSelectAll={handleSelectAll}
-          searchEnabled
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          filtersEnabled
-          filterOptions={BRANDS}
-          selectedFilters={selectedBrands}
-          onFilterChange={handleBrandToggle}
-          exportEnabled
-          onExport={handleExport}
-          idKey="id"
-          pageInfo={{
-            currentPage,
-            totalPages,
-            onPageChange: setCurrentPage,
-            rowsPerPage,
-            onRowsPerPageChange: setRowsPerPage,
-          }}
-          editRow={{
-            enabled: true,
-            onEditClick: handleEditClick,
-          }}
-        />
-      </div>
+      {tableLoading ? (
+        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+          <span className="flex items-center gap-2 text-gray-500">
+            Loading...
+            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          </span>
+        </div>
+      ) : (
+        <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
+          <DataTable
+            data={paginatedData}
+            columns={columns}
+            selectable
+            selectedRows={selectedRows}
+            onRowSelect={handleRowSelect}
+            onSelectAll={handleSelectAll}
+            searchEnabled
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            filtersEnabled
+            filterOptions={BRANDS}
+            selectedFilters={selectedBrands}
+            onFilterChange={handleBrandToggle}
+            exportEnabled
+            onExport={handleExport}
+            idKey="ReconciledDataId"
+            pageInfo={{
+              currentPage,
+              totalPages,
+              onPageChange: setCurrentPage,
+              rowsPerPage,
+              onRowsPerPageChange: setRowsPerPage,
+            }}
+            editRow={{
+              enabled: true,
+              onEditClick: handleEditClick,
+            }}
+          />
+        </div>
+      )}
       <EditModal
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}

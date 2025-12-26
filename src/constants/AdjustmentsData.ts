@@ -1,0 +1,133 @@
+export interface LedgerRow {
+  id: string;
+  effectiveDate: string;
+  type: string;
+  description: string;
+  source: string;
+  amount: number;
+  openBalance: number;
+  status: "Open" | "Closed" | "Pending";
+}
+
+export const DUMMY_LEDGER_DATA: LedgerRow[] = [
+  {
+    id: "1",
+    effectiveDate: "09/01/2025",
+    type: "Adjustment",
+    description: "Payment correction",
+    source: "United Health",
+    amount: 1200,
+    openBalance: 300,
+    status: "Open",
+  },
+  {
+    id: "2",
+    effectiveDate: "09/02/2025",
+    type: "Charge",
+    description: "Claim processing fee",
+    source: "Aetna",
+    amount: 850,
+    openBalance: 0,
+    status: "Closed",
+  },
+  {
+    id: "3",
+    effectiveDate: "09/03/2025",
+    type: "Refund",
+    description: "Duplicate payment",
+    source: "Cigna",
+    amount: 450,
+    openBalance: 450,
+    status: "Pending",
+  },
+  {
+    id: "4",
+    effectiveDate: "09/04/2025",
+    type: "Payment",
+    description: "ACH settlement",
+    source: "Blue Cross",
+    amount: 2200,
+    openBalance: 0,
+    status: "Closed",
+  },
+  {
+    id: "5",
+    effectiveDate: "09/05/2025",
+    type: "Charge",
+    description: "Late fee",
+    source: "Humana",
+    amount: 300,
+    openBalance: 300,
+    status: "Open",
+  },
+  {
+    id: "6",
+    effectiveDate: "09/06/2025",
+    type: "Adjustment",
+    description: "Contract variance",
+    source: "United Health",
+    amount: 1800,
+    openBalance: 600,
+    status: "Pending",
+  },
+  {
+    id: "7",
+    effectiveDate: "09/07/2025",
+    type: "Payment",
+    description: "Wire transfer",
+    source: "Medicare",
+    amount: 5000,
+    openBalance: 0,
+    status: "Closed",
+  },
+  {
+    id: "8",
+    effectiveDate: "09/08/2025",
+    type: "Refund",
+    description: "Overpayment",
+    source: "Aetna",
+    amount: 700,
+    openBalance: 700,
+    status: "Open",
+  },
+  {
+    id: "9",
+    effectiveDate: "09/09/2025",
+    type: "Charge",
+    description: "Manual posting",
+    source: "Cigna",
+    amount: 950,
+    openBalance: 200,
+    status: "Pending",
+  },
+  {
+    id: "10",
+    effectiveDate: "09/10/2025",
+    type: "Payment",
+    description: "ACH credit",
+    source: "Blue Cross",
+    amount: 4100,
+    openBalance: 0,
+    status: "Closed",
+  },
+  {
+    id: "11",
+    effectiveDate: "09/11/2025",
+    type: "Adjustment",
+    description: "System correction",
+    source: "Humana",
+    amount: 600,
+    openBalance: 600,
+    status: "Open",
+  },
+  {
+    id: "12",
+    effectiveDate: "09/12/2025",
+    type: "Refund",
+    description: "Reversal entry",
+    source: "Medicare",
+    amount: 1300,
+    openBalance: 0,
+    status: "Closed",
+  },
+];

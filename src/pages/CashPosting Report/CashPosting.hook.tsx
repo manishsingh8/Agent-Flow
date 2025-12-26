@@ -1,41 +1,66 @@
-import { useState, useMemo, type ReactNode } from "react";
-import {
-  CASH_POSTING_TABLE_DATA as transactions,
-  type Cash_Posting_Transaction,
-} from "@/constants/TableData";
+import { useState, useMemo, type ReactNode, useEffect } from "react";
+import { type Cash_Posting_Transaction } from "@/constants/TableData";
+import { API_ENDPOINTS } from "@/config/api";
 
 export const useCashPostingLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
-  const [from, setFrom] = useState("2025-06-01");
-  const [to, setTo] = useState("2025-06-01");
+  const [from, setFrom] = useState("2025-01-01");
+  const [to, setTo] = useState("2025-10-30");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const filteredData = useMemo(() => {
-    return transactions.filter((t) => {
-      const matchesBrand = selectedBrands.includes(t.region);
-      const matchesSearch =
-        // t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.payer.toLowerCase().includes(searchTerm.toLowerCase());
-      // t.accountNo.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesBrand && matchesSearch;
-    });
-  }, [selectedBrands, searchTerm]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [tableData, setTableData] = useState<Cash_Posting_Transaction[]>([]);
+  const [tableLoading, setTableLoading] = useState(false);
+  const fetchTable = async () => {
+    try {
+      setTableLoading(true);
+      const payload = {
+        fromDate: from,
+        toDate: to,
+        pageNo: 1,
+        pageSize: rowsPerPage,
+      };
+      const response = await fetch(API_ENDPOINTS.CASH_POSTING_REPORT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error("Failed to fetch table data");
+      const tableRes = await response.json();
+      setTableData(tableRes?.data ?? []);
+    } catch (error) {
+      console.error("Table API error:", error);
+      setTableData([]);
+    } finally {
+      setTableLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchTable();
+  }, [from, to, rowsPerPage]);
+  const filteredData = useMemo(() => {
+    if (!searchTerm) return tableData;
+    return tableData.filter((t) =>
+      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [tableData, searchTerm]);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
+
   const paginatedData = filteredData.slice(
     startIndex,
     startIndex + rowsPerPage
   );
-
   const handleRowSelect = (id: string) => {
-    const newSelected = new Set(selectedRows);
-    if (newSelected.has(id)) newSelected.delete(id);
-    else newSelected.add(id);
-    setSelectedRows(newSelected);
+    setSelectedRows((prev) => {
+      const updated = new Set(prev);
+      updated.has(id) ? updated.delete(id) : updated.add(id);
+      return updated;
+    });
   };
 
   const handleSelectAll = () => {
@@ -45,30 +70,24 @@ export const useCashPostingLogic = () => {
     ) {
       setSelectedRows(new Set());
     } else {
-      setSelectedRows(new Set(paginatedData.map((t) => t.id)));
+      setSelectedRows(
+        new Set(paginatedData.map((row) => String(row.cashPostingId)))
+      );
     }
   };
-
-  const handleBrandToggle = (region: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(region)
-        ? prev.filter((b) => b !== region)
-        : [...prev, region]
-    );
-    setCurrentPage(1);
-  };
-
   const handleExport = () => {
-    const headers = Object.keys(transactions[0]);
+    if (!tableData.length) return;
+
+    const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
-      headers.map((key) => t[key as keyof typeof t])
+      headers.map((key) => t[key as keyof Cash_Posting_Transaction])
     );
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "transactions.csv";
+    a.download = "tableData.csv";
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -82,87 +101,50 @@ export const useCashPostingLogic = () => {
       ) => string;
     }
   > = {
-    region: {
-      conditionalClassName: () => {
-        return "bg-white border-1 border-[#E5E5E5] px-2 py-1 rounded-[6px] inline-block mt-1";
-      },
-    },
     status: {
       conditionalClassName: (value) => {
         if (typeof value !== "string") return "";
         switch (value) {
           case "Partially Posted":
-            return "text-[#FF9500] bg-yellow-100 px-2 py-1 rounded-[6px] inline-block mt-1";
+            return "text-[#FF9500] bg-yellow-100 px-2 py-1 rounded-[6px]";
           case "Fully Posted":
-            return "text-[#34A255] bg-green-100 px-2 py-[2px] rounded-[6px] inline-block mt-1";
+            return "text-[#34A255] bg-green-100 px-2 py-1 rounded-[6px]";
           case "Exception":
-            return "text-[#E63435] bg-red-100 px-2 py-1 rounded-[6px] inline-block mt-1";
+            return "text-[#E63435] bg-red-100 px-2 py-1 rounded-[6px]";
           default:
             return "";
         }
       },
     },
-    amount: {
-      conditionalClassName: (value) => {
-        if (typeof value !== "number") return "";
-        return value < 0 ? "text-red-600" : "text-green-600";
-      },
-    },
-    Netsmart: {
-      conditionalClassName: (value) => {
-        if (typeof value !== "number") return "";
-        return value <= 0 ? "text-[#EC7723]" : "text-[#0A0A0A]";
-      },
-    },
-    remittance: {
-      conditionalClassName: (value) => {
-        if (typeof value !== "number") return "";
-        return value <= 0 ? "text-[#EC7723]" : "text-[#0A0A0A]";
-      },
-    },
-    cheque: {
-      conditionalClassName: () => {
-        return "text-[#0090FF]";
-      },
-    },
-    variance: {
-      conditionalClassName: () => {
-        return "text-[#E63435]";
-      },
-    },
+    cheque: { conditionalClassName: () => "text-[#0090FF]" },
+    variance: { conditionalClassName: () => "text-[#E63435]" },
     reason: {
-      conditionalClassName: () => {
-        return "text-[#E63435]  px-2 py-1 rounded-[6px]  items-center justify-center mx-auto";
-      },
-    },
-    email: {
-      bodyClassName: "text-blue-600",
+      conditionalClassName: () =>
+        "text-[#E63435] px-2 py-1 rounded-[6px] mx-auto",
     },
   };
-  const columns = (
-    Object.keys(transactions[0]) as Array<keyof Cash_Posting_Transaction>
-  )
-    .filter((key) => key !== "id")
-    .map((key) => {
-      const rule = columnRules[String(key)] || {};
-      const amountFields = ["totalAmount", "postedAmount", "remittance"];
-      const isAmountField = amountFields.includes(String(key));
-      return {
-        key,
-        label: key
-          .replace(/([A-Z])/g, " $1")
-          .replace(/^./, (str) => str.toUpperCase()),
-        render: isAmountField
-          ? undefined
-          : (val: unknown): ReactNode => {
-              return String(val ?? "");
-            },
-        isAmount: isAmountField,
-        bodyClassName: rule.bodyClassName || "",
-        conditionalClassName: rule.conditionalClassName || undefined,
-      };
-    });
+  const columns = useMemo(() => {
+    if (!tableData.length) return [];
+    const amountFields = ["totalAmount", "postedAmount", "remittance"];
+    return (Object.keys(tableData[0]) as Array<keyof Cash_Posting_Transaction>)
+      .filter((key) => key !== "cashPostingId")
+      .map((key) => {
+        const rule = columnRules[String(key)] || {};
 
+        return {
+          key,
+          label: String(key)
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase()),
+          isAmount: amountFields.includes(String(key)),
+          render: amountFields.includes(String(key))
+            ? undefined
+            : (val: unknown): ReactNode => String(val ?? ""),
+          bodyClassName: rule.bodyClassName ?? "",
+          conditionalClassName: rule.conditionalClassName,
+        };
+      });
+  }, [tableData, columnRules]);
   return {
     toggle,
     setToggle,
@@ -177,13 +159,12 @@ export const useCashPostingLogic = () => {
     handleSelectAll,
     searchTerm,
     setSearchTerm,
-    selectedBrands,
-    handleBrandToggle,
     handleExport,
     currentPage,
     totalPages,
     setCurrentPage,
     rowsPerPage,
     setRowsPerPage,
+    tableLoading,
   };
 };

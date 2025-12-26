@@ -4,7 +4,7 @@ import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 import { MainLayout } from "@/layout/MainLayout";
 import LoginPage from "@/pages/Login/Login";
-import DashboardPage from "@/pages/Dashboard/Dashboard";
+import RCMFlows from "@/pages/RCMFlows/RCMFlows";
 import Payment from "@/pages/VarianceQueue/VarianceQueue";
 import CashPostingPage from "@/pages/CashPosting Report/CashPostingPage";
 import CashPostingQueue from "@/pages/CashPosting Queue/CashPostingQueue";
@@ -14,6 +14,8 @@ import Dashboard2 from "@/pages/HCDDashboard/HCDDashboard";
 import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
 import EOBParser from "@/pages/EOB Parser/EOBParser";
 import Adjustments from "@/pages/Adjustments/Adjustments";
+// import CDMDashboard from "@/pages/CDM/CDMDashboard";
+import UnderConstruction from "@/pages/UnderConstruction/UnderConstruction";
 
 export const AppRoutes = () => {
   return (
@@ -29,7 +31,7 @@ export const AppRoutes = () => {
       {/* Private Routes */}
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/rcm-flows" element={<RCMFlows />} />
           <Route path="/variance-queue" element={<Payment />} />
           <Route path="/cash-posting" element={<CashPostingPage />} />
           <Route path="/cash-posting-queue" element={<CashPostingQueue />} />
@@ -39,6 +41,11 @@ export const AppRoutes = () => {
           <Route path="/era-parser" element={<RemittanceProcessing />} />
           <Route path="/eob-parser" element={<EOBParser />} />
           <Route path="/adjustments" element={<Adjustments />} />
+          {/* <Route path="/cdm" element={<CDMDashboard />} /> */}
+          <Route
+            path="/correspondence_cdm/letterDetails/:id"
+            element={<UnderConstruction />}
+          />
         </Route>
       </Route>
 

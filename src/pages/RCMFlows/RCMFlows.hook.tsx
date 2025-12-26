@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useDashboardLogic = () => {
+export const useRCMFlowsLogic = () => {
   const [activeTab, setActiveTab] = useState(
     sessionStorage.getItem("activetab") || "rcm"
   );
@@ -10,6 +10,6 @@ export const useDashboardLogic = () => {
 
   return {
     activeTab,
-    setActiveTab
+    setActiveTab,
   };
 };

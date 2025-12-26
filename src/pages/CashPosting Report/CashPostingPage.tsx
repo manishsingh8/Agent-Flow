@@ -2,6 +2,7 @@ import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useCashPostingLogic } from "./CashPosting.hook";
 import { BRANDS } from "@/constants/TableData";
+import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const CashPostingPage = () => {
   const {
@@ -18,14 +19,15 @@ const CashPostingPage = () => {
     handleSelectAll,
     searchTerm,
     setSearchTerm,
-    selectedBrands,
-    handleBrandToggle,
+    // selectedBrands,
+    // handleBrandToggle,
     handleExport,
     currentPage,
     totalPages,
     setCurrentPage,
     rowsPerPage,
     setRowsPerPage,
+    tableLoading,
   } = useCashPostingLogic();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -56,33 +58,42 @@ const CashPostingPage = () => {
           onAdvancedSearch={() => console.log("adv search")}
         />
       </div>
-      <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
-        <DataTable
-          data={paginatedData}
-          columns={columns}
-          selectable
-          selectedRows={selectedRows}
-          onRowSelect={handleRowSelect}
-          onSelectAll={handleSelectAll}
-          searchEnabled
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          filtersEnabled
-          filterOptions={BRANDS}
-          selectedFilters={selectedBrands}
-          onFilterChange={handleBrandToggle}
-          exportEnabled
-          onExport={handleExport}
-          idKey="id"
-          pageInfo={{
-            currentPage,
-            totalPages,
-            onPageChange: setCurrentPage,
-            rowsPerPage,
-            onRowsPerPageChange: setRowsPerPage,
-          }}
-        />
-      </div>
+      {tableLoading ? (
+        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+          <span className="flex items-center gap-2 text-gray-500">
+            Loading...
+            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          </span>
+        </div>
+      ) : (
+        <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
+          <DataTable
+            data={paginatedData}
+            columns={columns}
+            selectable
+            selectedRows={selectedRows}
+            onRowSelect={handleRowSelect}
+            onSelectAll={handleSelectAll}
+            searchEnabled
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            filtersEnabled
+            filterOptions={BRANDS}
+            // selectedFilters={selectedBrands}
+            // onFilterChange={handleBrandToggle}
+            exportEnabled
+            onExport={handleExport}
+            idKey="cashPostingId"
+            pageInfo={{
+              currentPage,
+              totalPages,
+              onPageChange: setCurrentPage,
+              rowsPerPage,
+              onRowsPerPageChange: setRowsPerPage,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
