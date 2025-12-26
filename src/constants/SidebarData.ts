@@ -39,7 +39,7 @@ export const SIDEBAR_DATA = {
   navMain: [
     {
       title: "RCM Operational Flows",
-      url: "/",
+      url: "/rcm-flows",
       icon: WavesLadder,
     },
     {
@@ -70,6 +70,10 @@ export const SIDEBAR_DATA = {
           title: "Reconciliation Summary Report",
           url: "/reconciled-report",
         },
+        // {
+        //   title: "Adjustments",
+        //   url: "/adjustments",
+        // },
       ],
     },
     {
@@ -102,10 +106,10 @@ export const SIDEBAR_DATA = {
         },
       ],
     },
-    {
-      title: "CDM",
-      url: "/cdm",
-      icon: AudioWaveform,
-    },
+    // {
+    //   title: "CDM",
+    //   url: "/cdm",
+    //   icon: AudioWaveform,
+    // },
   ],
 };

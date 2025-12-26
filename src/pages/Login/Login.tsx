@@ -1,40 +1,17 @@
 import RevPlus from "@/assets/icons/rp-logo.svg";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useLoginLogic } from "./Login.hook";
+import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const validateEmail = (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value);
-  };
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (!value) {
-      setEmailError("");
-    } else if (!validateEmail(value)) {
-      setEmailError("Please enter a valid email address");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const handleLogin = () => {
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-
-    if (!password) {
-      return;
-    }
-    sessionStorage.setItem("isLoggedIn", "true");
-    navigate("/dashboard", { replace: true });
-  };
+  const {
+    email,
+    password,
+    setPassword,
+    emailError,
+    handleLogin,
+    handleEmailChange,
+    loading,
+  } = useLoginLogic();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -75,16 +52,26 @@ const Login = () => {
             Forgot password?
           </button>
         </div>
+
         <button
           onClick={handleLogin}
-          disabled={!email || !password || !!emailError}
-          className={`w-full py-2 rounded-lg font-medium transition ${
-            email && password && !emailError
-              ? "bg-[#249563] text-white cursor-pointer"
+          disabled={loading || !email || !password || !!emailError}
+          className={`w-full py-2 rounded-lg font-medium transition cursor-pointer ${
+            loading
+              ? "bg-[#249563] text-white cursor-not-allowed"
+              : email && password && !emailError
+              ? "bg-[#249563] text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
-          Login
+          {loading ? (
+            <span className="flex items-center justify-center gap-2 text-white">
+              Signing you in…
+              <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+            </span>
+          ) : (
+            "Sign in"
+          )}
         </button>
       </div>
     </div>

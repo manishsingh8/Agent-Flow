@@ -1,44 +1,194 @@
-import { useState, useMemo, type ReactNode } from "react";
+import { useState, useMemo, type ReactNode, useEffect } from "react";
 import { type Column } from "@/components/DataTable/DataTable";
-import {
-  DUMMY_TABLE_DATA as transactions,
-  type Transaction,
-} from "@/constants/TableData";
-const payerOptions = [
-  { value: "all", label: "All Payers" },
-  { value: "payer1", label: "Payer 1" },
-  { value: "payer2", label: "Payer 2" },
-];
-const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-];
+import { type Transaction } from "@/constants/TableData";
+import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
+import { API_ENDPOINTS } from "@/config/api";
+
+type VarianceWidgetResponse = {
+  data?: {
+    headerText: string;
+    amount: string;
+  }[];
+  totalClaims?: number;
+  totalAmount?: number;
+  pendingCount?: number;
+  exceptionCount?: number;
+};
+
+const headerTextMap = {
+  "Bank Deposit": "Bank Deposit Amount",
+  Remittance: "Remittance Amount",
+  "Cash Posting": "Posted Amount",
+  "Pay Variance": "Variance With Remit",
+  "Post Variance": "Variance With Posting",
+};
 
 export const usePaymentLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
-  const [from, setFrom] = useState("2025-06-01");
-  const [to, setTo] = useState("2025-06-01");
+  const [from, setFrom] = useState("2025-01-01");
+  const [to, setTo] = useState("2025-10-30");
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [payerOptions, setPayerOptions] = useState([
+    { value: "all", label: "All Payers" },
+  ]);
+  const [statusOptions, setStatusOptions] = useState([
+    { value: "all", label: "All Status" },
+  ]);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedData, setEditedData] = useState<Partial<Transaction>[]>([]);
+  const [widgetData, setWidgetData] = useState<VarianceWidgetResponse | null>(
+    null
+  );
+  const [widgetLoading, setWidgetLoading] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [tableData, setTableData] = useState<Transaction[]>([]);
+
+  const fetchPayers = async () => {
+    try {
+      const res = await fetch(API_ENDPOINTS.PAYERS, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      });
+      if (!res.ok) throw new Error("Payer API failed");
+
+      const response = await res.json();
+
+      const mapped =
+        response?.data?.map((payer: any) => ({
+          value: payer.id, // ✅ store ID
+          label: payer.name,
+        })) ?? [];
+
+      setPayerOptions([{ value: "all", label: "All Payers" }, ...mapped]);
+    } catch (error) {
+      console.error("Payer API error", error);
+    }
+  };
+
+  const fetchStatuses = async () => {
+    try {
+      const res = await fetch(API_ENDPOINTS.TRANSACTION_STATUSES, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      });
+      if (!res.ok) throw new Error("Status API failed");
+
+      const response = await res.json();
+
+      const mapped =
+        response?.data?.map((status: any) => ({
+          value: status.id, // ✅ already ID
+          label: status.name,
+        })) ?? [];
+
+      setStatusOptions([{ value: "all", label: "All Status" }, ...mapped]);
+    } catch (error) {
+      console.error("Status API error", error);
+    }
+  };
+
+  const getPayerIds = () => {
+    if (selectedPayer === "all") {
+      return payerOptions.filter((p) => p.value !== "all").map((p) => p.value);
+    }
+    return [selectedPayer];
+  };
+  const getStatusIds = () => {
+    if (selectedStatus === "all") return null;
+    return [selectedStatus];
+  };
+
+  const fetchVarianceWidget = async () => {
+    const payload = {
+      fromDate: from,
+      toDate: to,
+      payerIds: getPayerIds(),
+      statusIds: getStatusIds(),
+      pageNo: currentPage,
+      pageSize: rowsPerPage,
+    };
+
+    try {
+      setWidgetLoading(true);
+      setTableLoading(true);
+
+      const [widgetRes, tableRes] = await Promise.allSettled([
+        fetch(API_ENDPOINTS.VARIANCE_WIDGET, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(payload),
+        }),
+        fetch(API_ENDPOINTS.VARIANCE_TABLE, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(payload),
+        }),
+      ]);
+      if (widgetRes.status === "fulfilled" && widgetRes.value.ok) {
+        const widgetData = await widgetRes.value.json();
+        setWidgetData(widgetData);
+      } else {
+        console.error("Widget API failed", widgetRes);
+        setWidgetData(null);
+      }
+      if (tableRes.status === "fulfilled" && tableRes.value.ok) {
+        const tableData = await tableRes.value.json();
+        setTableData(tableData?.data || []);
+      } else {
+        console.error("Table API failed", tableRes);
+        setTableData([]);
+      }
+    } catch (error) {
+      console.error("Variance API error:", error);
+    } finally {
+      setWidgetLoading(false);
+      setTableLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayers();
+    fetchStatuses();
+  }, []);
+  useEffect(() => {
+    fetchVarianceWidget();
+  }, [from, to, selectedPayer, selectedStatus, rowsPerPage]);
+
+  const paymentCardsData = useMemo(() => {
+    if (!widgetData?.data) return [];
+    return mapPaymentCardsWithBg(widgetData?.data, headerTextMap);
+  }, [widgetData]);
 
   const filteredData = useMemo(() => {
-    return transactions.filter((t) => {
-      const matchesBrand = selectedBrands.includes(t.region);
+    return tableData.filter((t) => {
       const matchesSearch =
-        t.transactionNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.payer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.account.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesBrand && matchesSearch;
+        String(t.transactionNo || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        String(t.payer || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        String(t.account || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+      return matchesSearch;
     });
-  }, [selectedBrands, searchTerm]);
+  }, [tableData, selectedBrands, searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -75,10 +225,13 @@ export const usePaymentLogic = () => {
   };
 
   const handleExport = () => {
-    const headers = Object.keys(transactions[0]);
+    if (!tableData.length) return;
+
+    const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
-      headers.map((key) => t[key as keyof typeof t])
+      headers.map((key) => t[key as keyof Transaction])
     );
+
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -188,29 +341,21 @@ export const usePaymentLogic = () => {
     },
   };
 
-  // Dynamically create columns for all keys
-  const columns: Column<Transaction>[] = (
-    Object.keys(transactions[0]) as Array<keyof Transaction>
-  )
-    .filter((key) => key !== "id")
-    .map((key) => {
-      const rule = columnRules[String(key)] || {};
-
-      return {
-        key,
-        label: key
-          .replace(/([A-Z])/g, " $1")
-          .replace(/^./, (str) => str.toUpperCase()),
-        render: (val: unknown): ReactNode => {
-          if (typeof val === "number") return `$${val.toFixed(2)}`;
-          return String(val);
-        },
-
-        // 👇 NEW ADDED PROPERTIES
-        bodyClassName: rule.bodyClassName || "",
-        conditionalClassName: rule.conditionalClassName || undefined,
-      };
-    });
+  // 👇 COLUMNS GENERATED FROM API DATA
+  const columns: Column<Transaction>[] = tableData.length
+    ? (Object.keys(tableData[0]) as Array<keyof Transaction>)
+        .filter((key) => key !== "id")
+        .map((key) => ({
+          key,
+          label: key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase()),
+          render: (val: unknown): ReactNode => {
+            if (typeof val === "number") return `$${val.toFixed(2)}`;
+            return String(val ?? "-");
+          },
+        }))
+    : [];
 
   return {
     toggle,
@@ -248,5 +393,8 @@ export const usePaymentLogic = () => {
     rowsPerPage,
     setIsEditModalOpen,
     editedData,
+    paymentCardsData,
+    tableLoading,
+    widgetLoading,
   };
 };

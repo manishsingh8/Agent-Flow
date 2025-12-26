@@ -50,7 +50,6 @@ export const operationalMetrics: OperationalMetrics = {
   },
 };
 
-
 export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
   const { transactionPosting, performance, postingReports } = data;
 
@@ -65,7 +64,11 @@ export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
     {
       title: "Avg. Processing Time",
       value: `${performance.avgProcessingTimeMinutes.toFixed(1)} min`,
-      description: `${Math.abs(performance.mtdComparison.percentageChange).toFixed(1)}% ${performance.mtdComparison.percentageChange < 0 ? "faster" : "slower"} than last month`,
+      description: `${Math.abs(
+        performance.mtdComparison.percentageChange
+      ).toFixed(1)}% ${
+        performance.mtdComparison.percentageChange < 0 ? "faster" : "slower"
+      } than last month`,
       iconName: "Clock",
       trend: performance.mtdComparison.percentageChange < 0 ? "down" : "up",
     },
@@ -79,7 +82,6 @@ export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
   ];
 }
 
-
 export interface UserProductivity {
   userId: string;
   userName: string;
@@ -90,7 +92,7 @@ export interface UserProductivity {
 }
 
 export type WorkQueueDataPoint = {
-  date: string; 
+  date: string;
   "New Items": number;
   "Completed Items": number;
   "Rollover Items": number;
@@ -234,7 +236,6 @@ export type RcmDashboardData = {
   lastUpdated: string;
 };
 
-
 export const userProductivityData: UserProductivity[] = [
   {
     userId: "user-5",
@@ -359,36 +360,191 @@ export const userProductivityData: UserProductivity[] = [
 ];
 
 export const workQueueData: WorkQueueDataPoint[] = [
-  { date: "2025-10-26", "New Items": 275, "Completed Items": 239, "Rollover Items": 55 },
-  { date: "2025-10-27", "New Items": 187, "Completed Items": 283, "Rollover Items": 42 },
-  { date: "2025-10-28", "New Items": 264, "Completed Items": 260, "Rollover Items": 45 },
-  { date: "2025-10-29", "New Items": 243, "Completed Items": 221, "Rollover Items": 47 },
-  { date: "2025-10-30", "New Items": 222, "Completed Items": 202, "Rollover Items": 42 },
-  { date: "2025-10-31", "New Items": 86,  "Completed Items": 79,  "Rollover Items": 19 },
-  { date: "2025-11-01", "New Items": 105, "Completed Items": 96,  "Rollover Items": 18 },
-  { date: "2025-11-02", "New Items": 208, "Completed Items": 175, "Rollover Items": 60 },
-  { date: "2025-11-03", "New Items": 237, "Completed Items": 263, "Rollover Items": 41 },
-  { date: "2025-11-04", "New Items": 237, "Completed Items": 294, "Rollover Items": 59 },
-  { date: "2025-11-05", "New Items": 244, "Completed Items": 227, "Rollover Items": 51 },
-  { date: "2025-11-06", "New Items": 286, "Completed Items": 265, "Rollover Items": 56 },
-  { date: "2025-11-07", "New Items": 111, "Completed Items": 107, "Rollover Items": 18 },
-  { date: "2025-11-08", "New Items": 77,  "Completed Items": 115, "Rollover Items": 20 },
-  { date: "2025-11-09", "New Items": 232, "Completed Items": 220, "Rollover Items": 49 },
-  { date: "2025-11-10", "New Items": 208, "Completed Items": 188, "Rollover Items": 51 },
-  { date: "2025-11-11", "New Items": 263, "Completed Items": 230, "Rollover Items": 54 },
-  { date: "2025-11-12", "New Items": 283, "Completed Items": 188, "Rollover Items": 46 },
-  { date: "2025-11-13", "New Items": 218, "Completed Items": 311, "Rollover Items": 62 },
-  { date: "2025-11-14", "New Items": 104, "Completed Items": 106, "Rollover Items": 21 },
-  { date: "2025-11-15", "New Items": 89,  "Completed Items": 99,  "Rollover Items": 17 },
-  { date: "2025-11-16", "New Items": 217, "Completed Items": 272, "Rollover Items": 45 },
-  { date: "2025-11-17", "New Items": 261, "Completed Items": 251, "Rollover Items": 56 },
-  { date: "2025-11-18", "New Items": 277, "Completed Items": 277, "Rollover Items": 63 },
-  { date: "2025-11-19", "New Items": 283, "Completed Items": 275, "Rollover Items": 44 },
-  { date: "2025-11-20", "New Items": 252, "Completed Items": 319, "Rollover Items": 60 },
-  { date: "2025-11-21", "New Items": 117, "Completed Items": 94,  "Rollover Items": 21 },
-  { date: "2025-11-22", "New Items": 92,  "Completed Items": 80,  "Rollover Items": 26 },
-  { date: "2025-11-23", "New Items": 220, "Completed Items": 319, "Rollover Items": 53 },
-  { date: "2025-11-24", "New Items": 293, "Completed Items": 314, "Rollover Items": 45 },
+  {
+    date: "2025-10-26",
+    "New Items": 275,
+    "Completed Items": 239,
+    "Rollover Items": 55,
+  },
+  {
+    date: "2025-10-27",
+    "New Items": 187,
+    "Completed Items": 283,
+    "Rollover Items": 42,
+  },
+  {
+    date: "2025-10-28",
+    "New Items": 264,
+    "Completed Items": 260,
+    "Rollover Items": 45,
+  },
+  {
+    date: "2025-10-29",
+    "New Items": 243,
+    "Completed Items": 221,
+    "Rollover Items": 47,
+  },
+  {
+    date: "2025-10-30",
+    "New Items": 222,
+    "Completed Items": 202,
+    "Rollover Items": 42,
+  },
+  {
+    date: "2025-10-31",
+    "New Items": 86,
+    "Completed Items": 79,
+    "Rollover Items": 19,
+  },
+  {
+    date: "2025-11-01",
+    "New Items": 105,
+    "Completed Items": 96,
+    "Rollover Items": 18,
+  },
+  {
+    date: "2025-11-02",
+    "New Items": 208,
+    "Completed Items": 175,
+    "Rollover Items": 60,
+  },
+  {
+    date: "2025-11-03",
+    "New Items": 237,
+    "Completed Items": 263,
+    "Rollover Items": 41,
+  },
+  {
+    date: "2025-11-04",
+    "New Items": 237,
+    "Completed Items": 294,
+    "Rollover Items": 59,
+  },
+  {
+    date: "2025-11-05",
+    "New Items": 244,
+    "Completed Items": 227,
+    "Rollover Items": 51,
+  },
+  {
+    date: "2025-11-06",
+    "New Items": 286,
+    "Completed Items": 265,
+    "Rollover Items": 56,
+  },
+  {
+    date: "2025-11-07",
+    "New Items": 111,
+    "Completed Items": 107,
+    "Rollover Items": 18,
+  },
+  {
+    date: "2025-11-08",
+    "New Items": 77,
+    "Completed Items": 115,
+    "Rollover Items": 20,
+  },
+  {
+    date: "2025-11-09",
+    "New Items": 232,
+    "Completed Items": 220,
+    "Rollover Items": 49,
+  },
+  {
+    date: "2025-11-10",
+    "New Items": 208,
+    "Completed Items": 188,
+    "Rollover Items": 51,
+  },
+  {
+    date: "2025-11-11",
+    "New Items": 263,
+    "Completed Items": 230,
+    "Rollover Items": 54,
+  },
+  {
+    date: "2025-11-12",
+    "New Items": 283,
+    "Completed Items": 188,
+    "Rollover Items": 46,
+  },
+  {
+    date: "2025-11-13",
+    "New Items": 218,
+    "Completed Items": 311,
+    "Rollover Items": 62,
+  },
+  {
+    date: "2025-11-14",
+    "New Items": 104,
+    "Completed Items": 106,
+    "Rollover Items": 21,
+  },
+  {
+    date: "2025-11-15",
+    "New Items": 89,
+    "Completed Items": 99,
+    "Rollover Items": 17,
+  },
+  {
+    date: "2025-11-16",
+    "New Items": 217,
+    "Completed Items": 272,
+    "Rollover Items": 45,
+  },
+  {
+    date: "2025-11-17",
+    "New Items": 261,
+    "Completed Items": 251,
+    "Rollover Items": 56,
+  },
+  {
+    date: "2025-11-18",
+    "New Items": 277,
+    "Completed Items": 277,
+    "Rollover Items": 63,
+  },
+  {
+    date: "2025-11-19",
+    "New Items": 283,
+    "Completed Items": 275,
+    "Rollover Items": 44,
+  },
+  {
+    date: "2025-11-20",
+    "New Items": 252,
+    "Completed Items": 319,
+    "Rollover Items": 60,
+  },
+  {
+    date: "2025-11-21",
+    "New Items": 117,
+    "Completed Items": 94,
+    "Rollover Items": 21,
+  },
+  {
+    date: "2025-11-22",
+    "New Items": 92,
+    "Completed Items": 80,
+    "Rollover Items": 26,
+  },
+  {
+    date: "2025-11-23",
+    "New Items": 220,
+    "Completed Items": 319,
+    "Rollover Items": 53,
+  },
+  {
+    date: "2025-11-24",
+    "New Items": 293,
+    "Completed Items": 314,
+    "Rollover Items": 45,
+  },
+];
+export const workQueueSegments = [
+  { dataKey: "New Items", color: "#249563", label: "New Items" },
+  { dataKey: "Completed Items", color: "#4CAF50", label: "Completed Items" },
+  { dataKey: "Rollover Items", color: "#FF9800", label: "Rollover Items" },
 ];
 
 export const rcmDashboardData: RcmDashboardData = {
@@ -455,15 +611,59 @@ export const rcmDashboardData: RcmDashboardData = {
     totalAmount: 4535688,
     avgTransactionsPerRemit: 10,
     byType: [
-      { type: "835 ERA", count: 93, transactionCount: 930, totalAmount: 2721413, percentage: 60 },
-      { type: "Paper EOB", count: 23, transactionCount: 230, totalAmount: 673038, percentage: 15 },
-      { type: "Portal Download", count: 19, transactionCount: 190, totalAmount: 555988, percentage: 12 },
-      { type: "EFT", count: 12, transactionCount: 120, totalAmount: 351150, percentage: 8 },
-      { type: "Manual Entry", count: 5, transactionCount: 50, totalAmount: 146313, percentage: 3 },
-      { type: "Other", count: 3, transactionCount: 30, totalAmount: 87788, percentage: 2 },
+      {
+        type: "835 ERA",
+        count: 93,
+        transactionCount: 930,
+        totalAmount: 2721413,
+        percentage: 60,
+      },
+      {
+        type: "Paper EOB",
+        count: 23,
+        transactionCount: 230,
+        totalAmount: 673038,
+        percentage: 15,
+      },
+      {
+        type: "Portal Download",
+        count: 19,
+        transactionCount: 190,
+        totalAmount: 555988,
+        percentage: 12,
+      },
+      {
+        type: "EFT",
+        count: 12,
+        transactionCount: 120,
+        totalAmount: 351150,
+        percentage: 8,
+      },
+      {
+        type: "Manual Entry",
+        count: 5,
+        transactionCount: 50,
+        totalAmount: 146313,
+        percentage: 3,
+      },
+      {
+        type: "Other",
+        count: 3,
+        transactionCount: 30,
+        totalAmount: 87788,
+        percentage: 2,
+      },
     ],
-    ytd: { totalRemitsProcessed: 27506, totalTransactions: 275060, totalAmount: 804894325 },
-    mtd: { totalRemitsProcessed: 2374, totalTransactions: 23740, totalAmount: 69469175 },
+    ytd: {
+      totalRemitsProcessed: 27506,
+      totalTransactions: 275060,
+      totalAmount: 804894325,
+    },
+    mtd: {
+      totalRemitsProcessed: 2374,
+      totalTransactions: 23740,
+      totalAmount: 69469175,
+    },
     byDayOfWeek: [
       { day: "Monday", count: 563, amount: 16318537, percentage: 23.7 },
       { day: "Tuesday", count: 490, amount: 13612869, percentage: 20.6 },
@@ -528,14 +728,19 @@ export const rcmDashboardData: RcmDashboardData = {
         percentage: 45,
         byType: [
           { type: "Payment", count: 881, totalAmount: 2039982, percentage: 55 },
-          { type: "Adjustment", count: 400, totalAmount: 926212, percentage: 25 },
+          {
+            type: "Adjustment",
+            count: 400,
+            totalAmount: 926212,
+            percentage: 25,
+          },
           { type: "Charge", count: 160, totalAmount: 370485, percentage: 10 },
           { type: "Refund", count: 80, totalAmount: 185242, percentage: 5 },
           { type: "Transfer", count: 48, totalAmount: 111145, percentage: 3 },
           { type: "Write-off", count: 32, totalAmount: 74097, percentage: 2 },
         ],
       },
-    // ... rest of byEmr trimmed for brevity in this file listing (full object included in exported constant)
+      // ... rest of byEmr trimmed for brevity in this file listing (full object included in exported constant)
     ],
     ytd: {
       totalTransactionsPosted: 538570,
@@ -660,4 +865,3 @@ export const rcmDashboardData: RcmDashboardData = {
   },
   lastUpdated: "2025-11-24T18:52:49.420Z",
 };
-

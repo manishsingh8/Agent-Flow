@@ -15,7 +15,7 @@ const PaymentCard = ({
 }: PaymentCardProps) => {
   return (
     <div
-      className="flex flex-col gap-1 rounded-xl p-6"
+      className="w-60 rounded-xl p-4"
       style={{
         backgroundColor: bgColor,
         border: border ? `1px solid ${borderColor}` : "none",
