@@ -42,7 +42,7 @@ const CDMDashboard = () => {
             <TooltipTrigger asChild>
               <div
                 className="flex items-center gap-2 cursor-pointer hover:underline text-blue-900"
-                onClick={() => navigate(`/correspondence_cdm/letterDetails/${encodeURIComponent(row.id)}`)}
+                onClick={() => navigate(`/cdm/letterDetails/${encodeURIComponent(row.id)}`)}
               >
                 <FileText className="w-4 h-4 text-slate-500" />
                 <span className="truncate max-w-[300px] font-medium">

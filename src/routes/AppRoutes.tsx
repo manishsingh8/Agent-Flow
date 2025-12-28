@@ -14,8 +14,8 @@ import Dashboard2 from "@/pages/HCDDashboard/HCDDashboard";
 import RemittanceProcessing from "@/pages/Remittance Processing/RemittanceProcessing";
 import EOBParser from "@/pages/EOB Parser/EOBParser";
 import Adjustments from "@/pages/Adjustments/Adjustments";
-// import CDMDashboard from "@/pages/CDM/CDMDashboard";
-import UnderConstruction from "@/pages/UnderConstruction/UnderConstruction";
+import CDMDashboard from "@/pages/CDM/CDMDashboard";
+import DocumentPage from "@/pages/CDM/documentsDetails/DocumentPage";
 
 export const AppRoutes = () => {
   return (
@@ -41,11 +41,8 @@ export const AppRoutes = () => {
           <Route path="/era-parser" element={<RemittanceProcessing />} />
           <Route path="/eob-parser" element={<EOBParser />} />
           <Route path="/adjustments" element={<Adjustments />} />
-          {/* <Route path="/cdm" element={<CDMDashboard />} /> */}
-          <Route
-            path="/correspondence_cdm/letterDetails/:id"
-            element={<UnderConstruction />}
-          />
+          <Route path="/cdm" element={<CDMDashboard />} />
+          <Route path="/cdm/letterDetails/:id" element={<DocumentPage />} />
         </Route>
       </Route>
 
