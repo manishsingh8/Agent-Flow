@@ -25,7 +25,7 @@ export const RowActions = ({ onOpenModal }: RowActionsProps) => {
       </button>
 
       {open && (
-        <div className="absolute left-2 right-0 top-8 z-50 w-60 rounded-md border bg-white shadow-lg">
+        <div className="absolute left-2 right-0 z-50 w-60 rounded-md border bg-white shadow-lg">
           <ul className="py-1 text-sm">
             <li
               onClick={() => handleClick("ican")}

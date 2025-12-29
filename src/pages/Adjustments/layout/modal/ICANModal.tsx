@@ -7,9 +7,12 @@ export const ICANModal = ({ onClose }: { onClose: () => void }) => (
         Failed to analyze data. Please try again.
       </p>
       <Button
-        variant="default"
-        className="bg-[#249563] hover:bg-green-700 cursor-pointer mt-2"
-        data-testid="button-export"
+        variant="outline"
+        data-testid="button-edit"
+        className="gap-2 text-red-500 cursor-pointer border border-red-500  hover:text-red-500 
+    hover:border-red-500
+    hover:bg-transparent mt-2"
+        onClick={onClose}
       >
         Retry
       </Button>

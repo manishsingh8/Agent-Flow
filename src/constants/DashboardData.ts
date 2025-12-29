@@ -3,7 +3,7 @@ import MapMediumImg from "@/assets/icons/trading-med.svg";
 import MapNegative from "@/assets/icons/trading-negative.svg";
 export const RCM_CENTRAL_ENGINE_DATA = [
   {
-    headerText: "Total Files Ingested",
+    headerText: "RCM Engine uptime",
     percentage: 5,
     value: 126,
     status: "positive",
@@ -15,7 +15,7 @@ export const RCM_CENTRAL_ENGINE_DATA = [
     image: MapImage,
   },
   {
-    headerText: "Docs Analyzed",
+    headerText: "Jobs scheduled vs completed",
     percentage: 8,
     status: "positive",
     value: 118,
@@ -27,7 +27,7 @@ export const RCM_CENTRAL_ENGINE_DATA = [
     image: MapImage,
   },
   {
-    headerText: "Bank File Count",
+    headerText: "Active workflows running",
     status: "",
     percentage: -1,
     value: "12",
@@ -39,7 +39,7 @@ export const RCM_CENTRAL_ENGINE_DATA = [
     image: MapMediumImg,
   },
   {
-    headerText: "835 File Count",
+    headerText: "Errors in last 24 hours",
     percentage: 3,
     value: "34",
     colorClass: {
@@ -51,7 +51,7 @@ export const RCM_CENTRAL_ENGINE_DATA = [
     status: "positive",
   },
   {
-    headerText: "EOB File Count",
+    headerText: "Average processing time per workflow",
     percentage: 6,
     value: "52",
     colorClass: {
@@ -62,23 +62,23 @@ export const RCM_CENTRAL_ENGINE_DATA = [
     status: "positive",
     image: MapImage,
   },
-  {
-    headerText: "837 File Count",
-    percentage: -7,
-    value: "9",
-    colorClass: {
-      text: "text-rose-500",
-      border: "border-rose-500",
-      chart: "stroke-rose-500",
-    },
-    status: "negative",
-    image: MapNegative,
-  },
+  // {
+  //   headerText: "837 File Count",
+  //   percentage: -7,
+  //   value: "9",
+  //   colorClass: {
+  //     text: "text-rose-500",
+  //     border: "border-rose-500",
+  //     chart: "stroke-rose-500",
+  //   },
+  //   status: "negative",
+  //   image: MapNegative,
+  // },
 ];
 
 export const INTAKE_ORCHESTRATOR_DATA = [
   {
-    headerText: "Bank File Count",
+    headerText: "Total Files Ingested",
     percentage: "12",
     value: "982",
     colorClass: {
@@ -90,7 +90,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "positive",
   },
   {
-    headerText: "Remit File Count",
+    headerText: "BAI Files and Success rate",
     percentage: "9",
     value: "870",
     colorClass: {
@@ -102,7 +102,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "positive",
   },
   {
-    headerText: "Correspondence File Count",
+    headerText: "EDI Files and Success Rate",
     percentage: "-4",
     value: "112",
     colorClass: {
@@ -114,7 +114,7 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "",
   },
   {
-    headerText: "Cash Posting File Count",
+    headerText: "Correspondence Files and Success Rate",
     percentage: "-2",
     value: "25",
     colorClass: {
@@ -126,35 +126,35 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     status: "",
   },
   // may needed later on
-  // {
-  //   headerText: "Reprocessed Claims",
-  //   percentage: "6",
-  //   value: "14",
-  //   colorClass: {
-  //     text: "text-teal-600",
-  //     border: "border-teal-600",
-  //     chart: "stroke-teal-600",
-  //   },
-  //   image: MapImage,
-  //   status: "positive",
-  // },
-  // {
-  //   headerText: "Claims Approved",
-  //   percentage: "-15",
-  //   value: "820",
-  //   colorClass: {
-  //     text: "text-rose-500",
-  //     border: "border-rose-500",
-  //     chart: "stroke-rose-500",
-  //   },
-  //   image: MapNegative,
-  //   status: "negative",
-  // },
+  {
+    headerText: "Payment Posting files and Success Rate",
+    percentage: "6",
+    value: "14",
+    colorClass: {
+      text: "text-teal-600",
+      border: "border-teal-600",
+      chart: "stroke-teal-600",
+    },
+    image: MapImage,
+    status: "positive",
+  },
+  {
+    headerText: "Average File Processing time",
+    percentage: "-15",
+    value: "16 Min",
+    colorClass: {
+      text: "text-rose-500",
+      border: "border-rose-500",
+      chart: "stroke-rose-500",
+    },
+    image: MapNegative,
+    status: "negative",
+  },
 ];
 
 export const RECONCILIATION_DATA = [
   {
-    headerText: "Overall Transaction Count",
+    headerText: "Total Transactions Processed",
     percentage: "5",
     value: "684",
     colorClass: {
@@ -166,7 +166,7 @@ export const RECONCILIATION_DATA = [
     status: "positive",
   },
   {
-    headerText: "Reconciled Transaction Count",
+    headerText: "Transactions Auto-Matched",
     percentage: "8",
     value: "512",
     colorClass: {
@@ -178,7 +178,7 @@ export const RECONCILIATION_DATA = [
     status: "positive",
   },
   {
-    headerText: "Reconciled Amount",
+    headerText: "Matching Accuracy",
     percentage: "-1",
     value: "$14,50,236",
     colorClass: {
@@ -190,7 +190,31 @@ export const RECONCILIATION_DATA = [
     status: "",
   },
   {
-    headerText: "Non Reconciled Amount",
+    headerText: "Exceptions Detected",
+    percentage: "3",
+    value: "$2,819.11",
+    colorClass: {
+      text: "text-teal-600",
+      border: "border-teal-600",
+      chart: "stroke-teal-600",
+    },
+    image: MapImage,
+    status: "positive",
+  },
+  {
+    headerText: "Validations Performed",
+    percentage: "3",
+    value: "$2,819.11",
+    colorClass: {
+      text: "text-teal-600",
+      border: "border-teal-600",
+      chart: "stroke-teal-600",
+    },
+    image: MapImage,
+    status: "positive",
+  },
+  {
+    headerText: "Transactions Generated for Posting",
     percentage: "3",
     value: "$2,819.11",
     colorClass: {
@@ -205,7 +229,7 @@ export const RECONCILIATION_DATA = [
 
 export const CASH_POSTING_DATA = [
   {
-    headerText: "Ready-to-Post Amount",
+    headerText: "Auto Posting Rate",
     percentage: "5",
     value: "$8,20,345",
     colorClass: {
@@ -217,7 +241,7 @@ export const CASH_POSTING_DATA = [
     status: "positive",
   },
   {
-    headerText: "Ready-to-Post Count",
+    headerText: "Total Payments Posted Today",
     percentage: "8",
     value: "311",
     colorClass: {
@@ -229,7 +253,7 @@ export const CASH_POSTING_DATA = [
     status: "positive",
   },
   {
-    headerText: "Successfully Posted Amount",
+    headerText: "Total Payment Amount Posted",
     percentage: "-1",
     value: "$6,12,441.22",
     colorClass: {
@@ -241,7 +265,7 @@ export const CASH_POSTING_DATA = [
     status: "",
   },
   {
-    headerText: "Successfully Posted Count ",
+    headerText: "Payments Pending Posting",
     percentage: "3",
     value: "221",
     colorClass: {
@@ -253,7 +277,19 @@ export const CASH_POSTING_DATA = [
     status: "positive",
   },
   {
-    headerText: "Failed Posting Count",
+    headerText: "Payments Partially Posted",
+    percentage: "-6",
+    value: "8",
+    colorClass: {
+      text: "text-teal-600",
+      border: "border-teal-600",
+      chart: "stroke-teal-600",
+    },
+    image: MapImage,
+    status: "positive",
+  },
+  {
+    headerText: "Average Posting Time per Payment",
     percentage: "-6",
     value: "8",
     colorClass: {
