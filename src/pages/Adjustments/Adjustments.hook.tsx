@@ -3,10 +3,7 @@ import { RowActions } from "./layout/modal/ActionModal";
 import { DUMMY_LEDGER_DATA } from "@/constants/AdjustmentsData";
 
 import { type Column } from "@/components/DataTable/DataTable";
-import {
-  type LedgerRow,
-  type LedgerCategory,
-} from "@/constants/AdjustmentsData";
+import { type LedgerRow } from "@/constants/AdjustmentsData";
 
 type ActionModalType = "ican" | "note" | "exception" | "source" | null;
 
@@ -14,7 +11,7 @@ export const useAdjustmentsLogic = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeModal, setActiveModal] = useState<ActionModalType>(null);
-  const [activeTab, setActiveTab] = useState<LedgerCategory>("SUSPENSE");
+  const [activeTab, setActiveTab] = useState("SUSPENSE");
 
   const TABS = [
     { label: "Suspense", value: "SUSPENSE" },
@@ -37,7 +34,7 @@ export const useAdjustmentsLogic = () => {
     {
       key: "type",
       label: "Type",
-      render: (value, row) => {
+      render: (value: any, row) => {
         const typeStyles =
           row.ledgerCategory === "PIP"
             ? "bg-blue-100 text-blue-700"
@@ -65,7 +62,7 @@ export const useAdjustmentsLogic = () => {
       key: "amount",
       label: "Amount",
       isAmount: true,
-      render: (value) => (
+      render: (value: any) => (
         <span
           className={
             value > 0
