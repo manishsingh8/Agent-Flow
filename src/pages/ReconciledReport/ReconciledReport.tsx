@@ -68,7 +68,7 @@ const ReconciledReport = () => {
           </span>
         </div>
       ) : (
-        <div className="grid grid-cols-5 gap-4">
+        <div className="flex flex-wrap gap-4">
           {reconciledCardsData.map((card) => (
             <PaymentCard
               key={card.id}
