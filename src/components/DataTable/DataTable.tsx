@@ -230,7 +230,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
               {columns.map((col) => (
                 <TableHead
                   key={String(col.key)}
-                  className={`font-semibold text-foreground text-xs ${
+                  className={`font-semibold text-foreground text-xs text-center ${
                     col.className || ""
                   }`}
                 >
@@ -269,7 +269,9 @@ export function DataTable<T extends object = Record<string, unknown>>({
                       return (
                         <TableCell
                           key={String(col.key)}
-                          className={`text-xs ${col.bodyClassName || ""} ${
+                          className={`text-xs text-center align-middle ${
+                            col.bodyClassName || ""
+                          } ${
                             col.conditionalClassName
                               ? col.conditionalClassName(cellValue, row)
                               : ""
@@ -279,7 +281,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                             ? col.render(cellValue, row)
                             : col.isAmount
                             ? formatAmount(cellValue)
-                            : String(cellValue ?? "")}
+                            : String(cellValue ?? "-")}
                         </TableCell>
                       );
                     })}

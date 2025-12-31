@@ -111,7 +111,7 @@ const Payment = () => {
     console.log("Delete tasks:", selectedRowIds);
   };
   return (
-    <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
+    <div className="p-4 flex flex-col h-[calc(100vh-64px)] gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
         <div className="text-[20px] font-semibold text-[#0A0A0A]">
           Non-Reconciled Queue
@@ -165,47 +165,50 @@ const Payment = () => {
         />
       </div>
       {tableLoading ? (
-        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+        <div className="flex items-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
           <span className="flex items-center gap-2 text-gray-500">
             Loading...
             <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
           </span>
         </div>
       ) : (
-        <div className="border border-[#E6ECF0] p-4 rounded-[14px] w-[1230px]">
-          <DataTable
-            data={paginatedData}
-            columns={columns}
-            selectable={true}
-            selectedRows={selectedRows}
-            onRowSelect={handleRowSelect}
-            onSelectAll={handleSelectAll}
-            exportEnabled={true}
-            searchEnabled
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            onExport={handleExport}
-            idKey="nonReconciledDataId"
-            pageInfo={{
-              currentPage,
-              totalPages: Math.ceil(mockTasks.length / rowsPerPage),
-              onPageChange: setCurrentPage,
-              rowsPerPage,
-              onRowsPerPageChange: setRowsPerPage,
-            }}
-            assignmentFeature={{
-              enabled: true,
-              onAssign: handleAssign,
-              users: mockUsers,
-              quickActions: true,
-              currentUserId: "user-1",
-              onChangeStatus: handleChangeStatus,
-              onWatchOptions: handleWatchOptions,
-              onDelete: handleDelete,
-            }}
-          />
+        <div className="border border-[#E6ECF0] p-4 rounded-[14px]">
+          <div className="w-full overflow-x-auto overflow-hidden">
+            <DataTable
+              data={paginatedData}
+              columns={columns}
+              selectable
+              selectedRows={selectedRows}
+              onRowSelect={handleRowSelect}
+              onSelectAll={handleSelectAll}
+              exportEnabled
+              searchEnabled
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              onExport={handleExport}
+              idKey="nonReconciledDataId"
+              pageInfo={{
+                currentPage,
+                totalPages: Math.ceil(mockTasks.length / rowsPerPage),
+                onPageChange: setCurrentPage,
+                rowsPerPage,
+                onRowsPerPageChange: setRowsPerPage,
+              }}
+              assignmentFeature={{
+                enabled: true,
+                onAssign: handleAssign,
+                users: mockUsers,
+                quickActions: true,
+                currentUserId: "user-1",
+                onChangeStatus: handleChangeStatus,
+                onWatchOptions: handleWatchOptions,
+                onDelete: handleDelete,
+              }}
+            />
+          </div>
         </div>
       )}
+
       <EditModal
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}
