@@ -20,6 +20,18 @@ const headerTextMap = {
   Remittance: "Remittance Amount",
   "Cash Posting": "Posted Amount",
 };
+const COLUMN_LABELS: Partial<Record<keyof ReconciledTransaction, string>> = {
+  transactionNo: "Check #",
+  transactionType: "Transaction Category",
+  region: "Region",
+  payer: "Payer Name",
+  account: "Account Number",
+  depositDate: "	Deposit Date",
+  bankDeposit: "BAI Amount",
+  remittance: "Remittance Amount",
+  emrAmount: "EMR Amount",
+  glAmount: "Others",
+};
 
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -307,24 +319,26 @@ export const useReconciledReportLogic = () => {
       bodyClassName: "text-blue-600",
     },
   };
-  const columns: Column<ReconciledTransaction>[] = tableData?.length
+
+  const columns: Column<ReconciledTransaction>[] = tableData.length
     ? (Object.keys(tableData[0]) as Array<keyof ReconciledTransaction>)
-        .filter((key) => key !== "id")
-        .map((key) => {
-          const rule = columnRules[String(key)] || {};
-          return {
-            key,
-            label: String(key)
+        .filter((key) => key !== "id" && key !== "reconciledDataId")
+        .map((key) => ({
+          key,
+          label:
+            COLUMN_LABELS[key] ??
+            String(key)
               .replace(/([A-Z])/g, " $1")
               .replace(/^./, (str) => str.toUpperCase()),
-            render: (val: unknown): ReactNode => {
-              if (typeof val === "number") return `$${val.toFixed(2)}`;
-              return String(val);
-            },
-            bodyClassName: rule.bodyClassName || "",
-            conditionalClassName: rule.conditionalClassName || undefined,
-          };
-        })
+
+          render: (val: unknown): ReactNode => {
+            if (val === null || val === undefined || val === "") return "-";
+
+            if (typeof val === "number") return `$${val.toFixed(2)}`;
+
+            return String(val);
+          },
+        }))
     : [];
 
   return {

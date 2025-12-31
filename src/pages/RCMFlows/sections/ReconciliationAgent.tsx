@@ -2,6 +2,7 @@ import { RECONCILIATION_DATA } from "@/constants/DashboardData";
 import { MapCard } from "@/components";
 import WorkflowPage from "./Workflow/WorkFlow";
 import { type Node, type Edge, MarkerType } from "reactflow";
+import { getStatusMeta } from "@/utils/getStatusMeta";
 
 const initialNodes: Node[] = [
   // ---------------- Group 1 ----------------
@@ -368,17 +369,20 @@ const ReconciliationAgent = () => {
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mt-3">
-        {RECONCILIATION_DATA.map((item, index) => (
-          <MapCard
-            key={index}
-            headerText={item.headerText}
-            percentage={item.percentage}
-            value={item.value}
-            colorClass={item.colorClass}
-            image={item.image} // ✅ added
-            status={item.status}
-          />
-        ))}
+        {RECONCILIATION_DATA.map((item, index) => {
+          const { colorClass, image } = getStatusMeta(item.status);
+          return (
+            <MapCard
+              key={index}
+              headerText={item.headerText}
+              percentage={item.percentage}
+              value={item.value}
+              status={item.status}
+              image={image}
+              colorClass={colorClass}
+            />
+          );
+        })}
       </div>
       <div
         className="flex justify-between gap-2 p-0 mt-4 mb-4 bg-[#E6EEF4] rounded-3xl"

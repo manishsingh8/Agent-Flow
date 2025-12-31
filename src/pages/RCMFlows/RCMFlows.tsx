@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import CashPostingAgent from "./sections/CashPostingAgent";
 import IntakeOrchestratorAgent from "./sections/IntakeWorkflowAgent";
 import RCMCentralEngine from "./sections/RCMCentralEngine";
 import ReconciliationAgent from "./sections/ReconciliationAgent";
-import { TABS } from "@/constants/DashboardData";
+import { TABS, DROPDOWN_OPTIONS } from "@/constants/DashboardData";
 import { useRCMFlowsLogic } from "./RCMFlows.hook";
 import {
   DropdownMenu,
@@ -16,15 +15,15 @@ import { Button } from "@/components/ui/Button";
 import { ChevronDown } from "lucide-react";
 
 const RCMFlows = () => {
-  const { activeTab, setActiveTab } = useRCMFlowsLogic();
-  const [open, setOpen] = useState(false);
-  const [selectedRange, setSelectedRange] = useState("1week");
+  const {
+    activeTab,
+    setActiveTab,
+    open,
+    setOpen,
+    selectedRange,
+    setSelectedRange,
+  } = useRCMFlowsLogic();
 
-  const options = [
-    { value: "today", label: "Today" },
-    { value: "1week", label: "1 Week" },
-    { value: "lastMonth", label: "Last Month" },
-  ];
   return (
     <div
       className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto"
@@ -61,7 +60,10 @@ const RCMFlows = () => {
                   className="text-xs w-40 flex justify-between shadow-none focus-visible:ring-0 py-4"
                 >
                   <span>
-                    {options.find((o) => o.value === selectedRange)?.label}
+                    {
+                      DROPDOWN_OPTIONS.find((o) => o.value === selectedRange)
+                        ?.label
+                    }
                   </span>
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${
@@ -72,7 +74,7 @@ const RCMFlows = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-36">
-                {options.map((o) => (
+                {DROPDOWN_OPTIONS.map((o) => (
                   <DropdownMenuItem
                     key={o.value}
                     onClick={() => setSelectedRange(o.value)}
