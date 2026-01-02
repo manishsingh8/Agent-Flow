@@ -26,7 +26,7 @@ const CustomDropdown = ({
   value,
   onChange,
   placeholder = "Select option",
-  className,
+  // className,
 }: CustomDropdownProps) => {
   const [open, setOpen] = useState(false);
 

@@ -151,7 +151,7 @@ export const useCashPostingQueueLogic = () => {
         labelMap: CASH_POSTING_COLUMN_LABELS,
         excludeKeys: ["cashPostingId"],
         amountFields: ["totalAmount", "postedAmount", "remittance"],
-        columnRules,
+        // columnRules,
       }),
     [tableData, columnRules]
   );

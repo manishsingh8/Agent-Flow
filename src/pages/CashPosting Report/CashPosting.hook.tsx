@@ -4,7 +4,6 @@ import { API_ENDPOINTS } from "@/config/api";
 import { buildColumns } from "@/utils/buildColumns";
 import { CASH_POSTING_REPORT_COLUMN_LABELS } from "@/constants/TableData";
 
-
 export const useCashPostingLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
@@ -133,7 +132,7 @@ export const useCashPostingLogic = () => {
         labelMap: CASH_POSTING_REPORT_COLUMN_LABELS,
         excludeKeys: ["cashPostingId"],
         amountFields: ["totalAmount", "postedAmount", "remittance"],
-        columnRules,
+        // columnRules,
       }),
     [tableData, columnRules]
   );
