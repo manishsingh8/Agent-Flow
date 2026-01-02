@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableBody,
@@ -15,7 +14,7 @@ interface PatientLevelDataProps {
 
 export const PatientLevelData = ({ data }: PatientLevelDataProps) => {
   return (
-     <Card>
+    <Card>
       <CardHeader>
         <CardTitle>Patient Level Data</CardTitle>
       </CardHeader>
