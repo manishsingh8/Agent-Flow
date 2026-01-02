@@ -1,21 +1,9 @@
-import { useState, useMemo, type ReactNode, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { type Cash_Posting_Transaction } from "@/constants/TableData";
 import { API_ENDPOINTS } from "@/config/api";
+import { buildColumns } from "@/utils/buildColumns";
+import { CASH_POSTING_COLUMN_LABELS } from "@/constants/TableData";
 
-const CASH_POSTING_COLUMN_LABELS: Partial<
-  Record<keyof Cash_Posting_Transaction, string>
-> = {
-  cheque: "Check Number",
-  payerName: "Payer Name",
-  region: "Region",
-  postingType: "Posting Method",
-  totalAmount: "Total Payment Amount",
-  postedAmount: "Amount Successfully Posted",
-  remittance: "Remittance Amount Received",
-  attemptedOn: "Last Attempt Date",
-  status: "Status",
-  reason: "Posting Exception Reason",
-};
 
 export const useCashPostingQueueLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -156,41 +144,17 @@ export const useCashPostingQueueLogic = () => {
     },
     email: { bodyClassName: "text-blue-600" },
   };
-
-  const columns = useMemo(() => {
-    if (!tableData.length) return [];
-
-    const amountFields = ["totalAmount", "postedAmount", "remittance"];
-
-    return (Object.keys(tableData[0]) as Array<keyof Cash_Posting_Transaction>)
-      .filter((key) => key !== "cashPostingId")
-      .map((key) => {
-        const rule = columnRules[String(key)] || {};
-        const isAmount = amountFields.includes(String(key));
-
-        return {
-          key,
-          label:
-            CASH_POSTING_COLUMN_LABELS[key] ??
-            String(key)
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase()),
-
-          isAmount,
-          render: isAmount
-            ? undefined
-            : (val: unknown): ReactNode => {
-                if (val === null || val === undefined || val === "") {
-                  return "-";
-                }
-                return String(val);
-              },
-
-          bodyClassName: rule.bodyClassName ?? "",
-          conditionalClassName: rule.conditionalClassName,
-        };
-      });
-  }, [tableData, columnRules]);
+  const columns = useMemo(
+    () =>
+      buildColumns<Cash_Posting_Transaction>({
+        tableData,
+        labelMap: CASH_POSTING_COLUMN_LABELS,
+        excludeKeys: ["cashPostingId"],
+        amountFields: ["totalAmount", "postedAmount", "remittance"],
+        columnRules,
+      }),
+    [tableData, columnRules]
+  );
 
   return {
     toggle,
