@@ -1,8 +1,10 @@
-import { useState, useMemo, type ReactNode, useEffect } from "react";
-import { type Column } from "@/components/DataTable/DataTable";
+import { useState, useMemo, useEffect } from "react";
 import { type Transaction } from "@/constants/TableData";
 import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
 import { API_ENDPOINTS } from "@/config/api";
+import { buildColumns } from "@/utils/buildColumns";
+import { NON_RECONCILED_COLUMN_LABELS } from "@/constants/TableData";
+import { NON_RECONCILED_HEADER_TEXT } from "@/constants/TableData";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -13,28 +15,6 @@ type VarianceWidgetResponse = {
   totalAmount?: number;
   pendingCount?: number;
   exceptionCount?: number;
-};
-
-const headerTextMap = {
-  "Bank Deposit": "Bank Deposit Amount",
-  Remittance: "Remittance Amount",
-  "Cash Posting": "Posted Amount",
-  "Pay Variance": "Variance With Remit",
-  "Post Variance": "Variance With Posting",
-};
-const COLUMN_LABELS: Partial<Record<keyof Transaction, string>> = {
-  transactionNo: "Check #",
-  transactionType: "Transaction Category",
-  region: "Region",
-  payer: "Payer Name",
-  account: "Account Number",
-  depositDate: "	Deposit Date",
-  bankDeposit: "BAI Amount",
-  remittance: "Remittance Amount",
-  emrAmount: "EMR Amount",
-  payVariance: "Variance Amount",
-  statusName: "Current Status",
-  glAmount: "Others",
 };
 
 export const usePaymentLogic = () => {
@@ -184,7 +164,7 @@ export const usePaymentLogic = () => {
 
   const paymentCardsData = useMemo(() => {
     if (!widgetData?.data) return [];
-    return mapPaymentCardsWithBg(widgetData?.data, headerTextMap);
+    return mapPaymentCardsWithBg(widgetData?.data, NON_RECONCILED_HEADER_TEXT);
   }, [widgetData]);
 
   const filteredData = useMemo(() => {
@@ -356,28 +336,22 @@ export const usePaymentLogic = () => {
   };
 
   // 👇 COLUMNS GENERATED FROM API DATA
-  const columns: Column<Transaction>[] = tableData.length
-    ? (Object.keys(tableData[0]) as Array<keyof Transaction>)
-        .filter(
-          (key) =>
-            key !== "id" && key !== "nonReconciledDataId" && key !== "statusId"
-        )
-        .map((key) => ({
-          key,
-
-          // 👇 Use mapped label if exists, else auto-generate
-          label:
-            COLUMN_LABELS[key] ??
-            String(key)
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase()),
-
-          render: (val: unknown): ReactNode => {
-            if (typeof val === "number") return `$${val.toFixed(2)}`;
-            return String(val ?? "-");
-          },
-        }))
-    : [];
+  const columns = useMemo(
+    () =>
+      buildColumns<Transaction>({
+        tableData,
+        labelMap: NON_RECONCILED_COLUMN_LABELS,
+        excludeKeys: ["id", "nonReconciledDataId", "statusId"],
+        amountFields: [
+          "bankDeposit",
+          "remittance",
+          "emrAmount",
+          "payVariance",
+          "glAmount",
+        ],
+      }),
+    [tableData]
+  );
 
   return {
     toggle,

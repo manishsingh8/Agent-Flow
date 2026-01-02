@@ -1,4 +1,4 @@
-"use client";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
 import { ChevronDown } from "lucide-react";
+import { Button } from "../ui/Button";
 
 interface DropdownOption {
   value: string;
@@ -25,23 +26,30 @@ const CustomDropdown = ({
   value,
   onChange,
   placeholder = "Select option",
-  className,
+  // className,
 }: CustomDropdownProps) => {
+  const [open, setOpen] = useState(false);
+
   const selectedLabel =
     options.find((opt) => opt.value === value)?.label || placeholder;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button
-          className={`px-3 py-2 bg-white border border-border rounded-md text-sm font-medium text-foreground hover:bg-muted flex items-center gap-2 ${
-            className || ""
-          }`}
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-xs w-40 flex justify-between shadow-none focus-visible:ring-0"
         >
           {selectedLabel}
-          <ChevronDown className="w-4 h-4" />
-        </button>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform duration-200 ${
+              open ? "rotate-180" : ""
+            }`}
+          />
+        </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-40">
         {options.map((option) => (
           <DropdownMenuItem

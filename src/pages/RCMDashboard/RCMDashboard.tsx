@@ -1,15 +1,31 @@
 import KpiCard from "@/components/KpiCard/KpiCard";
 import { AreaChart } from "lucide-react";
 import useRCMDashboard from "./RCMDashboard.hook";
-// import { Card, CardContent, CardHeader } from "@/components/KpiCard/UI/Card";
-// import UserProductivityTable from "@/components/UserProductivityTable/UserProductivityTable";
 import OperationalView from "@/components/OperationalView/OperationalView";
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
 import { workQueueData } from "@/constants/RCMDashboardData";
 import { workQueueSegments } from "@/constants/RCMDashboardData";
+import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
+import { CustomDropdown } from "@/components";
+
+export type DateFilterValue = "today" | "lastMonth" | "custom";
+const DATE_OPTIONS = [
+  { value: "today", label: "Today" },
+  { value: "lastMonth", label: "Last Month" },
+  { value: "custom", label: "Custom" },
+];
 
 const RCMDashboard = () => {
-  const { kpiCards, loading } = useRCMDashboard();
+  const {
+    kpiCards,
+    loading,
+    from,
+    setFrom,
+    to,
+    setTo,
+    handleDateOptionChange,
+    dateFilter,
+  } = useRCMDashboard();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
@@ -42,17 +58,27 @@ const RCMDashboard = () => {
           ))
         )}
       </div>
+      <div className="flex items-center justify-end border border-[#E6ECF0] p-1 rounded-[14px] px-3 py-4">
+        {dateFilter === "custom" ? (
+          <FilterSearchBar
+            enableDateRange
+            fromDate={from}
+            toDate={to}
+            onFromDateChange={setFrom}
+            onToDateChange={setTo}
+          />
+        ) : (
+          ""
+        )}
+        <div>
+          <CustomDropdown
+            options={DATE_OPTIONS}
+            value={dateFilter}
+            onChange={handleDateOptionChange}
+          />
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-4">
-        {/* <Card>
-          <CardHeader>
-            <p className="text-md font-medium">
-              Workforce Performance Overview
-            </p>
-          </CardHeader>
-          <CardContent>
-            <UserProductivityTable />
-          </CardContent>
-        </Card> */}
         <CustomBarChart
           title="Work Queue Activity Analysis"
           description="Daily Activity summary showing in the queue."
