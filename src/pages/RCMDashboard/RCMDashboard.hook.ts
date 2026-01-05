@@ -2,7 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { buildKpiCards } from "@/constants/RCMDashboardData";
 import { API_ENDPOINTS } from "@/config/api";
 import { postRequest } from "@/utils/postRequest";
-import {type BackendKpi } from "@/constants/RCMDashboardData";
+import { type BackendKpi } from "@/constants/RCMDashboardData";
+import { type BarSegmentConfig } from "@/components/CustomBarChart/CustomBarChart";
+
+interface WorkQueueBarChartData {
+  title?: string;
+  description?: string;
+  data: any;
+  segments?: BarSegmentConfig[];
+}
 
 export default function useRCMDashboard() {
   const [operationalMetrics, setOperationalMetrics] = useState<BackendKpi[]>(
@@ -11,13 +19,15 @@ export default function useRCMDashboard() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error] = useState<string | null>(null);
   const today = new Date().toISOString().split("T")[0];
-  const [from, setFrom] = useState(today);
-  const [to, setTo] = useState(today);
-  const [dateFilter, setDateFilter] = useState("today");
+  const [from, setFrom] = useState("2025-10-01");
+  const [to, setTo] = useState("2025-12-24");
+  const [dateFilter, setDateFilter] = useState("custom");
   const [customDate, setCustomDate] = useState(false);
   const [dateFilterText, setDateFilterText] = useState(
     "Showing records for today."
   );
+  const [workQueueData, setWorkQueueData] =
+    useState<WorkQueueBarChartData | null>(null);
 
   const kpiCards = useMemo(() => {
     return buildKpiCards(operationalMetrics);
@@ -80,6 +90,7 @@ export default function useRCMDashboard() {
 
       if (workQueueRes.status === "fulfilled") {
         console.log(workQueueRes.value);
+        setWorkQueueData(workQueueRes?.value?.data);
       }
 
       if (operationalRes.status === "fulfilled") {
@@ -109,5 +120,6 @@ export default function useRCMDashboard() {
     dateFilter,
     customDate,
     dateFilterText,
+    workQueueData,
   };
 }
