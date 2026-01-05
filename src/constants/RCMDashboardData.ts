@@ -29,7 +29,7 @@ export interface KpiCardItem {
   iconName?: string;
   trend?: "up" | "down" | "neutral";
 }
-type BackendKpi = {
+export type BackendKpi = {
   id: string;
   title: string;
   value: string | null;

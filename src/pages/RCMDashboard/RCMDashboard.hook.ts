@@ -2,9 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { buildKpiCards } from "@/constants/RCMDashboardData";
 import { API_ENDPOINTS } from "@/config/api";
 import { postRequest } from "@/utils/postRequest";
+import {type BackendKpi } from "@/constants/RCMDashboardData";
 
 export default function useRCMDashboard() {
-  const [operationalMetrics, setOperationalMetrics] = useState();
+  const [operationalMetrics, setOperationalMetrics] = useState<BackendKpi[]>(
+    []
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error] = useState<string | null>(null);
   const today = new Date().toISOString().split("T")[0];
