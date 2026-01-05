@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronRight, FileText } from "lucide-react";
@@ -28,13 +27,18 @@ export default function DocumentPage() {
     <div className="flex flex-col h-full bg-slate-50/50">
       {/* Breadcrumbs */}
       <div className="px-6 py-4 flex items-center gap-2 text-sm text-slate-500">
-        <Button variant="ghost" size="sm" className="p-0 h-auto hover:bg-transparent text-slate-500" onClick={() => navigate("/cdm")}>
-            Correspondence Document Manager
+        <Button
+          variant="ghost"
+          size="sm"
+          className="p-0 h-auto hover:bg-transparent text-slate-500"
+          onClick={() => navigate("/cdm")}
+        >
+          Correspondence Document Manager
         </Button>
         <ChevronRight className="w-4 h-4" />
         <div className="flex items-center gap-2 font-medium text-slate-900">
-             <FileText className="w-4 h-4" />
-             <span className="truncate max-w-[200px]">{fileData.fileName}</span>
+          <FileText className="w-4 h-4" />
+          <span className="truncate max-w-[200px]">{fileData.fileName}</span>
         </div>
       </div>
 
@@ -43,24 +47,33 @@ export default function DocumentPage() {
       <div className="flex-1 overflow-auto p-6 space-y-6">
         {/* Header / Stepper */}
         <div className="bg-white rounded-lg border p-6 shadow-sm">
-             <HorizontalStepper steps={documentSteps} currentStepIndex={3} />
+          <HorizontalStepper steps={documentSteps} currentStepIndex={3} />
         </div>
 
         {/* Tabs and Content */}
         <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-6">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full space-y-6"
+          >
             <div className="flex items-center justify-between border-b pb-4">
               <TabsList className="bg-transparent p-0 h-auto">
-                  <TabsTrigger value="file-metadata" className="">
-                    File-level MetaData
-                  </TabsTrigger>
-                  {/* <TabsTrigger value="patient-data">Patient-level Data</TabsTrigger> */}
+                <TabsTrigger value="file-metadata" className="">
+                  File-level MetaData
+                </TabsTrigger>
+                {/* <TabsTrigger value="patient-data">Patient-level Data</TabsTrigger> */}
               </TabsList>
 
               <div className="flex gap-2">
-                   <Button variant="outline" size="sm" onClick={() => setIsModifySheetOpen(true)} className="text-slate-600">
-                      <FileText className="w-4 h-4 mr-2" /> Modify Document
-                   </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsModifySheetOpen(true)}
+                  className="text-slate-600"
+                >
+                  <FileText className="w-4 h-4 mr-2" /> Modify Document
+                </Button>
               </div>
             </div>
 
@@ -73,10 +86,10 @@ export default function DocumentPage() {
           </Tabs>
         </div>
 
-        <ModifyDocumentSheet 
-            open={isModifySheetOpen} 
-            onOpenChange={setIsModifySheetOpen}
-            fileName={fileData.fileName}
+        <ModifyDocumentSheet
+          open={isModifySheetOpen}
+          onOpenChange={setIsModifySheetOpen}
+          fileName={fileData.fileName}
         />
       </div>
     </div>
