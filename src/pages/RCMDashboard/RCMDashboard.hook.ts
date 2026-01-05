@@ -18,7 +18,7 @@ export default function useRCMDashboard() {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error] = useState<string | null>(null);
-  const today = new Date().toISOString().split("T")[0];
+  // const today = new Date().toISOString().split("T")[0];
   const [from, setFrom] = useState("2025-10-01");
   const [to, setTo] = useState("2025-12-24");
   const [dateFilter, setDateFilter] = useState("custom");
