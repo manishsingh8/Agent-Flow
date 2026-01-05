@@ -13,7 +13,8 @@ interface HorizontalStepperProps {
   currentStepIndex: number;
 }
 
-export const HorizontalStepper = ({ steps, currentStepIndex }: HorizontalStepperProps) => {
+export const HorizontalStepper = (props: HorizontalStepperProps) => {
+  const { steps } = props
   const getIcon = (label: string) => {
     switch (label) {
       case 'Classification':
