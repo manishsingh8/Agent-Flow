@@ -10,7 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/Sheet";
 import { SplitManager } from "./SplitManager";
-import { mockSplitData } from "./mockSplitData";
+import { mockSplitData } from "@/constants/CDMData";
 
 interface ModifyDocumentSheetProps {
   open: boolean;
