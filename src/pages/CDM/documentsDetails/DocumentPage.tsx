@@ -13,7 +13,7 @@ import {
   mockFileLevelData,
   // mockPatientLevelData,
   documentSteps,
-} from "../data/MockData";
+} from "@/constants/CDMData";
 
 export default function DocumentPage() {
   const { id } = useParams();

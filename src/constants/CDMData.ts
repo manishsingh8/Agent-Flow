@@ -1,3 +1,18 @@
+export const getFileLevelFields = (data: any) => {
+  return [
+    { label: "Payer Name", value: data?.payerName ?? "N/A" },
+    { label: "Deposit Date", value: data?.depositDate ?? "N/A" },
+    { label: "Check Number", value: data?.checkNumber ?? "N/A" },
+    { label: "Number of Pages", value: data?.numberOfPages ?? "N/A" },
+    { label: "Patient Count", value: data?.patientCount ?? "N/A" },
+    { label: "Document Age", value: data?.documentAge ?? "N/A" },
+    { label: "Confidence Score", value: data?.confidenceScore ?? "N/A" },
+    { label: "Letter Name", value: data?.letterName ?? "N/A" },
+  ];
+}
+
+export default getFileLevelFields;
+
 export const mockFileLevelData = {
   id: "1",
   fileName: "EOB_835_123456789.pdf",
@@ -37,7 +52,7 @@ export const documentSteps = [
   { label: 'Classification', isCompleted: true },
   { label: 'Data Extraction', isCompleted: true },
   { label: 'iCAN Data Verification', isCompleted: true },
-  { label: 'User Validation', isCompleted: false }, // Current step
+  { label: 'User Validation', isCompleted: false },
   { label: 'Process', isCompleted: false },
 ];
 
