@@ -3,8 +3,6 @@ import { AreaChart } from "lucide-react";
 import useRCMDashboard from "./RCMDashboard.hook";
 import OperationalView from "@/components/OperationalView/OperationalView";
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
-import { workQueueData } from "@/constants/RCMDashboardData";
-import { workQueueSegments } from "@/constants/RCMDashboardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { CustomDropdown } from "@/components";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
@@ -27,6 +25,7 @@ const RCMDashboard = () => {
     handleDateOptionChange,
     dateFilter,
     dateFilterText,
+    workQueueData,
   } = useRCMDashboard();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -87,14 +86,23 @@ const RCMDashboard = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4">
-        <CustomBarChart
-          title="Work Queue Activity Analysis"
-          description="Daily Activity summary showing in the queue."
-          data={workQueueData}
-          xKey="date"
-          segments={workQueueSegments}
-          barSize={30}
-        />
+        {loading ? (
+          <div className="flex items-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+            <span className="flex items-center gap-2 text-gray-500 h-10">
+              Loading...
+              <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+            </span>
+          </div>
+        ) : (
+          <CustomBarChart
+            title={workQueueData?.title}
+            description={workQueueData?.description}
+            data={workQueueData?.data}
+            xKey="date"
+            segments={workQueueData?.segments}
+            barSize={30}
+          />
+        )}
         {/* <WorkQueueVolumeChart /> */}
       </div>
       <OperationalView />
