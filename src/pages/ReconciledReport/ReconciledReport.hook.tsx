@@ -56,7 +56,7 @@ export const useReconciledReportLogic = () => {
       const response = await res.json();
       const mapped =
         response?.data?.map((payer: any) => ({
-          value: payer.id, // ✅ store ID
+          value: payer.id,
           label: payer.name,
         })) ?? [];
 
@@ -180,7 +180,9 @@ export const useReconciledReportLogic = () => {
     ) {
       setSelectedRows(new Set());
     } else {
-      setSelectedRows(new Set(paginatedData.map((t) => t.id)));
+      setSelectedRows(
+        new Set(paginatedData.map((row) => String(row.reconciledDataId)))
+      );
     }
   };
 

@@ -57,7 +57,7 @@ export const usePaymentLogic = () => {
 
       const mapped =
         response?.data?.map((payer: any) => ({
-          value: payer.id, // ✅ store ID
+          value: payer.id,
           label: payer.name,
         })) ?? [];
 
@@ -198,6 +198,8 @@ export const usePaymentLogic = () => {
     setSelectedRows(newSelected);
   };
 
+  console.log(paginatedData, "paginatedData");
+
   const handleSelectAll = () => {
     if (
       selectedRows.size === paginatedData.length &&
@@ -205,7 +207,9 @@ export const usePaymentLogic = () => {
     ) {
       setSelectedRows(new Set());
     } else {
-      setSelectedRows(new Set(paginatedData.map((t) => t.id)));
+      setSelectedRows(
+        new Set(paginatedData.map((row) => String(row.nonReconciledDataId)))
+      );
     }
   };
 
