@@ -50,8 +50,7 @@ export default function PdfPipelineViewer() {
 
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      {/* HEADER */}
-      <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] pt-[10px] rounded-[14px] h-[80px]">
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px]">
         <div className="text-[20px] font-[600] text-[#0A0A0A]">
           RCM Insight Extraction
         </div>
@@ -63,9 +62,9 @@ export default function PdfPipelineViewer() {
         </div>
       </div>
 
-      <div className=" h-screen flex gap-6 bg-gray-50 overflow-hidden font-sans">
+      <div className=" h-screen flex flex-col lg:flex-row gap-6 bg-gray-50 overflow-hidden font-sans">
         {/* LEFT PANEL */}
-        <div className="w-[50%]  overflow-auto">
+        <div className="w-full lg:w-[50%] overflow-auto">
           <Card
             className={`w-[100%] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between 
               "h-full"`}
@@ -611,7 +610,7 @@ export default function PdfPipelineViewer() {
         </div>
 
         {/* RIGHT PANEL – DOCUMENT VIEWER */}
-        <Card className="w-[50%] flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-0 overflow-hidden flex flex-col">
+        <Card className="w-full lg:w-[50%] flex-1 bg-white rounded-xl shadow-sm border border-gray-200 p-0 overflow-hidden flex flex-col">
           <div className=" p-4 border-b border-gray-100 flex justify-between items-center bg-white">
             <div>
               <h2 className="text-sm font-semibold text-gray-900">

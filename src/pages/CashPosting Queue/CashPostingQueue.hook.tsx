@@ -4,7 +4,6 @@ import { API_ENDPOINTS } from "@/config/api";
 import { buildColumns } from "@/utils/buildColumns";
 import { CASH_POSTING_COLUMN_LABELS } from "@/constants/TableData";
 
-
 export const useCashPostingQueueLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
@@ -77,7 +76,9 @@ export const useCashPostingQueueLogic = () => {
     ) {
       setSelectedRows(new Set());
     } else {
-      setSelectedRows(new Set(paginatedData.map((t) => t.id)));
+      setSelectedRows(
+        new Set(paginatedData.map((row) => String(row.cashPostingId)))
+      );
     }
   };
 

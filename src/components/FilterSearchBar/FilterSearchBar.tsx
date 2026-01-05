@@ -78,26 +78,36 @@ FilterSearchBarProps) {
   // const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
 
   return (
-    <div className="flex items-center justify-end gap-4 px-3 py-3 bg-white rounded-md">
-      <div className="flex items-center gap-4">
+    <div className="flex items-center justify-end  gap-4 px-3 py-3 bg-white rounded-md">
+      <div className="flex items-center gap-4 flex-wrap">
         {/* ------- Date Range -------- */}
         {enableDateRange && (
-          <div className="flex items-center gap-2">
-            <div className="text-xs font-medium">From</div>
-            <Input
-              type="date"
-              value={fromDate}
-              onChange={(e) => onFromDateChange?.(e.target.value)}
-              className="h-8 text-xs"
-            />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+            {/* From Date */}
+            <div className="flex items-center gap-1 sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
+              <span className="text-xs font-medium  sm:whitespace-nowrap">
+                From
+              </span>
+              <Input
+                type="date"
+                value={fromDate}
+                onChange={(e) => onFromDateChange?.(e.target.value)}
+                className="h-8 text-xs w-full sm:w-40"
+              />
+            </div>
 
-            <div className="text-xs font-medium">To</div>
-            <Input
-              type="date"
-              value={toDate}
-              onChange={(e) => onToDateChange?.(e.target.value)}
-              className="h-8 text-xs"
-            />
+            {/* To Date */}
+            <div className="flex items-center gap-1 sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
+              <span className="text-xs font-medium  sm:whitespace-nowrap">
+                To
+              </span>
+              <Input
+                type="date"
+                value={toDate}
+                onChange={(e) => onToDateChange?.(e.target.value)}
+                className="h-8 text-xs w-full sm:w-40"
+              />
+            </div>
           </div>
         )}
 

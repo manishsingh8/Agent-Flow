@@ -19,7 +19,7 @@ import {
 const Dashboard2 = () => {
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px]">
         <div className="text-[20px] font-semibold text-[#0A0A0A]">
           Healthcare Correspondence Document Intelligence Dashboard
         </div>
@@ -30,7 +30,7 @@ const Dashboard2 = () => {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="flex lg:justify-between items-center flex-wrap gap-4">
         {HCD_CARDS.map((card) => (
           <PaymentCard
             key={card.id}
@@ -41,7 +41,7 @@ const Dashboard2 = () => {
           />
         ))}
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col lg:flex-row gap-4">
         <CustomBarChart
           title="Document Processing Duration (min)"
           description="Processing duration trends across documents types."
@@ -60,7 +60,7 @@ const Dashboard2 = () => {
           legendPosition="right"
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col lg:flex-row gap-4">
         <CustomBarChart
           title="Daily Processing Volume by Category"
           description="Daily distribution of processed document types"
@@ -76,34 +76,34 @@ const Dashboard2 = () => {
           legendPosition="right"
         />
       </div>
-      <div className="flex gap-4">
-        <div className="w-[50%]">
-          <CustomBarChart
-            title="Total Documents Processed per Agent (30 Days)"
-            data={agentData}
-            xKey="agentId"
-            dataKey="completed"
-            color="#249563"
-            tooltipLabel="Completed Documents"
-            xAxisLabel="Agent ID"
-            yAxisLabel="Total Completed Documents"
-          />
-        </div>
-        <div className="w-[50%]">
-          <CustomBarChart
-            title="Average Processing Time by Document Type"
-            data={processingTimeData}
-            xKey="documentType"
-            dataKey="avgTime"
-            color="#1D4ED8"
-            tooltipLabel="Hours"
-            xAxisLabel="Document Type"
-            yAxisLabel="AVG Processing Time (Hours)"
-          />
-        </div>
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* <div className="w-[50%]"> */}
+        <CustomBarChart
+          title="Total Documents Processed per Agent (30 Days)"
+          data={agentData}
+          xKey="agentId"
+          dataKey="completed"
+          color="#249563"
+          tooltipLabel="Completed Documents"
+          xAxisLabel="Agent ID"
+          yAxisLabel="Total Completed Documents"
+        />
+        {/* </div> */}
+        {/* <div className="w-[50%]"> */}
+        <CustomBarChart
+          title="Average Processing Time by Document Type"
+          data={processingTimeData}
+          xKey="documentType"
+          dataKey="avgTime"
+          color="#1D4ED8"
+          tooltipLabel="Hours"
+          xAxisLabel="Document Type"
+          yAxisLabel="AVG Processing Time (Hours)"
+        />
+        {/* </div> */}
       </div>
       <div className="flex gap-4">
-        <div className="w-[50%]">
+        <div className="w-full lg:w-[50%]">
           <CustomAreaChart
             title="SLA Achievements Analysis "
             data={slaComplianceData}

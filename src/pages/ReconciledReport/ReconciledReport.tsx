@@ -4,7 +4,6 @@ import { useReconciledReportLogic } from "./ReconciledReport.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_RECONCILED_FIELDS } from "@/constants/TableData";
-import { BRANDS } from "@/constants/TableData";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const ReconciledReport = () => {
@@ -25,9 +24,7 @@ const ReconciledReport = () => {
     handleEditCancel,
     handleEditSubmit,
     handleFieldChange,
-    handleEditClick,
     handleExport,
-    handleBrandToggle,
     handleSelectAll,
     handleRowSelect,
     totalPages,
@@ -37,7 +34,6 @@ const ReconciledReport = () => {
     paginatedData,
     selectedRows,
     searchTerm,
-    selectedBrands,
     currentPage,
     setCurrentPage,
     rowsPerPage,
@@ -50,7 +46,7 @@ const ReconciledReport = () => {
 
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px]">
         <div className="text-[20px] font-semibold text-[#0A0A0A]">
           Reconciliation Summary Report
         </div>
@@ -120,16 +116,12 @@ const ReconciledReport = () => {
             selectedRows={selectedRows}
             onRowSelect={handleRowSelect}
             onSelectAll={handleSelectAll}
+            exportEnabled
             searchEnabled
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
-            filtersEnabled
-            filterOptions={BRANDS}
-            selectedFilters={selectedBrands}
-            onFilterChange={handleBrandToggle}
-            exportEnabled
             onExport={handleExport}
-            idKey="ReconciledDataId"
+            idKey="reconciledDataId"
             pageInfo={{
               currentPage,
               totalPages,
@@ -137,10 +129,11 @@ const ReconciledReport = () => {
               rowsPerPage,
               onRowsPerPageChange: setRowsPerPage,
             }}
-            editRow={{
-              enabled: true,
-              onEditClick: handleEditClick,
-            }}
+            // May needed later on
+            // editRow={{
+            //   enabled: true,
+            //   onEditClick: handleEditClick,
+            // }}
           />
         </div>
       )}
