@@ -33,4 +33,12 @@ export const API_ENDPOINTS = {
   ========================== */
   CASH_POSTING_QUEUE: `${BASE_URL}/cashPosting/getCashPostingQueue`,
   CASH_POSTING_REPORT: `${BASE_URL}/cashPosting/getCashPostingReport`,
+
+  /* ==========================
+      DASHBOARD DATA
+  ==============================
+  */
+  REVENUE_WIDGETS: `${BASE_URL}/dashboard/revenueWidgets`,
+  WORK_QUEUE_ACTIVITY: `${BASE_URL}/dashboard/workQueueActivityAnalysis`,
+  OPERATIONAL_PERFORMANCE_VIEW: `${BASE_URL}/dashboard/operationalPerformanceView`,
 };

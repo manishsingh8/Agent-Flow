@@ -29,6 +29,17 @@ export interface KpiCardItem {
   iconName?: string;
   trend?: "up" | "down" | "neutral";
 }
+type BackendKpi = {
+  id: string;
+  title: string;
+  value: string | null;
+  subText?: {
+    icon?: string;
+    text?: string;
+  };
+  topRightIcon?: string;
+  trend: "up" | "down";
+};
 
 export const operationalMetrics: OperationalMetrics = {
   transactionPosting: {
@@ -50,36 +61,14 @@ export const operationalMetrics: OperationalMetrics = {
   },
 };
 
-export function buildKpiCards(data: OperationalMetrics): KpiCardItem[] {
-  const { transactionPosting, performance, postingReports } = data;
-
-  return [
-    {
-      title: "Automated Posting Index",
-      value: `${transactionPosting.autoPostRate.toFixed(1)}%`,
-      description: `${transactionPosting.autoPostedCount.toLocaleString()} of ${transactionPosting.totalTransactionsPosted.toLocaleString()} auto-posted`,
-      iconName: "TrendingUp",
-      trend: transactionPosting.autoPostRate >= 90 ? "up" : "down",
-    },
-    {
-      title: "Avg. Processing Time",
-      value: `${performance.avgProcessingTimeMinutes.toFixed(1)} min`,
-      description: `${Math.abs(
-        performance.mtdComparison.percentageChange
-      ).toFixed(1)}% ${
-        performance.mtdComparison.percentageChange < 0 ? "faster" : "slower"
-      } than last month`,
-      iconName: "Clock",
-      trend: performance.mtdComparison.percentageChange < 0 ? "down" : "up",
-    },
-    {
-      title: "Quality Compliance Index",
-      value: `${(100 - postingReports.exceptionRate).toFixed(1)}%`,
-      description: `${postingReports.totalExceptions} exceptions in reports`,
-      iconName: "ShieldCheck",
-      trend: postingReports.exceptionRate < 5 ? "up" : "down",
-    },
-  ];
+export function buildKpiCards(data: BackendKpi[]): KpiCardItem[] {
+  return data?.map((item) => ({
+    title: item.title,
+    value: item.value && item.value !== "null" ? item.value : "--",
+    description: item.subText?.text ?? "",
+    iconName: item.topRightIcon ?? "TrendingUp",
+    trend: item.trend,
+  }));
 }
 
 export interface UserProductivity {
