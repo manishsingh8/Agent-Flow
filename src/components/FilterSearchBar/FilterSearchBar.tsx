@@ -88,7 +88,7 @@ FilterSearchBarProps) {
               type="date"
               value={fromDate}
               onChange={(e) => onFromDateChange?.(e.target.value)}
-              className="h-7 text-xs"
+              className="h-8 text-xs"
             />
 
             <div className="text-xs font-medium">To</div>
@@ -96,7 +96,7 @@ FilterSearchBarProps) {
               type="date"
               value={toDate}
               onChange={(e) => onToDateChange?.(e.target.value)}
-              className="h-7 text-xs"
+              className="h-8 text-xs"
             />
           </div>
         )}

@@ -4,6 +4,8 @@ export const useRCMFlowsLogic = () => {
   const [activeTab, setActiveTab] = useState(
     sessionStorage.getItem("activetab") || "rcm"
   );
+  const [open, setOpen] = useState(false);
+  const [selectedRange, setSelectedRange] = useState("1week");
   useEffect(() => {
     sessionStorage.setItem("activetab", activeTab);
   }, [activeTab]);
@@ -11,5 +13,9 @@ export const useRCMFlowsLogic = () => {
   return {
     activeTab,
     setActiveTab,
+    open,
+    setOpen,
+    selectedRange,
+    setSelectedRange
   };
 };

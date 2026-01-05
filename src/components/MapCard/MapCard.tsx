@@ -67,11 +67,10 @@ const MapCard = ({
   const formattedValue = shouldFormat(value) ? formatCurrency(value) : value;
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-full">
+    <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-full gap-2">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 h-4">
         <h3 className="text-xs font-medium text-gray-500">{headerText}</h3>
-
         <div
           className={`flex items-center gap-1 px-1 py-0 rounded-full border ${colorClass.border} ${colorClass.text}`}
         >

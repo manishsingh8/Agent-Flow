@@ -1,9 +1,9 @@
-import { DataTable } from "@/components/DataTable/DataTable";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
+import Suspense from "./layout/tabs/Suspense";
+import PIP from "./layout/tabs/PIP";
+import Recoupment from "./layout/tabs/Recoupments";
+import OtherAdjustments from "./layout/tabs/OtherAdjustments";
 import { useAdjustmentsLogic } from "./Adjustments.hook";
-import { ICANModal } from "./layout/ICANModal";
-import { AddNoteModal } from "./layout/AddNoteModal";
-import { CreateExceptionModal } from "./layout/CreateExceptionModal";
-import { SourceDocumentModal } from "./layout/SourceDocumentModal";
 
 const Adjustments = () => {
   const {
@@ -14,48 +14,95 @@ const Adjustments = () => {
     setRowsPerPage,
     totalPages,
     paginatedData,
+    TABS,
+    activeTab,
+    setActiveTab,
     activeModal,
     setActiveModal,
   } = useAdjustmentsLogic();
+  // ✅ default
+
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
-      <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
-        <div className="text-[20px] font-semibold text-[#0A0A0A]">
-          Suspense Account
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        {/* Tabs Header */}
+        <div className="flex justify-center">
+          <TabsList className="bg-transparent gap-2 flex justify-center items-center">
+            {TABS.map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="
+                  cursor-pointer rounded-full px-5 py-5
+                  data-[state=active]:bg-[#249563]
+                  data-[state=active]:text-white
+                  data-[state=inactive]:bg-[#E6EEF4]
+                  data-[state=inactive]:text-gray-700
+                "
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-[#737373]">Suspense Account</span>
-        </div>
-      </div>
-      <DataTable
-        data={paginatedData}
-        columns={ledgerColumns}
-        idKey="id"
-        pageInfo={{
-          currentPage,
-          totalPages,
-          onPageChange: setCurrentPage,
-          rowsPerPage,
-          onRowsPerPageChange: setRowsPerPage,
-        }}
-      />
-      <div>
-        {activeModal === "ican" && (
-          <ICANModal onClose={() => setActiveModal(null)} />
-        )}
 
-        {activeModal === "note" && (
-          <AddNoteModal onClose={() => setActiveModal(null)} />
-        )}
+        {/* Tabs Content */}
+        <TabsContent value="SUSPENSE" className="mt-4">
+          <Suspense
+            ledgerColumns={ledgerColumns}
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            setCurrentPage={setCurrentPage}
+            setRowsPerPage={setRowsPerPage}
+            totalPages={totalPages}
+            paginatedData={paginatedData}
+            activeModal={activeModal}
+            setActiveModal={setActiveModal}
+          />
+        </TabsContent>
 
-        {activeModal === "exception" && (
-          <CreateExceptionModal onClose={() => setActiveModal(null)} />
-        )}
+        <TabsContent value="PIP" className="mt-4">
+          <PIP
+            ledgerColumns={ledgerColumns}
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            setCurrentPage={setCurrentPage}
+            setRowsPerPage={setRowsPerPage}
+            totalPages={totalPages}
+            paginatedData={paginatedData}
+            activeModal={activeModal}
+            setActiveModal={setActiveModal}
+          />
+        </TabsContent>
 
-        {activeModal === "source" && (
-          <SourceDocumentModal onClose={() => setActiveModal(null)} />
-        )}
-      </div>
+        <TabsContent value="RECOUPMENT" className="mt-4">
+          <Recoupment
+            ledgerColumns={ledgerColumns}
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            setCurrentPage={setCurrentPage}
+            setRowsPerPage={setRowsPerPage}
+            totalPages={totalPages}
+            paginatedData={paginatedData}
+            activeModal={activeModal}
+            setActiveModal={setActiveModal}
+          />
+        </TabsContent>
+
+        <TabsContent value="OTHER_ADJUSTMENT" className="mt-4">
+          <OtherAdjustments
+            ledgerColumns={ledgerColumns}
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            setCurrentPage={setCurrentPage}
+            setRowsPerPage={setRowsPerPage}
+            totalPages={totalPages}
+            paginatedData={paginatedData}
+            activeModal={activeModal}
+            setActiveModal={setActiveModal}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

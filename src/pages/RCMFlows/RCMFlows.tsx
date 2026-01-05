@@ -3,12 +3,27 @@ import CashPostingAgent from "./sections/CashPostingAgent";
 import IntakeOrchestratorAgent from "./sections/IntakeWorkflowAgent";
 import RCMCentralEngine from "./sections/RCMCentralEngine";
 import ReconciliationAgent from "./sections/ReconciliationAgent";
-import { ChevronDown } from "lucide-react";
-import { TABS } from "@/constants/DashboardData";
+import { TABS, DROPDOWN_OPTIONS } from "@/constants/DashboardData";
 import { useRCMFlowsLogic } from "./RCMFlows.hook";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
+import { Button } from "@/components/ui/Button";
+import { ChevronDown } from "lucide-react";
 
 const RCMFlows = () => {
-  const { activeTab, setActiveTab } = useRCMFlowsLogic();
+  const {
+    activeTab,
+    setActiveTab,
+    open,
+    setOpen,
+    selectedRange,
+    setSelectedRange,
+  } = useRCMFlowsLogic();
+
   return (
     <div
       className="bg-[#cfdde8] p-4 flex justify-center h-[calc(100vh-64px)] overflow-auto"
@@ -36,9 +51,39 @@ const RCMFlows = () => {
               </TabsTrigger>
             ))}
           </TabsList>
-          <div className="flex items-center gap-1 underline decoration-[1.5px] underline-offset-2 decoration-gray-800 cursor-pointer w-[10%] justify-end">
-            <span>1Week</span>
-            <ChevronDown className="w-4 h-4 text-gray-800" />
+          <div className="flex items-center gap-1 decoration-[1.5px]  decoration-gray-800 cursor-pointer w-[10%] justify-end">
+            <DropdownMenu onOpenChange={setOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs w-40 flex justify-between shadow-none focus-visible:ring-0 py-4"
+                >
+                  <span>
+                    {
+                      DROPDOWN_OPTIONS.find((o) => o.value === selectedRange)
+                        ?.label
+                    }
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      open ? "rotate-180" : ""
+                    }`}
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-36">
+                {DROPDOWN_OPTIONS.map((o) => (
+                  <DropdownMenuItem
+                    key={o.value}
+                    onClick={() => setSelectedRange(o.value)}
+                  >
+                    {o.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <TabsContent value="rcm">

@@ -16,8 +16,6 @@ export const MainLayout = () => {
 
   const handleOpenChat = () => setIsChatbotOpen(true);
   const handleCloseChat = () => setIsChatbotOpen(false);
-
-  // FINAL SIDEBAR STATE (Chatbot condition preserved)
   const sidebarState = isChatbotOpen ? false : isSidebarOpen;
 
   return (
@@ -39,14 +37,14 @@ export const MainLayout = () => {
         </button>
       )}
 
-      <SidebarInset>
+      <SidebarInset className="flex flex-col h-screen overflow-hidden">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          {/* Toggler will work now */}
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
         </header>
 
-        <main className="flex flex-1 flex-col gap-4">
+        {/* 👇 Only this area scrolls */}
+        <main className="flex-1 overflow-auto min-w-0">
           <Outlet />
         </main>
       </SidebarInset>

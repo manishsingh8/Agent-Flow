@@ -71,7 +71,7 @@ export default function RemittanceProcessing() {
   };
 
   return (
-    <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
+    <div className="p-4 flex flex-col h-[calc(100vh-64px)] gap-4">
       <div className="w-full border-[1px] border-[#E6ECF0] p-[16px] rounded-[14px] h-[80px]">
         <div className="text-[20px] font-[600] text-[#0A0A0A]">
           Smart Remittance Assistant

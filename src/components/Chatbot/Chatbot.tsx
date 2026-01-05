@@ -26,7 +26,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
   } = useChatbot();
 
   return (
-    <Card className="relative flex w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
+    <Card className="relative flex w-80 min-w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
       {/* Header */}
       <div className="shrink-0 flex items-center justify-between border-b bg-white p-4 h-16">
         <h2 className="font-semibold text-foreground">AI Assistant</h2>
@@ -43,38 +43,38 @@ export function Chatbot({ onClose }: ChatbotProps) {
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* {messages.length === 1 && ( */}
-          <div className="flex flex-col items-center justify-center gap-4">
-            <img src={ChatbotImg} alt="chatbot image" />
-          </div>
+        <div className="flex flex-col items-center justify-center gap-4">
+          <img src={ChatbotImg} alt="chatbot image" />
+        </div>
         {/* )} */}
 
         {/* {messages.length === 1 && ( */}
-          <div className="text-sm">
-            <div className="text-xs text-muted-foreground text-left">
-              You can talk to me, ask questions and perform tasks with text
-              commands.
-            </div>
-            <ul className="list-disc pl-4 text-[#171717] marker:text-[#171717]">
-              <li>
-                <p className="text-xs text-muted-foreground text-left">
-                  I can generate dynamic data analytics dashboards customized to
-                  your needs.
-                </p>
-              </li>
-              <li>
-                <p className="text-xs text-muted-foreground text-left">
-                  I can help you with jobs, queries and any tasks you would like
-                  to create, execute or assign.
-                </p>
-              </li>
-              <li>
-                <p className="text-xs text-muted-foreground text-left">
-                  I can scan and analyze your data and provide you with all the
-                  answers .
-                </p>
-              </li>
-            </ul>
+        <div className="text-sm">
+          <div className="text-xs text-muted-foreground text-left">
+            You can talk to me, ask questions and perform tasks with text
+            commands.
           </div>
+          <ul className="list-disc pl-4 text-[#171717] marker:text-[#171717]">
+            <li>
+              <p className="text-xs text-muted-foreground text-left">
+                I can generate dynamic data analytics dashboards customized to
+                your needs.
+              </p>
+            </li>
+            <li>
+              <p className="text-xs text-muted-foreground text-left">
+                I can help you with jobs, queries and any tasks you would like
+                to create, execute or assign.
+              </p>
+            </li>
+            <li>
+              <p className="text-xs text-muted-foreground text-left">
+                I can scan and analyze your data and provide you with all the
+                answers .
+              </p>
+            </li>
+          </ul>
+        </div>
         {/* )} */}
         {messages.map((message) => (
           <div

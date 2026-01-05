@@ -1,8 +1,12 @@
-import { useState, useMemo, type ReactNode, useEffect } from "react";
-import { type Column } from "@/components/DataTable/DataTable";
+import { useState, useMemo, useEffect } from "react";
 import { type ReconciledTransaction } from "@/constants/TableData";
 import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
 import { API_ENDPOINTS } from "@/config/api";
+import { buildColumns } from "@/utils/buildColumns";
+import {
+  RECONCILED_REPORT_COLUMN_LABELS,
+  RECONCILED_REPORT_HEADER_TEXT,
+} from "@/constants/TableData";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -13,12 +17,6 @@ type VarianceWidgetResponse = {
   totalAmount?: number;
   pendingCount?: number;
   exceptionCount?: number;
-};
-
-const headerTextMap = {
-  "Bank Deposit": "Bank Deposit Amount",
-  Remittance: "Remittance Amount",
-  "Cash Posting": "Posted Amount",
 };
 
 export const useReconciledReportLogic = () => {
@@ -162,7 +160,10 @@ export const useReconciledReportLogic = () => {
 
   const reconciledCardsData = useMemo(() => {
     if (!widgetData?.data) return [];
-    return mapPaymentCardsWithBg(widgetData?.data, headerTextMap);
+    return mapPaymentCardsWithBg(
+      widgetData?.data,
+      RECONCILED_REPORT_HEADER_TEXT
+    );
   }, [widgetData]);
 
   const handleRowSelect = (id: string) => {
@@ -307,25 +308,17 @@ export const useReconciledReportLogic = () => {
       bodyClassName: "text-blue-600",
     },
   };
-  const columns: Column<ReconciledTransaction>[] = tableData?.length
-    ? (Object.keys(tableData[0]) as Array<keyof ReconciledTransaction>)
-        .filter((key) => key !== "id")
-        .map((key) => {
-          const rule = columnRules[String(key)] || {};
-          return {
-            key,
-            label: String(key)
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase()),
-            render: (val: unknown): ReactNode => {
-              if (typeof val === "number") return `$${val.toFixed(2)}`;
-              return String(val);
-            },
-            bodyClassName: rule.bodyClassName || "",
-            conditionalClassName: rule.conditionalClassName || undefined,
-          };
-        })
-    : [];
+
+  const columns = useMemo(
+    () =>
+      buildColumns<ReconciledTransaction>({
+        tableData,
+        labelMap: RECONCILED_REPORT_COLUMN_LABELS,
+        excludeKeys: ["id", "reconciledDataId"],
+        amountFields: ["bankDeposit", "remittance", "emrAmount", "glAmount"],
+      }),
+    [tableData]
+  );
 
   return {
     toggle,

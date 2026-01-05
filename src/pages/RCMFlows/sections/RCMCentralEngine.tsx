@@ -2,9 +2,9 @@ import MapCard from "@/components/MapCard/MapCard";
 import { RCM_CENTRAL_ENGINE_DATA } from "@/constants/DashboardData";
 import WorkflowPage from "./Workflow/WorkFlow";
 import { type Node, type Edge, MarkerType } from "reactflow";
+import { getStatusMeta } from "@/utils/getStatusMeta";
 
 const initialNodes: Node[] = [
-  // ---------------- Group 1 ----------------
   {
     id: "group-integration",
     type: "group",
@@ -37,8 +37,6 @@ const initialNodes: Node[] = [
     extent: "parent",
     data: { label: "Config", icon: "config" },
   },
-
-  // ---------------- Group 2 ----------------
   {
     id: "group-intake",
     type: "group",
@@ -78,8 +76,6 @@ const initialNodes: Node[] = [
     extent: "parent",
     data: { label: "Cloud Storage", icon: "amazon" },
   },
-
-  // ---------------- Center Agents ----------------
   {
     id: "rcm-maestro",
     type: "agent",
@@ -88,7 +84,7 @@ const initialNodes: Node[] = [
       label: "RCM Central Engine",
       showAddButton: true,
       showLogo: true,
-      isSecondLeftHandle: "true",
+      isSecondLeftHandle: true,
       route: "/dashboard/rcm-dashboard",
       handles: [
         { position: "Left", type: "target", id: "left" },
@@ -527,17 +523,20 @@ const RCMCentralEngine = ({ setActiveTab }: any) => {
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mt-3">
-        {RCM_CENTRAL_ENGINE_DATA.map((item, index) => (
-          <MapCard
-            key={index}
-            headerText={item.headerText}
-            percentage={item.percentage}
-            value={item.value}
-            colorClass={item.colorClass}
-            image={item.image} // ✅ added
-            status={item.status}
-          />
-        ))}
+        {RCM_CENTRAL_ENGINE_DATA.map((item, index) => {
+          const { colorClass, image } = getStatusMeta(item.status);
+          return (
+            <MapCard
+              key={index}
+              headerText={item.headerText}
+              percentage={item.percentage}
+              value={item.value}
+              status={item.status}
+              image={image}
+              colorClass={colorClass}
+            />
+          );
+        })}
       </div>
       <div
         className="flex justify-center items-center gap-2 p-0 mt-4 mb-4 bg-[#E6EEF4] rounded-3xl"
