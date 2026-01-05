@@ -1,6 +1,5 @@
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 function Label({
   className,
@@ -18,7 +17,7 @@ function Label({
     >
       {children}
     </label>
-  )
+  );
 }
 
-export { Label }
+export { Label };

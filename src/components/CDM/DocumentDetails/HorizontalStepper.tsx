@@ -1,7 +1,13 @@
-
-import { Check, ClipboardList, FileText, UserCheck, FilePlus2, CheckCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import React from 'react';
+import {
+  Check,
+  ClipboardList,
+  FileText,
+  UserCheck,
+  FilePlus2,
+  CheckCircle,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 interface Step {
   label: string;
@@ -14,18 +20,18 @@ interface HorizontalStepperProps {
 }
 
 export const HorizontalStepper = (props: HorizontalStepperProps) => {
-  const { steps } = props
+  const { steps } = props;
   const getIcon = (label: string) => {
     switch (label) {
-      case 'Classification':
+      case "Classification":
         return FileText;
-      case 'Data Extraction':
+      case "Data Extraction":
         return ClipboardList;
-      case 'iCAN Data Verification':
+      case "iCAN Data Verification":
         return CheckCircle;
-      case 'User Validation':
+      case "User Validation":
         return UserCheck;
-      case 'Process':
+      case "Process":
         return FilePlus2; // Or CopyPlus
       default:
         return FileText;
@@ -52,18 +58,24 @@ export const HorizontalStepper = (props: HorizontalStepperProps) => {
                       : "border-gray-300 text-gray-400"
                   )}
                 >
-                   <Icon className={cn("w-5 h-5", isCompleted ? "text-blue-600" : "text-gray-400")} strokeWidth={isCompleted ? 2 : 1.5} />
+                  <Icon
+                    className={cn(
+                      "w-5 h-5",
+                      isCompleted ? "text-blue-600" : "text-gray-400"
+                    )}
+                    strokeWidth={isCompleted ? 2 : 1.5}
+                  />
                 </div>
-                
+
                 <div className="flex items-center gap-1 absolute top-11 w-max">
-                   {isCompleted && <Check className="w-3 h-3 text-blue-600" />}
-                   <span
-                      className={cn(
+                  {isCompleted && <Check className="w-3 h-3 text-blue-600" />}
+                  <span
+                    className={cn(
                       "text-xs font-medium whitespace-nowrap",
                       isCompleted ? "text-blue-600" : "text-gray-500"
-                      )}
+                    )}
                   >
-                      {step.label}
+                    {step.label}
                   </span>
                 </div>
               </div>
@@ -71,12 +83,15 @@ export const HorizontalStepper = (props: HorizontalStepperProps) => {
               {/* Connector Line - Only render if not the last item */}
               {!isLast && (
                 <div className="flex-1 flex items-center px-2 mt-5">
-                    <div className={cn(
-                        "w-full border-t border-dashed",
-                        isCompleted && steps[index + 1].isCompleted
-                            ? "border-blue-600"
-                            : "border-gray-300"
-                    )} style={{ height: '1px' }} />
+                  <div
+                    className={cn(
+                      "w-full border-t border-dashed",
+                      isCompleted && steps[index + 1].isCompleted
+                        ? "border-blue-600"
+                        : "border-gray-300"
+                    )}
+                    style={{ height: "1px" }}
+                  />
                 </div>
               )}
             </React.Fragment>
