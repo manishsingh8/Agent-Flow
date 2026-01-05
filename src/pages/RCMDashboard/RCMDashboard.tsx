@@ -26,6 +26,7 @@ const RCMDashboard = () => {
     dateFilter,
     dateFilterText,
     workQueueData,
+    operationalViewData,
   } = useRCMDashboard();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -105,7 +106,7 @@ const RCMDashboard = () => {
         )}
         {/* <WorkQueueVolumeChart /> */}
       </div>
-      <OperationalView />
+      <OperationalView data={operationalViewData} />
     </div>
   );
 };

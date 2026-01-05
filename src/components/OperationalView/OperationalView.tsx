@@ -72,9 +72,9 @@ function ByDayTable({ items }: { items: ByDay[] }) {
                 {formatNumber(d.count)}
               </TableCell>
               <TableCell className="text-right">
-                {formatCurrency(d.amount)}
+                {d.amount}
               </TableCell>
-              <TableCell className="text-right">{d.percentage}%</TableCell>
+              <TableCell className="text-right">{d.percentage}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -83,8 +83,11 @@ function ByDayTable({ items }: { items: ByDay[] }) {
   );
 }
 
-export default function OperationalView() {
-  const data = rcmDashboardData;
+export default function OperationalView({ data: operationalData }: { data?: any }) {
+  // log the operational performance view data passed from the dashboard hook
+  console.log("OperationalView received data:", operationalData);
+
+  const data = operationalData ?? rcmDashboardData;
 
   return (
     <Card className="w-full">
@@ -117,30 +120,28 @@ export default function OperationalView() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <KpiCard
                   title="Bank Statements Processed Month-To-Date"
-                  value={`${data.bankStatements.mtd.statementsProcessed}`}
-                  description={`${formatNumber(
-                    data.bankStatements.mtd.transactionsProcessed
-                  )} transactions`}
+                  value={`${data.bankStatements.statementsProcessed}`}
+                  description={`${
+                    data.bankStatements.transactionsProcessed
+                  } transactions`}
                   iconName="FileText"
                   trend="up"
                 />
                 <KpiCard
                   title="Remittance Completed Month-To-Date"
-                  value={`${data.remits.mtd.totalRemitsProcessed}`}
-                  description={`${formatCurrency(
-                    data.remits.mtd.totalAmount
-                  )} total`}
+                  value={`${data.remits?.totalRemitsProcessed ?? "N/A"}`}
+                  description={`${
+                    data.remits.totalAmount ?? "N/A"
+                  } total`}
                   iconName="Activity"
                   trend="up"
                 />
                 <KpiCard
                   title=" Posted Transactions Month-To-Date"
-                  value={`${formatNumber(
-                    data.transactionPosting.mtd.totalTransactionsPosted
-                  )}`}
-                  description={`${formatCurrency(
-                    data.transactionPosting.mtd.totalAmount
-                  )} total`}
+                  value={`${
+                    data.transactionPosting.totalTransactionsPosted ?? "N/A"
+                  }`}
+                  description={`${ data.transactionPosting.totalTransactionsPosted ?? "N/A"} total`}
                   iconName="DollarSign"
                   trend="up"
                 />
@@ -149,34 +150,36 @@ export default function OperationalView() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <KpiCard
                   title="Automated Posting Index"
-                  value={`${data.transactionPosting.autoPostRate.toFixed(1)}%`}
+                  value={`${data.transactionPosting.autoPostRate?? "0"}%`}
                   description={`${formatNumber(
-                    data.transactionPosting.autoPostedCount
+                    data.transactionPosting.autoPostedCount  ?? 0
                   )} auto / ${formatNumber(
-                    data.transactionPosting.manualPostedCount
+                    data.transactionPosting.manualPostedCount ?? 0
                   )} manual`}
                   iconName="Zap"
-                  trend={
-                    data.transactionPosting.autoPostRate >= 80 ? "up" : "down"
+                  // trend={
+                  //   data.transactionPosting.autoPostRate >= 80 ? "up" : "down"
+                  // }
+                  // after key added caluculate the up and down trend
+                   trend={
+                     "up" 
                   }
                 />
                 <KpiCard
                   title="Posting Report Count (MTD)"
                   value={`${formatNumber(
-                    data.postingReports.mtd.totalReportsGenerated
+                    data.postingReports?.totalReportsGenerated ?? 0
                   )}`}
                   description={`${formatNumber(
-                    data.postingReports.mtd.totalTransactionsInReports
+                    data.postingReports?.totalTransactionsInReports ?? 0
                   )} transactions`}
                   iconName="FileText"
-                  trend={data.postingReports.exceptionRate < 5 ? "up" : "down"}
+                  trend={(data.postingReports?.exceptionRate ?? 0) < 5 ? "up" : "down"}
                 />
                 <KpiCard
                   title="Average Processing Duration"
-                  value={`${data.performance.avgProcessingTimeMinutes.toFixed(
-                    1
-                  )} min`}
-                  description={`${data.performance.totalProcessingTimeHours}h total (MTD)`}
+                  value={`${data.performance?.avgProcessingTimeMinutes}`}
+                  description={`${data.performance?.totalProcessingTimeHours} total (MTD)`}
                   iconName="Clock"
                   trend="down"
                 />
@@ -306,28 +309,24 @@ export default function OperationalView() {
               <div className="grid gap-4 md:grid-cols-3">
                 <KpiCard
                   title="Statements (MTD)"
-                  value={`${data.bankStatements.mtd.statementsProcessed}`}
-                  description={`${data.bankStatements.avgTransactionsPerStatement} avg txns/statement`}
+                  value={`${data.bankStatements.statementsProcessed}`}
+                  description={data.bankStatements.statementsProcessedSubText}
                   iconName="FileText"
                 />
                 <KpiCard
                   title="Transactions (MTD)"
                   value={`${formatNumber(
-                    data.bankStatements.mtd.transactionsProcessed
+                    data.bankStatements.transactionsProcessed
                   )}`}
-                  description={`${formatCurrency(
-                    data.bankStatements.mtd.totalAmount
-                  )}`}
+                  description={
+                    data.bankStatements.transactionsProcessedSubText
+                  }
                   iconName="TrendingUp"
                 />
                 <KpiCard
                   title="YTD / MTD"
-                  value={`${data.bankStatements.ytd.statementsProcessed} / ${data.bankStatements.mtd.statementsProcessed}`}
-                  description={`${formatNumber(
-                    data.bankStatements.ytd.transactionsProcessed
-                  )} / ${formatNumber(
-                    data.bankStatements.mtd.transactionsProcessed
-                  )}`}
+                  value={`${data.bankStatements.ytdAndMtdValues}`}
+                  description={`${data.bankStatements.ytdAndMtdValuesSubText}`}
                   iconName="Activity"
                 />
               </div>
@@ -453,7 +452,7 @@ export default function OperationalView() {
                               {formatNumber(t.count)}
                             </TableCell>
                             <TableCell className="text-right">
-                              {formatCurrency(t.totalAmount)}
+                              {formatCurrency(t?.totalAmount ?? 0)}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -558,10 +557,10 @@ export default function OperationalView() {
                             {emr.emrName}
                           </TableCell>
                           <TableCell className="text-right">
-                            {formatNumber(emr.transactionsPosted)}
+                            {formatNumber(emr?.transactionsPosted ?? 0)}
                           </TableCell>
                           <TableCell className="text-right">
-                            {formatCurrency(emr.totalAmount)}
+                            {formatCurrency(emr.amount)}
                           </TableCell>
                           <TableCell className="text-right">
                             {emr.percentage}%
@@ -717,7 +716,7 @@ export default function OperationalView() {
                 <CardContent className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
-                      data={data.postingReports.trend}
+                      data={data.performance.trend}
                       margin={{ top: 8, right: 12, left: -12, bottom: 8 }}
                     >
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -759,14 +758,10 @@ export default function OperationalView() {
                         Exception Rate (Today)
                       </div>
                       <div className="text-3xl font-bold">
-                        {data.postingReports.exceptionRate}%
+                        {data.performance?.exceptionRate?.exceptionRatePercent}%
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        {formatNumber(data.postingReports.totalExceptions)}{" "}
-                        exceptions out of{" "}
-                        {formatNumber(
-                          data.postingReports.totalTransactionsInReports
-                        )}{" "}
+                        {data.performance?.exceptionRate?.exceptionRateSubText}{" "}
                         transactions
                       </div>
                     </div>
@@ -776,9 +771,7 @@ export default function OperationalView() {
                           MTD Exceptions
                         </div>
                         <div className="text-2xl font-semibold">
-                          {formatNumber(
-                            data.postingReports.mtd.totalExceptions
-                          )}
+                          {data.performance?.exceptionRate?.mtdExceptions}
                         </div>
                       </div>
                       <div>
@@ -786,9 +779,7 @@ export default function OperationalView() {
                           YTD Exceptions
                         </div>
                         <div className="text-2xl font-semibold">
-                          {formatNumber(
-                            data.postingReports.ytd.totalExceptions
-                          )}
+                          {data?.performance?.exceptionRate?.ytdExceptions}
                         </div>
                       </div>
                     </div>
