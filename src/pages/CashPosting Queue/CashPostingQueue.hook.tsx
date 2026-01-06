@@ -3,6 +3,7 @@ import { type Cash_Posting_Transaction } from "@/constants/TableData";
 import { API_ENDPOINTS } from "@/config/api";
 import { buildColumns } from "@/utils/buildColumns";
 import { CASH_POSTING_COLUMN_LABELS } from "@/constants/TableData";
+import { validateDateRange } from "@/utils/dateRangeValidator";
 
 export const useCashPostingQueueLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
@@ -17,6 +18,7 @@ export const useCashPostingQueueLogic = () => {
   const [tableLoading, setTableLoading] = useState(false);
 
   const fetchTable = async () => {
+    if (!validateDateRange({ from, to })) return;
     try {
       setTableLoading(true);
       const payload = {

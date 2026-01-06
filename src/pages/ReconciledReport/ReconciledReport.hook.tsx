@@ -7,6 +7,7 @@ import {
   RECONCILED_REPORT_COLUMN_LABELS,
   RECONCILED_REPORT_HEADER_TEXT,
 } from "@/constants/TableData";
+import { validateDateRange } from "@/utils/dateRangeValidator";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -45,6 +46,7 @@ export const useReconciledReportLogic = () => {
   const [tableData, setTableData] = useState<ReconciledTransaction[]>([]);
 
   const fetchPayers = async () => {
+    if (!validateDateRange({ from, to })) return;
     try {
       const res = await fetch(API_ENDPOINTS.PAYERS, {
         method: "GET",
@@ -73,6 +75,7 @@ export const useReconciledReportLogic = () => {
   };
 
   const fetchVarianceWidget = async () => {
+    if (!validateDateRange({ from, to })) return;
     const payload = {
       fromDate: from,
       toDate: to,

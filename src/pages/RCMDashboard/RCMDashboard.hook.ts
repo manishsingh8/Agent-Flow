@@ -4,7 +4,8 @@ import { API_ENDPOINTS } from "@/config/api";
 import { postRequest } from "@/utils/postRequest";
 import { type BackendKpi } from "@/constants/RCMDashboardData";
 import { type BarSegmentConfig } from "@/components/CustomBarChart/CustomBarChart";
-
+import { showToast } from "@/lib/toast";
+import { validateDateRange } from "@/utils/dateRangeValidator";
 interface WorkQueueBarChartData {
   title?: string;
   description?: string;
@@ -50,7 +51,6 @@ export default function useRCMDashboard() {
     if (value === "lastMonth") {
       const start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
       const end = new Date(today.getFullYear(), today.getMonth(), 0);
-
       setFrom(format(start));
       setTo(format(end));
       setDateFilterText("Showing records from last month.");
@@ -70,6 +70,8 @@ export default function useRCMDashboard() {
   }, [dateFilter, from, to]);
 
   const fetchRcmDashboardData = async () => {
+    if (!validateDateRange({ from, to })) return;
+
     const payload = {
       fromDate: from,
       toDate: to,
@@ -89,8 +91,26 @@ export default function useRCMDashboard() {
       }
 
       if (workQueueRes.status === "fulfilled") {
-        console.log(workQueueRes.value);
-        setWorkQueueData(workQueueRes?.value?.data);
+        const data = workQueueRes.value?.data;
+
+        if (!data || data.length === 0) {
+          setWorkQueueData(null);
+          showToast({
+            message: "No work queue activity found",
+            severity: "info",
+            id: "workqueue-empty",
+          });
+        } else {
+          setWorkQueueData(data);
+        }
+      } else {
+        setWorkQueueData(null);
+
+        showToast({
+          message: "Failed to fetch work queue activity",
+          severity: "error",
+          id: "workqueue-error",
+        });
       }
 
       if (operationalRes.status === "fulfilled") {

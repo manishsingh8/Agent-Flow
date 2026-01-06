@@ -3,8 +3,11 @@ import { type Transaction } from "@/constants/TableData";
 import { mapPaymentCardsWithBg } from "@/utils/mapObjectToPaymentCard";
 import { API_ENDPOINTS } from "@/config/api";
 import { buildColumns } from "@/utils/buildColumns";
-import { NON_RECONCILED_COLUMN_LABELS } from "@/constants/TableData";
-import { NON_RECONCILED_HEADER_TEXT } from "@/constants/TableData";
+import {
+  NON_RECONCILED_COLUMN_LABELS,
+  NON_RECONCILED_HEADER_TEXT,
+} from "@/constants/TableData";
+import { validateDateRange } from "@/utils/dateRangeValidator";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -44,6 +47,7 @@ export const usePaymentLogic = () => {
   const [tableData, setTableData] = useState<Transaction[]>([]);
 
   const fetchPayers = async () => {
+    if (!validateDateRange({ from, to })) return;
     try {
       const res = await fetch(API_ENDPOINTS.PAYERS, {
         method: "GET",
@@ -68,6 +72,7 @@ export const usePaymentLogic = () => {
   };
 
   const fetchStatuses = async () => {
+    if (!validateDateRange({ from, to })) return;
     try {
       const res = await fetch(API_ENDPOINTS.TRANSACTION_STATUSES, {
         method: "GET",
@@ -103,6 +108,7 @@ export const usePaymentLogic = () => {
   };
 
   const fetchVarianceWidget = async () => {
+    if (!validateDateRange({ from, to })) return;
     const payload = {
       fromDate: from,
       toDate: to,
