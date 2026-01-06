@@ -77,30 +77,30 @@ const Dashboard2 = () => {
         />
       </div>
       <div className="flex flex-col lg:flex-row gap-4">
-        {/* <div className="w-[50%]"> */}
-        <CustomBarChart
-          title="Total Documents Processed per Agent (30 Days)"
-          data={agentData}
-          xKey="agentId"
-          dataKey="completed"
-          color="#249563"
-          tooltipLabel="Completed Documents"
-          xAxisLabel="Agent ID"
-          yAxisLabel="Total Completed Documents"
-        />
-        {/* </div> */}
-        {/* <div className="w-[50%]"> */}
-        <CustomBarChart
-          title="Average Processing Time by Document Type"
-          data={processingTimeData}
-          xKey="documentType"
-          dataKey="avgTime"
-          color="#1D4ED8"
-          tooltipLabel="Hours"
-          xAxisLabel="Document Type"
-          yAxisLabel="AVG Processing Time (Hours)"
-        />
-        {/* </div> */}
+        <div className="w-[50%]">
+          <CustomBarChart
+            title="Total Documents Processed per Agent (30 Days)"
+            data={agentData}
+            xKey="agentId"
+            dataKey="completed"
+            color="#249563"
+            tooltipLabel="Completed Documents"
+            xAxisLabel="Agent ID"
+            yAxisLabel="Total Completed Documents"
+          />
+        </div>
+        <div className="w-[50%]">
+          <CustomBarChart
+            title="Average Processing Time by Document Type"
+            data={processingTimeData}
+            xKey="documentType"
+            dataKey="avgTime"
+            color="#1D4ED8"
+            tooltipLabel="Hours"
+            xAxisLabel="Document Type"
+            yAxisLabel="AVG Processing Time (Hours)"
+          />
+        </div>
       </div>
       <div className="flex gap-4">
         <div className="w-full lg:w-[50%]">

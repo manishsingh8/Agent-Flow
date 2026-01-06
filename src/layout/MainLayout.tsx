@@ -30,7 +30,7 @@ export const MainLayout = () => {
           onClick={handleOpenChat}
           className="fixed bottom-6 right-6 bg-[#249563] text-white w-14 h-14 
                      rounded-full flex items-center justify-center shadow-lg 
-                     hover:opacity-90 transition z-[9999]"
+                     hover:opacity-90 transition z-9999"
           title="Open Chatbot"
         >
           <MessageCircle className="w-7 h-7" />

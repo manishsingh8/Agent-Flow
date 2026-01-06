@@ -6,6 +6,7 @@ import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { CustomDropdown } from "@/components";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
+import { Toaster } from "@/components/Toaster/Toaster";
 
 export type DateFilterValue = "today" | "lastMonth" | "custom";
 const DATE_OPTIONS = [
@@ -106,6 +107,7 @@ const RCMDashboard = () => {
         {/* <WorkQueueVolumeChart /> */}
       </div>
       <OperationalView />
+      <Toaster />
     </div>
   );
 };
