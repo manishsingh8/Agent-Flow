@@ -26,7 +26,7 @@ import {
 } from "recharts";
 import { rcmDashboardData } from "@/constants/RCMDashboardData";
 
-type ByDay = { day: string; count: number; amount: number; percentage: number };
+type ByDay = { day: string; count: number; amount: string; percentage: string };
 
 const COLORS = {
   high: "#166F4C",
@@ -87,7 +87,8 @@ export default function OperationalView({ data: operationalData }: { data?: any 
   // log the operational performance view data passed from the dashboard hook
   console.log("OperationalView received data:", operationalData);
 
-  const data = operationalData ?? rcmDashboardData;
+  // const data = operationalData ?? rcmDashboardData;
+  const {data}  = rcmDashboardData;
 
   return (
     <Card className="w-full">
@@ -120,18 +121,18 @@ export default function OperationalView({ data: operationalData }: { data?: any 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <KpiCard
                   title="Bank Statements Processed Month-To-Date"
-                  value={`${data.bankStatements.statementsProcessed}`}
+                  value={`${data.executiveSummary.bankStatementsProcessed}`}
                   description={`${
-                    data.bankStatements.transactionsProcessed
-                  } transactions`}
+                    data.executiveSummary.bankStatementsSubtext
+                  }`}
                   iconName="FileText"
                   trend="up"
                 />
                 <KpiCard
                   title="Remittance Completed Month-To-Date"
-                  value={`${data.remits?.totalRemitsProcessed ?? "N/A"}`}
+                  value={`${data.executiveSummary?.remittanceFilesCompleted ?? "N/A"}`}
                   description={`${
-                    data.remits.totalAmount ?? "N/A"
+                    data.executiveSummary?.remittanceSubtext ?? "N/A"
                   } total`}
                   iconName="Activity"
                   trend="up"
@@ -139,9 +140,9 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                 <KpiCard
                   title=" Posted Transactions Month-To-Date"
                   value={`${
-                    data.transactionPosting.totalTransactionsPosted ?? "N/A"
+                    data.executiveSummary?.postedTransactionsCount ?? "N/A"
                   }`}
-                  description={`${ data.transactionPosting.totalTransactionsPosted ?? "N/A"} total`}
+                  description={`${ data.executiveSummary.postedTransactionsSubtext ?? "N/A"}`}
                   iconName="DollarSign"
                   trend="up"
                 />
@@ -150,36 +151,29 @@ export default function OperationalView({ data: operationalData }: { data?: any 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <KpiCard
                   title="Automated Posting Index"
-                  value={`${data.transactionPosting.autoPostRate?? "0"}%`}
-                  description={`${formatNumber(
-                    data.transactionPosting.autoPostedCount  ?? 0
-                  )} auto / ${formatNumber(
-                    data.transactionPosting.manualPostedCount ?? 0
-                  )} manual`}
+                  value={`${data.executiveSummary.automatedPostingIndex?? "N/A"}`}
+                  description={`${data.executiveSummary.automatedPostingSubtext ?? ""}`}
                   iconName="Zap"
-                  // trend={
-                  //   data.transactionPosting.autoPostRate >= 80 ? "up" : "down"
-                  // }
-                  // after key added caluculate the up and down trend
-                   trend={
-                     "up" 
+                  trend={
+                    parseInt(data.executiveSummary.automatedPostingIndex, 10) >= 80 ? "up" : "down"
                   }
+                  // after key added caluculate the up and down trend
                 />
                 <KpiCard
                   title="Posting Report Count (MTD)"
-                  value={`${formatNumber(
-                    data.postingReports?.totalReportsGenerated ?? 0
-                  )}`}
-                  description={`${formatNumber(
-                    data.postingReports?.totalTransactionsInReports ?? 0
-                  )} transactions`}
+                  value={`${
+                    data.executiveSummary.postingReportCount
+                  }`}
+                  description={`${
+                    data.executiveSummary.postingReportSubtext 
+                  }`}
                   iconName="FileText"
-                  trend={(data.postingReports?.exceptionRate ?? 0) < 5 ? "up" : "down"}
+                  trend={(Number(data.performance?.exceptionRate?.exceptionRatePercent)) < 5 ? "up" : "down"}
                 />
                 <KpiCard
                   title="Average Processing Duration"
-                  value={`${data.performance?.avgProcessingTimeMinutes}`}
-                  description={`${data.performance?.totalProcessingTimeHours} total (MTD)`}
+                  value={`${data.executiveSummary?.avgProcessingDuration}`}
+                  description={`${data.executiveSummary?.avgDurationSubtext}`}
                   iconName="Clock"
                   trend="down"
                 />
@@ -195,11 +189,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                 <CardContent className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
-                      data={mergeTrendsForOverview(
-                        data.bankStatements.trend,
-                        data.remits.trend,
-                        data.transactionPosting.trend
-                      )}
+                      data={data.executiveSummary.executiveSummaryChart}
                       margin={{ top: 8, right: 12, left: -12, bottom: 8 }}
                     >
                       <defs>
@@ -261,7 +251,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
 
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis
-                        dataKey="date"
+                        dataKey="activityDate"
                         tickFormatter={(v) => formatShortDate(v)}
                       />
                       <YAxis />
@@ -274,7 +264,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                       <Legend />
                       <Area
                         type="monotone"
-                        dataKey="BankStatements"
+                        dataKey="statementCount"
                         name="Statements"
                         stroke={COLORS.high}
                         fill="url(#gradBank)"
@@ -282,7 +272,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                       />
                       <Area
                         type="monotone"
-                        dataKey="Remits"
+                        dataKey="remitCount"
                         name="Remits"
                         stroke={COLORS.medium}
                         fill="url(#gradRemit)"
@@ -290,7 +280,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                       />
                       <Area
                         type="monotone"
-                        dataKey="Posting"
+                        dataKey="postingCount"
                         name="Posting"
                         stroke={COLORS.low}
                         fill="url(#gradPosting)"
@@ -404,8 +394,8 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                           cx="50%"
                           cy="50%"
                           outerRadius={90}
-                          label={(entry: any) =>
-                            `${entry.type}: ${entry.percentage}%`
+                          label={(entry: {type:string; count:number; percentage:string}) =>
+                            `${entry.type}: ${entry.percentage}`
                           }
                         >
                           {data.remits.byType.map((_e, i) => (
@@ -443,7 +433,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {data.remits.byType.map((t) => (
+                        {data.remits.details.map((t) => (
                           <TableRow key={t.type}>
                             <TableCell className="font-medium">
                               {t.type}
@@ -452,7 +442,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                               {formatNumber(t.count)}
                             </TableCell>
                             <TableCell className="text-right">
-                              {formatCurrency(t?.totalAmount ?? 0)}
+                              {t.amount}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -557,7 +547,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                             {emr.emrName}
                           </TableCell>
                           <TableCell className="text-right">
-                            {formatNumber(emr?.transactionsPosted ?? 0)}
+                            {formatNumber(emr.count ?? 0)}
                           </TableCell>
                           <TableCell className="text-right">
                             {formatCurrency(emr.amount)}
@@ -630,7 +620,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Avg Processing Time
                       </div>
                       <div className="text-3xl font-bold">
-                        {data.performance.avgProcessingTimeMinutes} min
+                        {data.performance.avgProcessingTimeMinutes}
                       </div>
                     </div>
                     <div>
@@ -646,7 +636,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Peak Processing Hour
                       </div>
                       <div className="text-2xl font-semibold">
-                        {data.performance.peakProcessingHour}:00
+                        {data.performance.peakProcessingHour}
                       </div>
                     </div>
                     <div>
@@ -654,7 +644,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Total Processing Time (MTD)
                       </div>
                       <div className="text-2xl font-semibold">
-                        {data.performance.totalProcessingTimeHours} hours
+                        {data.performance.totalProcessingTimeHours}
                       </div>
                     </div>
                   </CardContent>
@@ -673,9 +663,9 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Current Month
                       </div>
                       <div className="text-3xl font-bold">
-                        {formatNumber(
+                        {
                           data.performance.mtdComparison.currentMonth
-                        )}
+                        }
                       </div>
                     </div>
                     <div>
@@ -683,7 +673,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Last Month
                       </div>
                       <div className="text-2xl font-semibold">
-                        {formatNumber(data.performance.mtdComparison.lastMonth)}
+                        {data.performance.mtdComparison.lastMonth}
                       </div>
                     </div>
                     <div>
@@ -692,15 +682,15 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                       </div>
                       <div
                         className={`text-2xl font-semibold ${
-                          data.performance.mtdComparison.percentageChange > 0
+                          parseInt(data.performance.mtdComparison.percentageChange, 10) > 0
                             ? "text-green-600"
                             : "text-red-600"
                         }`}
                       >
-                        {data.performance.mtdComparison.percentageChange > 0
+                        {parseInt(data.performance.mtdComparison.percentageChange, 10) > 0
                           ? "+"
                           : ""}
-                        {data.performance.mtdComparison.percentageChange}%
+                        {data.performance.mtdComparison.percentageChange}
                       </div>
                     </div>
                   </CardContent>
@@ -758,10 +748,10 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Exception Rate (Today)
                       </div>
                       <div className="text-3xl font-bold">
-                        {data.performance?.exceptionRate?.exceptionRatePercent}%
+                        {data.performance.exceptionRate.exceptionRatePercent}%
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        {data.performance?.exceptionRate?.exceptionRateSubText}{" "}
+                        {data.performance.exceptionRate.exceptionRateSubText}{" "}
                         transactions
                       </div>
                     </div>
@@ -771,7 +761,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                           MTD Exceptions
                         </div>
                         <div className="text-2xl font-semibold">
-                          {data.performance?.exceptionRate?.mtdExceptions}
+                          {data.performance.exceptionRate.mtdExceptions}
                         </div>
                       </div>
                       <div>
@@ -779,7 +769,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                           YTD Exceptions
                         </div>
                         <div className="text-2xl font-semibold">
-                          {data?.performance?.exceptionRate?.ytdExceptions}
+                          {data.performance.exceptionRate.ytdExceptions}
                         </div>
                       </div>
                     </div>
@@ -822,7 +812,7 @@ function mergeTrendsForOverview(
   postingTrend.forEach((t) => dates.add(t.date));
   const dateArr = Array.from(dates).sort();
 
-  return dateArr.map((date) => {
+  const dataArr = dateArr.map((date) => {
     const bs = bsTrend.find((t) => t.date === date)?.count ?? 0;
     const rm = remitsTrend.find((t) => t.date === date)?.count ?? 0;
     const tp = postingTrend.find((t) => t.date === date)?.count ?? 0;
