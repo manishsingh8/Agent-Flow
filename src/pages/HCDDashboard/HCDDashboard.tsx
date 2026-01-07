@@ -3,17 +3,17 @@ import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import CustomDoughnutChart from "@/components/CustomDoughnutChart/CustomDoughnutChart";
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
 import { AlertTriangle } from "lucide-react";
-import CustomAreaChart from "@/components/CustomAreaChart/CustomAreaChart";
+// import CustomAreaChart from "@/components/CustomAreaChart/CustomAreaChart";
 import {
   AVG_TIME_CHART_DATA,
   TOP_EXCEPTION_CHART_DATA,
   DAILY_DOCS_CHART_DATA,
   DOCUMENT_STATUS_CHART_DATA,
   DAILY_DOCS_SEGMENTS_DATA,
-  agentData,
-  processingTimeData,
-  slaComplianceData,
-  slaSegments,
+  // agentData,
+  // processingTimeData,
+  // slaComplianceData,
+  // slaSegments,
 } from "@/constants/ChartsData";
 
 const Dashboard2 = () => {
@@ -76,7 +76,7 @@ const Dashboard2 = () => {
           legendPosition="right"
         />
       </div>
-      <div className="flex flex-col lg:flex-row gap-4">
+      {/* <div className="flex flex-col lg:flex-row gap-4">
         <div className="w-[50%]">
           <CustomBarChart
             title="Total Documents Processed per Agent (30 Days)"
@@ -114,7 +114,7 @@ const Dashboard2 = () => {
           />
         </div>
         <div></div>
-      </div>
+      </div> */}
     </div>
   );
 };
