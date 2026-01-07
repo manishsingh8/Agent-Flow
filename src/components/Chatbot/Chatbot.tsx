@@ -4,7 +4,33 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { TypingIndicator } from "./TypingIndicator";
 import { useChatbot } from "./chatbot.hook";
+import { DataTable } from "@/components/DataTable/DataTable";
 import ChatbotImg from "../../assets/images/chatbot.png";
+
+function DynamicTableFromRows({ rows }: { rows: any[] }) {
+  if (!rows || rows.length === 0) return <div>No rows</div>;
+
+  const keys = Object.keys(rows[0]);
+  const columns = keys.map((k) => ({
+    key: k as any,
+    label: k.replace(/_/g, " "),
+    isAmount: /amount|bai_amount|totalAmount/i.test(k),
+  }));
+
+  const idKey = keys.includes("transaction_no")
+    ? "transaction_no"
+    : keys[0] || "";
+
+  return (
+    <DataTable
+      data={rows}
+      columns={columns}
+      selectable={false}
+      idKey={idKey}
+      searchEnabled={true}
+    />
+  );
+}
 
 interface ChatbotProps {
   onClose: () => void;
@@ -103,11 +129,20 @@ export function Chatbot({ onClose }: ChatbotProps) {
                     : " bg-gray-100 text-foreground justify-start"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">
-                  {typingMessageId === message.id
-                    ? typingText
-                    : message.content}
-                </p>
+                {typingMessageId === message.id ? (
+                  <p className="text-sm whitespace-pre-wrap">{typingText}</p>
+                ) : typeof message.content === "object" && (message.content?.rows || message.content?.text || message.content?.reply) ? (
+                  <div className="w-full max-h-96 overflow-auto space-y-2">
+                    {/* render textual reply if present */}
+                    {(message.content.text || message.content.reply) && (
+                      <p className="text-sm whitespace-pre-wrap">{message.content.text ?? message.content.reply}</p>
+                    )}
+                    {/* render table if rows present */}
+                    {message.content.rows && <DynamicTableFromRows rows={message.content.rows} />}
+                  </div>
+                ) : (
+                  <p className="text-sm whitespace-pre-wrap">{String(message.content)}</p>
+                )}
               </div>
             </div>
           </div>
