@@ -7,28 +7,26 @@ import { useChatbot } from "./chatbot.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import ChatbotImg from "../../assets/images/chatbot.png";
 
-function DynamicTableFromRows({ rows }: { rows: any[] }) {
-  if (!rows || rows.length === 0) return <div>No rows</div>;
+function DynamicTableFromRows({ rows }: { rows: Record<string, unknown>[] }) {
+  if (!rows || rows.length === 0) return null;
 
   const keys = Object.keys(rows[0]);
-  const columns = keys.map((k) => ({
-    key: k as any,
-    label: k.replace(/_/g, " "),
-    isAmount: /amount|bai_amount|totalAmount/i.test(k),
+  const columns = keys.map((key) => ({
+    key: key as keyof (typeof rows)[0],
+    label: key,
   }));
 
-  const idKey = keys.includes("transaction_no")
-    ? "transaction_no"
-    : keys[0] || "";
+  const idKey = keys[0] || "";
 
   return (
-    <DataTable
-      data={rows}
-      columns={columns}
-      selectable={false}
-      idKey={idKey}
-      searchEnabled={true}
-    />
+    <div className="w-full min-w-0 max-w-full overflow-x-auto">
+      <DataTable
+        data={rows}
+        columns={columns}
+        idKey={idKey}
+        searchEnabled={false}
+      />
+    </div>
   );
 }
 
@@ -52,7 +50,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
   } = useChatbot();
 
   return (
-    <Card className="fixed inset-0 z-10000 flex flex-col w-screen h-screen border-0 rounded-none p-0 bg-white">
+    <Card className="fixed inset-0 z-10000 flex w-full min-w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
       {/* Header */}
       <div className="shrink-0 flex items-center justify-between border-b bg-white p-4 h-16">
         <h2 className="font-semibold text-foreground">AI Assistant</h2>
@@ -118,27 +116,33 @@ export function Chatbot({ onClose }: ChatbotProps) {
               )}
             </div>
             <div
-              className={`flex items-end justify-end w-[50%] ${
+              className={`flex items-end justify-end w-[50%] min-w-0 ${
                 message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
               <div
-                className={`rounded-lg px-4 py-2 ${
+                className={`rounded-lg px-4 py-2 min-w-0 ${
                   message.role === "user"
                     ? "w-auto bg-primary text-primary-foreground justify-end"
-                    : " bg-gray-100 text-foreground justify-start"
+                    : "max-w-full bg-gray-100 text-foreground justify-start"
                 }`}
               >
                 {typingMessageId === message.id ? (
                   <p className="text-sm whitespace-pre-wrap">{typingText}</p>
                 ) : typeof message.content === "object" && (message.content?.rows || message.content?.text || message.content?.reply) ? (
-                  <div className="w-full max-h-96 overflow-auto space-y-2">
-                    {/* render textual reply if present */}
+                  <div className="space-y-4 max-w-full overflow-hidden">
+                    {/* Reply section */}
                     {(message.content.text || message.content.reply) && (
                       <p className="text-sm whitespace-pre-wrap">{message.content.text ?? message.content.reply}</p>
                     )}
-                    {/* render table if rows present */}
-                    {message.content.rows && <DynamicTableFromRows rows={message.content.rows} />}
+                    
+                    {/* Table section with separator */}
+                    {message.content.rows && (
+                      <>
+                        {message.content.rows.length > 0 && <hr className="border-t border-gray-300 my-4" />}
+                        <DynamicTableFromRows rows={message.content.rows} />
+                      </>
+                    )}
                   </div>
                 ) : (
                   <p className="text-sm whitespace-pre-wrap">{String(message.content)}</p>

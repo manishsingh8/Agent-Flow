@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { MOCK_CHAT_RESPONSE, USE_MOCK_DATA } from "@/constants/ChatbotData";
+import { CHATBOT_API_ENDPOINTS } from "@/config/api";
 
 declare global {
   interface Window {
@@ -48,7 +50,7 @@ export function useChatbot() {
         setIsTyping(true);
         const payload = { user_id: 2, message: "Hello" };
         const response = await fetch(
-          "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/webhook",
+          CHATBOT_API_ENDPOINTS.WEBHOOK,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -132,11 +134,16 @@ export function useChatbot() {
     };
   }, []);
 
-  const callChatAPIInternal = async (messageToSend: string) => {
+  const callChatAPIInternal = async (_messageToSend: string) => {
+    // Use mock data for testing
+    if (USE_MOCK_DATA) {
+      return MOCK_CHAT_RESPONSE;
+    }
+
     try {
-      const payload = { user_id: 2, message: messageToSend };
+      const payload = { user_id: 2, message: _messageToSend };
       const response = await fetch(
-        "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/chat",
+        CHATBOT_API_ENDPOINTS.CHAT,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -42,3 +42,8 @@ export const API_ENDPOINTS = {
   WORK_QUEUE_ACTIVITY: `${BASE_URL}/dashboard/workQueueActivityAnalysis`,
   OPERATIONAL_PERFORMANCE_VIEW: `${BASE_URL}/dashboard/operationalPerformanceView`,
 };
+
+export const CHATBOT_API_ENDPOINTS = {
+  WEBHOOK: "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/webhook",
+  CHAT: "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/chat",
+} as const;

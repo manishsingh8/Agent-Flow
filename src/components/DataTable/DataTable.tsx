@@ -156,7 +156,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
   };
 
   return (
-    <div className="space-y-6 relative">
+    <div className="space-y-6 relative min-w-0 max-w-full overflow-hidden">
       {/* TOP BAR */}
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
@@ -211,7 +211,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
       )}
 
       {/* TABLE */}
-      <div className="rounded-lg border border-border overflow-hidden">
+      <div className="w-full rounded-lg border border-border overflow-x-auto">
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow className="border-b border-border hover:bg-gray-50">
