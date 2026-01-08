@@ -18,32 +18,9 @@ import {
   Cell,
 } from "recharts";
 import {  type RcmDashboardResponse } from "@/constants/RCMDashboardData";
+import { COLORS, piePalette, formatCurrency, formatNumber, formatShortDate } from "@/lib/utils";
 
 type ByDay = { day: string; count: number; amount: string; percentage: string };
-
-const COLORS = {
-  high: "#166F4C",
-  medium: "#249563",
-  low: "#6CCBA2",
-  alt1: "#1f7a4a",
-  alt2: "#2fa06a",
-};
-
-const piePalette = [
-  COLORS.high,
-  COLORS.medium,
-  COLORS.low,
-  COLORS.alt1,
-  COLORS.alt2,
-];
-const formatCurrency = (v: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(v);
-
-const formatNumber = (v: number) => new Intl.NumberFormat("en-US").format(v);
 
 function ByDayTable({ items }: { items: ByDay[] }) {
   const columns: Column<ByDay>[] = [
@@ -751,18 +728,5 @@ export default function OperationalView({ data: operationalData }: { data?: RcmD
       </CardContent>
     </Card>
   );
-}
-
-/* -------------------------
-   Helper utilities below
-   ------------------------- */
-
-function formatShortDate(iso: string) {
-  try {
-    const d = new Date(iso);
-    return `${d.getMonth() + 1}/${d.getDate()}`;
-  } catch {
-    return iso;
-  }
 }
 
