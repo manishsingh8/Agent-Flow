@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/DataTable/DataTable";
 import KpiCard from "@/components/KpiCard/KpiCard";
 import {
   ResponsiveContainer,
@@ -53,32 +54,25 @@ const formatCurrency = (v: number) =>
 const formatNumber = (v: number) => new Intl.NumberFormat("en-US").format(v);
 
 function ByDayTable({ items }: { items: ByDay[] }) {
+  const columns: Column<ByDay>[] = [
+    { key: "day", label: "Day" },
+    {
+      key: "count",
+      label: "Count",
+      render: (v: unknown) => formatNumber(Number(v ?? 0)),
+    },
+    { key: "amount", label: "Amount",  },
+    { key: "percentage", label: "% of total", },
+  ];
+
   return (
     <div className="overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Day</TableHead>
-            <TableHead className="text-right">Count</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-            <TableHead className="text-right">% of total</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.map((d) => (
-            <TableRow key={d.day}>
-              <TableCell className="font-medium">{d.day}</TableCell>
-              <TableCell className="text-right">
-                {formatNumber(d.count)}
-              </TableCell>
-              <TableCell className="text-right">
-                {d.amount}
-              </TableCell>
-              <TableCell className="text-right">{d.percentage}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <DataTable<ByDay>
+        data={items}
+        columns={columns}
+        idKey="day"
+        searchEnabled={false}
+      />
     </div>
   );
 }
