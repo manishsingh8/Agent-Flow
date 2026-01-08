@@ -98,7 +98,6 @@ const Payment = () => {
     setSearchTerm,
   } = usePaymentLogic();
 
-
   const handleAssign = (userId: string, selectedRowIds: string[]) => {
     console.log(`Assigned user ${userId} to tasks:`, selectedRowIds);
   };
@@ -130,7 +129,7 @@ const Payment = () => {
         </div>
       ) : (
         <div className="flex flex-wrap gap-2">
-          {paymentCardsData.map((card) => (
+          {paymentCardsData.map((card: any) => (
             <PaymentCard
               key={card.id}
               headerText={card.headerText}

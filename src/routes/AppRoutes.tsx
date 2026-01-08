@@ -5,7 +5,7 @@ import { PublicRoute } from "./PublicRoute";
 import { MainLayout } from "@/layout/MainLayout";
 import LoginPage from "@/pages/Login/Login";
 import RCMFlows from "@/pages/RCMFlows/RCMFlows";
-import Payment from "@/pages/VarianceQueue/NonReconciledQueue";
+import Payment from "@/pages/NonReconciledQueue/NonReconciledQueue";
 import CashPostingPage from "@/pages/CashPosting Report/CashPostingPage";
 import CashPostingQueue from "@/pages/CashPosting Queue/CashPostingQueue";
 import ReconciledReport from "@/pages/ReconciledReport/ReconciledReport";
