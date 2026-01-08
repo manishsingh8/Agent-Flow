@@ -29,6 +29,8 @@ export default function useRCMDashboard() {
   );
   const [workQueueData, setWorkQueueData] =
     useState<WorkQueueBarChartData | null>(null);
+  const [operationalViewData, setOperationalViewData] =
+    useState<any | null>(null);
 
   const kpiCards = useMemo(() => {
     return buildKpiCards(operationalMetrics);
@@ -114,7 +116,7 @@ export default function useRCMDashboard() {
       }
 
       if (operationalRes.status === "fulfilled") {
-        console.log(operationalRes.value);
+        setOperationalViewData(operationalRes.value);
       }
     } catch (error) {
       console.error("Widget fetch error", error);
@@ -141,5 +143,6 @@ export default function useRCMDashboard() {
     customDate,
     dateFilterText,
     workQueueData,
+    operationalViewData,
   };
 }

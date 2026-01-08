@@ -52,7 +52,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
   } = useChatbot();
 
   return (
-    <Card className="relative flex w-full min-w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
+    <Card className="fixed inset-0 z-10000 flex flex-col w-screen h-screen border-0 rounded-none p-0 bg-white">
       {/* Header */}
       <div className="shrink-0 flex items-center justify-between border-b bg-white p-4 h-16">
         <h2 className="font-semibold text-foreground">AI Assistant</h2>
