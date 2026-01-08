@@ -1,3 +1,60 @@
+export const getFileLevelFields = (data: any) => {
+  return [
+    { label: "Payer Name", value: data?.payerName ?? "N/A" },
+    { label: "Deposit Date", value: data?.depositDate ?? "N/A" },
+    { label: "Check Number", value: data?.checkNumber ?? "N/A" },
+    { label: "Number of Pages", value: data?.numberOfPages ?? "N/A" },
+    { label: "Patient Count", value: data?.patientCount ?? "N/A" },
+    { label: "Document Age", value: data?.documentAge ?? "N/A" },
+    { label: "Confidence Score", value: data?.confidenceScore ?? "N/A" },
+    { label: "Letter Name", value: data?.letterName ?? "N/A" },
+  ];
+}
+
+export default getFileLevelFields;
+
+export const mockFileLevelData = {
+  id: "1",
+  fileName: "EOB_835_123456789.pdf",
+  uploadDate: "2023-10-27",
+  status: "Processed",
+  payerName: "-",
+  depositDate: "12-12-2024",
+  checkNumber: "451_2",
+  checkAmount: "$1,250.00",
+  numberOfPages: "3 Pages",
+  patientCount: "Only N/A Patient",
+  documentAge: "291 days ago",
+  confidenceScore: "100.00",
+  letterName: "N/A"
+};
+
+export const mockPatientLevelData = [
+  {
+    id: "p1",
+    patientName: "John Doe",
+    claimNumber: "CLM001",
+    serviceDate: "2023-10-01",
+    billedAmount: "$500.00",
+    paidAmount: "$350.00",
+  },
+  {
+    id: "p2",
+    patientName: "Jane Smith",
+    claimNumber: "CLM002",
+    serviceDate: "2023-10-05",
+    billedAmount: "$750.00",
+    paidAmount: "$900.00",
+  },
+];
+
+export const documentSteps = [
+  { label: 'Classification', isCompleted: true },
+  { label: 'Data Extraction', isCompleted: true },
+  { label: 'iCAN Data Verification', isCompleted: true },
+  { label: 'User Validation', isCompleted: false },
+  { label: 'Process', isCompleted: false },
+];
 
 export const MOCK_FILTER_DATA = {
   classification: [
@@ -121,4 +178,17 @@ export const COOKED_CDM_DATA = [
     tags: ["Urgent"],
     status: "Ready to Process"
   }
+];
+
+export const mockSplitData = [
+  { letterId: 101, classificationType: "EOB", pageRange: "1-2" },
+  { letterId: 102, classificationType: "Medical Records", pageRange: "3-5" },
+];
+
+export const mockClassifications = [
+  { id: 1, classificationType: "Acknowledgement" },
+  { id: 2, classificationType: "EOB" },
+  { id: 3, classificationType: "Medical Records" },
+  { id: 4, classificationType: "Appeal" },
+  { id: 5, classificationType: "Denial" },
 ];

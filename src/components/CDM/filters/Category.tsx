@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { MoreHorizontal, Search, X, Check } from "lucide-react";
-import { MOCK_FILTER_DATA } from '@/pages/CDM/data/MockData';
+import { MOCK_FILTER_DATA } from '@/constants/CDMData';
 
 interface CategoryProps {
   selectedCategories: { id: number; payerName: string }[];
