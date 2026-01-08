@@ -1,13 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { DataTable, type Column } from "@/components/DataTable/DataTable";
 import KpiCard from "@/components/KpiCard/KpiCard";
 import {
@@ -418,30 +410,20 @@ export default function OperationalView({ data: operationalData }: { data?: RcmD
                     </p>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Type</TableHead>
-                          <TableHead className="text-right">Count</TableHead>
-                          <TableHead className="text-right">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {data.remits.details.map((t) => (
-                          <TableRow key={t.type}>
-                            <TableCell className="font-medium">
-                              {t.type}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              {formatNumber(t.count)}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              {t.amount}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <DataTable<{ type: string; count: number; amount: string }>
+                      data={data.remits.details}
+                      columns={[
+                        { key: "type", label: "Type" },
+                        {
+                          key: "count",
+                          label: "Count",
+                          render: (v: unknown) => formatNumber(Number(v ?? 0)),
+                        },
+                        { key: "amount", label: "Amount" },
+                      ]}
+                      idKey="type"
+                      searchEnabled={false}
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -523,36 +505,29 @@ export default function OperationalView({ data: operationalData }: { data?: RcmD
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>EMR System</TableHead>
-                        <TableHead className="text-right">
-                          Transactions
-                        </TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                        <TableHead className="text-right">% of total</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {data.transactionPosting.byEmr.map((emr) => (
-                        <TableRow key={emr.emrName}>
-                          <TableCell className="font-medium">
-                            {emr.emrName}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {formatNumber(emr.count ?? 0)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {formatCurrency(emr.amount)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {emr.percentage}%
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                  <DataTable<{ emrName: string; count: number; amount: number; percentage: number }>
+                    data={data.transactionPosting.byEmr}
+                    columns={[
+                      { key: "emrName", label: "EMR System" },
+                      {
+                        key: "count",
+                        label: "Transactions",
+                        render: (v: unknown) => formatNumber(Number(v ?? 0)),
+                      },
+                      {
+                        key: "amount",
+                        label: "Amount",
+                        render: (v: unknown) => formatCurrency(Number(v ?? 0)),
+                      },
+                      {
+                        key: "percentage",
+                        label: "% of total",
+                        render: (v: unknown) => `${v}%`,
+                      },
+                    ]}
+                    idKey="emrName"
+                    searchEnabled={false}
+                  />
                 </CardContent>
               </Card>
 
