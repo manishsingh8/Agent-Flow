@@ -7,8 +7,8 @@ export type LedgerCategory =
 export interface LedgerRow {
   id: string;
   effectiveDate: string;
-  ledgerCategory: LedgerCategory; // 👈 controls tab
-  type: string; // Adjustment / Payment / Refund etc (display only)
+  ledgerCategory: LedgerCategory;
+  type: string;
   description: string;
   source: string;
   amount: number;
