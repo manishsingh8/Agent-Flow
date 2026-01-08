@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { format, subDays } from "date-fns";
 import { setPayload, setLetterListTableData } from "@/redux/slices/cdmSlice";
 import type { RootState } from "@/redux/store";
-import { COOKED_CDM_DATA } from "./data/MockData";
+import { COOKED_CDM_DATA } from "@/constants/CDMData";
 
 export interface CDMDocument {
   id: string;
