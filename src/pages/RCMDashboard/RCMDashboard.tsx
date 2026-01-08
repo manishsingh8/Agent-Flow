@@ -2,10 +2,10 @@ import KpiCard from "@/components/KpiCard/KpiCard";
 import { AreaChart } from "lucide-react";
 import useRCMDashboard from "./RCMDashboard.hook";
 import OperationalView from "@/components/OperationalView/OperationalView";
+import Loader from "@/components/Loader/Loader";
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { CustomDropdown } from "@/components";
-import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 export type DateFilterValue = "today" | "lastMonth" | "custom";
 const DATE_OPTIONS = [
@@ -43,12 +43,7 @@ const RCMDashboard = () => {
         </div>
       </div>
       {loading ? (
-        <div className="flex items-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
-          <span className="flex items-center gap-2 text-gray-500 h-10">
-            Loading...
-            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
-          </span>
-        </div>
+        <Loader />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {kpiCards?.map((c) => (
@@ -88,12 +83,7 @@ const RCMDashboard = () => {
       </div>
       <div className="grid grid-cols-1 gap-4">
         {loading ? (
-          <div className="flex items-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
-            <span className="flex items-center gap-2 text-gray-500 h-10">
-              Loading...
-              <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
-            </span>
-          </div>
+          <Loader />
         ) : (
           <CustomBarChart
             title={workQueueData?.title}
@@ -106,7 +96,7 @@ const RCMDashboard = () => {
         )}
         {/* <WorkQueueVolumeChart /> */}
       </div>
-      <OperationalView data={operationalViewData} />
+      {loading ? <Loader /> : <OperationalView data={operationalViewData} />}
     </div>
   );
 };

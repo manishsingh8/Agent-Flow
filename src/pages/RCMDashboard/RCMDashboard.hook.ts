@@ -96,8 +96,7 @@ export default function useRCMDashboard() {
       }
 
       if (operationalRes.status === "fulfilled") {
-        console.log("operational performance view:", operationalRes.value);
-        setOperationalViewData(operationalRes.value?.data ?? operationalRes.value);
+        setOperationalViewData(operationalRes.value);
       }
     } catch (error) {
       console.error("Widget fetch error", error);

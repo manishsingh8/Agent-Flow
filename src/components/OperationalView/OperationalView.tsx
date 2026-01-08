@@ -24,7 +24,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { rcmDashboardData } from "@/constants/RCMDashboardData";
+import {  type RcmDashboardResponse } from "@/constants/RCMDashboardData";
 
 type ByDay = { day: string; count: number; amount: string; percentage: string };
 
@@ -83,12 +83,12 @@ function ByDayTable({ items }: { items: ByDay[] }) {
   );
 }
 
-export default function OperationalView({ data: operationalData }: { data?: any }) {
-  // log the operational performance view data passed from the dashboard hook
-  console.log("OperationalView received data:", operationalData);
+export default function OperationalView({ data: operationalData }: { data?: RcmDashboardResponse }) {
 
-  // const data = operationalData ?? rcmDashboardData;
-  const {data}  = rcmDashboardData;
+   if (!operationalData) {
+     return null;
+   }
+   const { data } = operationalData;
 
   return (
     <Card className="w-full">
@@ -748,7 +748,7 @@ export default function OperationalView({ data: operationalData }: { data?: any 
                         Exception Rate (Today)
                       </div>
                       <div className="text-3xl font-bold">
-                        {data.performance.exceptionRate.exceptionRatePercent}%
+                        {data.performance.exceptionRate.exceptionRatePercent}
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
                         {data.performance.exceptionRate.exceptionRateSubText}{" "}
@@ -797,25 +797,3 @@ function formatShortDate(iso: string) {
   }
 }
 
-/**
- * Merge three trend arrays for the overview combined chart.
- * returns [{ date, BankStatements, Remits, Posting }]
- */
-function mergeTrendsForOverview(
-  bsTrend: { date: string; count: number }[],
-  remitsTrend: { date: string; count: number }[],
-  postingTrend: { date: string; count: number }[]
-) {
-  const dates = new Set<string>();
-  bsTrend.forEach((t) => dates.add(t.date));
-  remitsTrend.forEach((t) => dates.add(t.date));
-  postingTrend.forEach((t) => dates.add(t.date));
-  const dateArr = Array.from(dates).sort();
-
-  const dataArr = dateArr.map((date) => {
-    const bs = bsTrend.find((t) => t.date === date)?.count ?? 0;
-    const rm = remitsTrend.find((t) => t.date === date)?.count ?? 0;
-    const tp = postingTrend.find((t) => t.date === date)?.count ?? 0;
-    return { date, BankStatements: bs, Remits: rm, Posting: tp };
-  });
-}
