@@ -104,6 +104,10 @@ export const SIDEBAR_DATA = {
           title: "EOB Parser",
           url: "/eob-parser",
         },
+        {
+          title: "BAI Parser",
+          url: "/bai-parser",
+        },
       ],
     },
     // {

@@ -57,12 +57,10 @@ export const useLoginLogic = () => {
       if (!response.ok) {
         throw new Error(result?.message || "Login failed");
       }
-
-      sessionStorage.setItem("authToken", result.data.token);
+      sessionStorage.setItem("authToken", result.data.token.access_token);
       sessionStorage.setItem("tokenType", result.data.tokenType);
       sessionStorage.setItem("username", result.data.username);
       sessionStorage.setItem("fullName", result.data.fullName);
-
       navigate("/rcm-flows", { replace: true });
 
       return;

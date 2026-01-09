@@ -20,7 +20,7 @@ type VarianceWidgetResponse = {
   exceptionCount?: number;
 };
 
-export const usePaymentLogic = () => {
+export const usePaymentLogic: any = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
   const [to, setTo] = useState("2025-10-30");
@@ -56,15 +56,12 @@ export const usePaymentLogic = () => {
         },
       });
       if (!res.ok) throw new Error("Payer API failed");
-
       const response = await res.json();
-
       const mapped =
         response?.data?.map((payer: any) => ({
           value: payer.id,
           label: payer.name,
         })) ?? [];
-
       setPayerOptions([{ value: "all", label: "All Payers" }, ...mapped]);
     } catch (error) {
       console.error("Payer API error", error);
@@ -86,7 +83,7 @@ export const usePaymentLogic = () => {
 
       const mapped =
         response?.data?.map((status: any) => ({
-          value: status.id, // ✅ already ID
+          value: status.id,
           label: status.name,
         })) ?? [];
 
@@ -203,8 +200,6 @@ export const usePaymentLogic = () => {
     else newSelected.add(id);
     setSelectedRows(newSelected);
   };
-
-  console.log(paginatedData, "paginatedData");
 
   const handleSelectAll = () => {
     if (

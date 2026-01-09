@@ -1,7 +1,7 @@
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
 // import { paymentCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
-import { usePaymentLogic } from "./VarianceQueue.hook";
+import { usePaymentLogic } from "./NonReconciledQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
@@ -129,7 +129,7 @@ const Payment = () => {
         </div>
       ) : (
         <div className="flex flex-wrap gap-2">
-          {paymentCardsData.map((card) => (
+          {paymentCardsData.map((card: any) => (
             <PaymentCard
               key={card.id}
               headerText={card.headerText}

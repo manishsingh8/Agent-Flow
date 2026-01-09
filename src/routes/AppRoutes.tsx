@@ -5,7 +5,7 @@ import { PublicRoute } from "./PublicRoute";
 import { MainLayout } from "@/layout/MainLayout";
 import LoginPage from "@/pages/Login/Login";
 import RCMFlows from "@/pages/RCMFlows/RCMFlows";
-import Payment from "@/pages/VarianceQueue/VarianceQueue";
+import Payment from "@/pages/NonReconciledQueue/NonReconciledQueue";
 import CashPostingPage from "@/pages/CashPosting Report/CashPostingPage";
 import CashPostingQueue from "@/pages/CashPosting Queue/CashPostingQueue";
 import ReconciledReport from "@/pages/ReconciledReport/ReconciledReport";
@@ -16,6 +16,7 @@ import EOBParser from "@/pages/EOB Parser/EOBParser";
 import Adjustments from "@/pages/Adjustments/Adjustments";
 import CDMDashboard from "@/pages/CDM/CDMDashboard";
 import DocumentPage from "@/pages/CDM/documentsDetails/DocumentPage";
+import BAIParser from "@/pages/BAIParser/BAIParser";
 
 export const AppRoutes = () => {
   return (
@@ -40,6 +41,7 @@ export const AppRoutes = () => {
           <Route path="/dashboard/hcd-dashboard" element={<Dashboard2 />} />
           <Route path="/era-parser" element={<RemittanceProcessing />} />
           <Route path="/eob-parser" element={<EOBParser />} />
+          <Route path="/bai-parser" element={<BAIParser />} />
           <Route path="/adjustments" element={<Adjustments />} />
           <Route path="/cdm" element={<CDMDashboard />} />
           <Route path="/cdm/letterDetails/:id" element={<DocumentPage />} />
