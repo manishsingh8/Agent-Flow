@@ -6,16 +6,28 @@ export const useBAIParserLogic = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleProcess = async () => {
+  const handleProcess = async (file: File) => {
+    // Extra safety check
+    if (!file.name.endsWith(".xlsx")) {
+      showToast({
+        message: "Only .xlsx files are allowed",
+        severity: "error",
+        id: "file-format-error",
+      });
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const res = await fetch(API_ENDPOINTS.REVENUE_WIDGETS, {
+      const formData = new FormData();
+      formData.append("files", file);
+      const res = await fetch(API_ENDPOINTS.BAI_PARSER, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-        },
+        body: formData,
       });
-      console.log(res, "result");
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
       setIsSuccess(true);
       showToast({
         message: "File uploaded successfully",

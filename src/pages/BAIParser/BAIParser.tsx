@@ -1,11 +1,25 @@
+import { useRef } from "react";
 import { FileUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
-
 import { useBAIParserLogic } from "./BAIParser.hook";
 
 const BAIParser = () => {
   const { isSuccess, handleProcess, isLoading } = useBAIParserLogic();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleProcess(file);
+      e.target.value = ""; // allow re-upload of same file
+    }
+  };
+
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px]">
@@ -18,6 +32,7 @@ const BAIParser = () => {
           </span>
         </div>
       </div>
+
       <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 transition-colors relative">
         {!isSuccess ? (
           <>
@@ -25,14 +40,22 @@ const BAIParser = () => {
               <FileUp className="w-8 h-8 text-blue-500" />
             </div>
 
-            <p className="text-gray-900 font-medium mb-1">Upload PDF file</p>
-
+            <p className="text-gray-900 font-medium mb-1">Upload XLSX file</p>
             <p className="text-gray-500 text-xs text-center mb-4">
-              Click below to start processing
+              Click below to select an Excel file
             </p>
 
+            {/* Hidden file input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
             <Button
-              onClick={handleProcess}
+              onClick={handleButtonClick}
               disabled={isLoading}
               className="w-full max-w-[200px]"
             >
@@ -42,7 +65,7 @@ const BAIParser = () => {
                   Processing...
                 </span>
               ) : (
-                "Process File"
+                "Upload & Process"
               )}
             </Button>
           </>

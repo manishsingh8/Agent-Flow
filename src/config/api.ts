@@ -41,4 +41,5 @@ export const API_ENDPOINTS = {
   REVENUE_WIDGETS: `${BASE_URL}/dashboard/revenueWidgets`,
   WORK_QUEUE_ACTIVITY: `${BASE_URL}/dashboard/workQueueActivityAnalysis`,
   OPERATIONAL_PERFORMANCE_VIEW: `${BASE_URL}/dashboard/operationalPerformanceView`,
+  BAI_PARSER:'https://api.revpulseapp.com/bai-processor/api/files/upload',
 };
