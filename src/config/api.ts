@@ -43,3 +43,8 @@ export const API_ENDPOINTS = {
   OPERATIONAL_PERFORMANCE_VIEW: `${BASE_URL}/dashboard/operationalPerformanceView`,
   BAI_PARSER:'https://api.revpulseapp.com/bai-processor/api/files/upload',
 };
+
+export const CHATBOT_API_ENDPOINTS = {
+  WEBHOOK: "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/webhook",
+  CHAT: "https://djio73p3fh.execute-api.us-east-1.amazonaws.com/dev/chat",
+} as const;
