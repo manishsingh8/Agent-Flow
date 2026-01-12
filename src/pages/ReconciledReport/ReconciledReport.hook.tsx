@@ -81,7 +81,7 @@ export const useReconciledReportLogic = () => {
       toDate: to,
       payerIds: getPayerIds(),
       statusIds: null,
-      pageNo: 1,
+      pageNo: currentPage,
       pageSize: rowsPerPage,
     };
 
@@ -133,7 +133,7 @@ export const useReconciledReportLogic = () => {
   }, []);
   useEffect(() => {
     fetchVarianceWidget();
-  }, [from, to, selectedPayer, selectedStatus, rowsPerPage]);
+  }, [from, to, selectedPayer, selectedStatus, rowsPerPage, currentPage]);
 
   const filteredData = useMemo(() => {
     return tableData.filter((t) => {
@@ -153,13 +153,7 @@ export const useReconciledReportLogic = () => {
   }, [tableData, selectedBrands, searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-
-  // Slice for pagination
-  const paginatedData = filteredData.slice(
-    startIndex,
-    startIndex + rowsPerPage
-  );
+  const paginatedData = filteredData;
 
   const reconciledCardsData = useMemo(() => {
     if (!widgetData?.data) return [];

@@ -118,7 +118,6 @@ export const usePaymentLogic: any = () => {
     try {
       setWidgetLoading(true);
       setTableLoading(true);
-
       const [widgetRes, tableRes] = await Promise.allSettled([
         fetch(API_ENDPOINTS.VARIANCE_WIDGET, {
           method: "POST",
@@ -163,7 +162,7 @@ export const usePaymentLogic: any = () => {
   }, []);
   useEffect(() => {
     fetchVarianceWidget();
-  }, [from, to, selectedPayer, selectedStatus, rowsPerPage]);
+  }, [from, to, selectedPayer, selectedStatus, rowsPerPage, currentPage]);
 
   const paymentCardsData = useMemo(() => {
     if (!widgetData?.data) return [];
@@ -188,11 +187,7 @@ export const usePaymentLogic: any = () => {
   }, [tableData, selectedBrands, searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedData = filteredData.slice(
-    startIndex,
-    startIndex + rowsPerPage
-  );
+  const paginatedData = filteredData;
 
   const handleRowSelect = (id: string) => {
     const newSelected = new Set(selectedRows);

@@ -1,5 +1,4 @@
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
-// import { paymentCardsData } from "@/constants/PaymentsCardData";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { usePaymentLogic } from "./NonReconciledQueue.hook";
 import { DataTable } from "@/components/DataTable/DataTable";

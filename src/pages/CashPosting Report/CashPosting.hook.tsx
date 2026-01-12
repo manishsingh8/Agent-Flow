@@ -22,7 +22,7 @@ export const useCashPostingLogic = () => {
       const payload = {
         fromDate: from,
         toDate: to,
-        pageNo: 1,
+        pageNo: currentPage,
         pageSize: rowsPerPage,
       };
       const response = await fetch(API_ENDPOINTS.CASH_POSTING_REPORT, {
@@ -45,7 +45,7 @@ export const useCashPostingLogic = () => {
 
   useEffect(() => {
     fetchTable();
-  }, [from, to, rowsPerPage]);
+  }, [from, to, rowsPerPage, currentPage]);
   const filteredData = useMemo(() => {
     if (!searchTerm) return tableData;
     return tableData.filter((t) =>
@@ -53,12 +53,9 @@ export const useCashPostingLogic = () => {
     );
   }, [tableData, searchTerm]);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
+  // const startIndex = (currentPage - 1) * rowsPerPage;
 
-  const paginatedData = filteredData.slice(
-    startIndex,
-    startIndex + rowsPerPage
-  );
+  const paginatedData = filteredData;
   const handleRowSelect = (id: string) => {
     setSelectedRows((prev) => {
       const updated = new Set(prev);

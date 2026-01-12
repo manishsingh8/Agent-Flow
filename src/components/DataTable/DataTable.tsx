@@ -334,8 +334,8 @@ export function DataTable<T extends object = Record<string, unknown>>({
             <div className="text-xs text-muted-foreground">
               Page {pageInfo.currentPage} of {pageInfo.totalPages || 1}
             </div>
-            <div className="flex gap-2">
-              <Button
+            <div className="flex gap-2 mr-8">
+              {/* <Button
                 variant="outline"
                 size="sm"
                 onClick={() => pageInfo.onPageChange(1)}
@@ -343,7 +343,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 data-testid="button-first-page"
               >
                 {"<<"}
-              </Button>
+              </Button> */}
               <Button
                 variant="outline"
                 size="sm"
@@ -358,17 +358,13 @@ export function DataTable<T extends object = Record<string, unknown>>({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  pageInfo.onPageChange(
-                    Math.min(pageInfo.totalPages, pageInfo.currentPage + 1)
-                  )
-                }
-                disabled={pageInfo.currentPage === pageInfo.totalPages}
-                data-testid="button-next-page"
+                onClick={() => pageInfo.onPageChange(pageInfo.currentPage + 1)}
+                disabled={false}
               >
                 {">"}
               </Button>
-              <Button
+
+              {/* <Button
                 variant="outline"
                 size="sm"
                 onClick={() => pageInfo.onPageChange(pageInfo.totalPages)}
@@ -376,7 +372,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 data-testid="button-last-page"
               >
                 {">>"}
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
