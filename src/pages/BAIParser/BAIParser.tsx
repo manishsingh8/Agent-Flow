@@ -57,6 +57,7 @@ const BAIParser = () => {
             <Button
               onClick={handleButtonClick}
               disabled={isLoading}
+              variant="outline"
               className="w-full max-w-[200px]"
             >
               {isLoading ? (

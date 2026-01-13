@@ -287,13 +287,13 @@ export const usePaymentLogic: any = () => {
         return "bg-white border-1 border-[#E5E5E5] px-2 py-1 rounded-[6px] inline-block mt-1";
       },
     },
-    status: {
+    statusName: {
       conditionalClassName: (value) => {
         if (typeof value !== "string") return "";
         switch (value) {
           case "Pending Approval":
             return "text-[#FF9500] bg-yellow-100 px-2 py-1 rounded-[6px] inline-block mt-1";
-          case "Done":
+          case "Remit Missing":
             return "text-[#34A255] bg-green-100 px-2 py-[2px] rounded-[6px] inline-block mt-1";
           case "Exception":
             return "text-[#E63435] bg-red-100 px-2 py-1 rounded-[6px] inline-block mt-1";
@@ -325,7 +325,7 @@ export const usePaymentLogic: any = () => {
         return "text-[#0090FF]";
       },
     },
-    variance: {
+    payVariance: {
       conditionalClassName: () => {
         return "text-[#E63435]";
       },
@@ -335,13 +335,12 @@ export const usePaymentLogic: any = () => {
     },
   };
 
-  // 👇 COLUMNS GENERATED FROM API DATA
   const columns = useMemo(
     () =>
       buildColumns<Transaction>({
         tableData,
         labelMap: NON_RECONCILED_COLUMN_LABELS,
-        excludeKeys: ["id", "nonReconciledDataId", "statusId"],
+        excludeKeys: ["id", "nonReconciledDataId", "statusId", "region"],
         amountFields: [
           "bankDeposit",
           "remittance",
@@ -349,6 +348,7 @@ export const usePaymentLogic: any = () => {
           "payVariance",
           "glAmount",
         ],
+        columnRules,
       }),
     [tableData]
   );

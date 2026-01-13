@@ -313,8 +313,9 @@ export const useReconciledReportLogic = () => {
       buildColumns<ReconciledTransaction>({
         tableData,
         labelMap: RECONCILED_REPORT_COLUMN_LABELS,
-        excludeKeys: ["id", "reconciledDataId"],
+        excludeKeys: ["id", "reconciledDataId", "region"],
         amountFields: ["bankDeposit", "remittance", "emrAmount", "glAmount"],
+        columnRules,
       }),
     [tableData]
   );
