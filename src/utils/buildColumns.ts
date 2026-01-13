@@ -1,16 +1,16 @@
 import { type ReactNode } from "react";
 
-type ColumnRule = {
-  bodyClassName?: string;
-  conditionalClassName?: (value: unknown, row?: unknown) => string;
-};
+// type ColumnRule = {
+//   bodyClassName?: string;
+//   conditionalClassName?: (value: unknown, row?: unknown) => string;
+// };
 
 type BuildColumnsOptions<T> = {
   tableData: T[];
   labelMap?: Partial<Record<keyof T, string>>;
   excludeKeys?: Array<keyof T>;
   amountFields?: Array<keyof T>;
-  columnRules?: Record<string, ColumnRule>;
+  columnRules?: any;
   amountFormatter?: (value: number) => ReactNode;
   defaultRenderer?: (value: unknown) => ReactNode;
 };
@@ -40,9 +40,7 @@ export function buildColumns<T extends Record<string, any>>({
           String(key)
             .replace(/([A-Z])/g, " $1")
             .replace(/^./, (str) => str.toUpperCase()),
-
         isAmount,
-
         render: isAmount
           ? (val: unknown) =>
               typeof val === "number" ? amountFormatter(val) : "-"

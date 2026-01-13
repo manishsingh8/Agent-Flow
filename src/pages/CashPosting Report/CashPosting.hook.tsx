@@ -129,7 +129,7 @@ export const useCashPostingLogic = () => {
       buildColumns<Cash_Posting_Transaction>({
         tableData,
         labelMap: CASH_POSTING_REPORT_COLUMN_LABELS,
-        excludeKeys: ["cashPostingId"],
+        excludeKeys: ["cashPostingId", "region"],
         amountFields: ["totalAmount", "postedAmount", "remittance"],
         // columnRules,
       }),
