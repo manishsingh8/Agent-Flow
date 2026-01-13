@@ -92,6 +92,11 @@ export const SIDEBAR_DATA = {
       ],
     },
     {
+      title: "CDM",
+      url: "/cdm",
+      icon: AudioWaveform,
+    },
+    {
       title: "Document Parser",
       url: "#",
       icon: BrainCircuit,
@@ -110,10 +115,5 @@ export const SIDEBAR_DATA = {
         },
       ],
     },
-    // {
-    //   title: "CDM",
-    //   url: "/cdm",
-    //   icon: AudioWaveform,
-    // },
   ],
 };
