@@ -1,10 +1,5 @@
 import { type ReactNode } from "react";
 
-// type ColumnRule = {
-//   bodyClassName?: string;
-//   conditionalClassName?: (value: unknown, row?: unknown) => string;
-// };
-
 type BuildColumnsOptions<T> = {
   tableData: T[];
   labelMap?: Partial<Record<keyof T, string>>;
