@@ -11,22 +11,30 @@ import { Chatbot } from "@/components/Chatbot/Chatbot";
 import { MessageCircle } from "lucide-react";
 
 export const MainLayout = () => {
-  const [isChatbotOpen, setIsChatbotOpen] = useState(true);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(() => {
+    const hasSeenChatbot = localStorage.getItem("hasSeenChatbot");
+    return !hasSeenChatbot;
+  });
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const handleCloseChatbot = () => {
+    localStorage.setItem("hasSeenChatbot", "true");
+    setIsChatbotOpen(false);
+  };
 
   return (
     <SidebarProvider open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
       <AppSidebar />
 
-      {/* FULL SCREEN CHATBOT */}
-      {isChatbotOpen && <Chatbot onClose={() => setIsChatbotOpen(false)} />}
+      {isChatbotOpen && <Chatbot onClose={handleCloseChatbot} />}
 
       {!isChatbotOpen && (
         <button
           onClick={() => setIsChatbotOpen(true)}
           className="fixed bottom-6 right-6 bg-[#249563] text-white w-14 h-14
                      rounded-full flex items-center justify-center shadow-lg
-                     hover:opacity-90 transition z-[9999]"
+                     hover:opacity-90 transition z-9999"
         >
           <MessageCircle className="w-7 h-7" />
         </button>
