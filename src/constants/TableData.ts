@@ -50,20 +50,6 @@ export const EDITABLE_RECONCILED_FIELDS: (keyof ReconciledTransaction)[] = [
   "glAmount",
 ];
 
-export const BRANDS = [
-  "CH",
-  "ALT",
-  "BRK MA",
-  "BRK HA",
-  "CITC CA",
-  "CITC MA",
-  "CITC RI",
-  "CBT",
-  "DRK",
-  "FIT",
-  "HM II",
-];
-
 export interface Cash_Posting_Transaction {
   id: string;
   cashPostingId: number;

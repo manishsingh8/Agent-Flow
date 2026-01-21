@@ -1,5 +1,5 @@
 import { ChevronRight, type LucideIcon } from "lucide-react";
-import { Link, useLocation } from "react-router-dom"; // ✅ useLocation for active route
+import { Link, useLocation } from "react-router-dom";
 import {
   Collapsible,
   CollapsibleContent,
@@ -30,7 +30,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const location = useLocation(); // 🔹 get current route
+  const location = useLocation();
 
   const isActiveLink = (url: string) => location.pathname === url;
 
@@ -40,7 +40,6 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) =>
           item.items && item.items.length > 0 ? (
-            // Dropdown item (Collapsible)
             <Collapsible
               key={item.title}
               asChild
@@ -83,7 +82,6 @@ export function NavMain({
               </SidebarMenuItem>
             </Collapsible>
           ) : (
-            // Simple link (Non-dropdown)
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <Link

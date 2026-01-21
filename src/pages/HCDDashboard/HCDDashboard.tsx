@@ -4,6 +4,8 @@ import CustomDoughnutChart from "@/components/CustomDoughnutChart/CustomDoughnut
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
 import { AlertTriangle } from "lucide-react";
 // import CustomAreaChart from "@/components/CustomAreaChart/CustomAreaChart";
+import { CustomDropdown } from "@/components";
+import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import {
   AVG_TIME_CHART_DATA,
   TOP_EXCEPTION_CHART_DATA,
@@ -15,8 +17,23 @@ import {
   // slaComplianceData,
   // slaSegments,
 } from "@/constants/ChartsData";
+import { useHCDLogic } from "./HCDDashboard.hook";
+const DATE_OPTIONS = [
+  { value: "today", label: "Today" },
+  { value: "lastMonth", label: "Last Month" },
+  { value: "custom", label: "Custom" },
+];
 
 const Dashboard2 = () => {
+  const {
+    from,
+    setFrom,
+    to,
+    setTo,
+    dateFilterText,
+    dateFilter,
+    handleDateOptionChange,
+  } = useHCDLogic();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px]">
@@ -30,13 +47,36 @@ const Dashboard2 = () => {
           </span>
         </div>
       </div>
+      <div className="flex items-center justify-between border border-[#E6ECF0] p-1 rounded-[14px] px-3 py-4 flex-wrap">
+        <div className="font-semibold">{dateFilterText}</div>
+        <div className="flex items-center flex-wrap">
+          {dateFilter === "custom" ? (
+            <FilterSearchBar
+              enableDateRange
+              fromDate={from}
+              toDate={to}
+              onFromDateChange={setFrom}
+              onToDateChange={setTo}
+            />
+          ) : (
+            ""
+          )}
+          <div>
+            <CustomDropdown
+              options={DATE_OPTIONS}
+              value={dateFilter}
+              onChange={handleDateOptionChange}
+            />
+          </div>
+        </div>
+      </div>
       <div className="flex lg:justify-between items-center flex-wrap gap-4">
         {HCD_CARDS.map((card) => (
           <PaymentCard
             key={card.id}
             headerText={card.headerText}
             amount={card.amount}
-            border={card.border}
+            border
             borderColor="#E5E5E5"
           />
         ))}
