@@ -108,7 +108,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
               message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <div className="flex w-[50%]">
+            <div className="flex w-full md:w-[50%]">
               {message.role === "assistant" && (
                 <div className="shrink-0 h-8 w-8 rounded-full bg-linear-to-br from-cyan-400 to-green-400 flex items-center justify-center text-sm">
                   🤖
@@ -116,7 +116,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
               )}
             </div>
             <div
-              className={`flex items-end justify-end w-[50%] min-w-0 ${
+              className={`flex items-end justify-end w-full md:w-[50%] min-w-0 ${
                 message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
@@ -129,37 +129,48 @@ export function Chatbot({ onClose }: ChatbotProps) {
               >
                 {typingMessageId === message.id ? (
                   <p className="text-sm whitespace-pre-wrap">{typingText}</p>
-                ) : typeof message.content === "object" && (message.content?.rows || message.content?.text || message.content?.reply) ? (
+                ) : typeof message.content === "object" &&
+                  (message.content?.rows ||
+                    message.content?.text ||
+                    message.content?.reply) ? (
                   <div className="space-y-4 max-w-full overflow-hidden">
                     {/* Reply section */}
                     {(message.content.text || message.content.reply) && (
-                      <p className="text-sm whitespace-pre-wrap">{message.content.text ?? message.content.reply}</p>
+                      <p className="text-sm whitespace-pre-wrap">
+                        {message.content.text ?? message.content.reply}
+                      </p>
                     )}
-                    
+
                     {/* Table section with separator */}
                     {message.content.rows && (
                       <>
-                        {message.content.rows.length > 0 && <hr className="border-t border-gray-300 my-4" />}
+                        {message.content.rows.length > 0 && (
+                          <hr className="border-t border-gray-300 my-4" />
+                        )}
                         <DynamicTableFromRows rows={message.content.rows} />
                       </>
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm whitespace-pre-wrap">{String(message.content)}</p>
+                  <p className="text-sm whitespace-pre-wrap">
+                    {String(message.content)}
+                  </p>
                 )}
               </div>
             </div>
           </div>
         ))}
         <div className="flex justify-center">
-          <div className="w-[50%]">{isTyping && <TypingIndicator />}</div>
+          <div className="w-full md:w-[50%]">
+            {isTyping && <TypingIndicator />}
+          </div>
         </div>
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input Area */}
       <div className="flex justify-center">
-        <div className="w-[50%] shrink-0  bg-white p-4 space-y-3">
+        <div className="w-full md:w-[50%] shrink-0  bg-white p-4 space-y-3">
           <div className="flex gap-2">
             <Input
               type="text"
