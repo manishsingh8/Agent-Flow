@@ -3,25 +3,25 @@ import CashPostingAgent from "./sections/CashPostingAgent";
 import IntakeOrchestratorAgent from "./sections/IntakeWorkflowAgent";
 import RCMCentralEngine from "./sections/RCMCentralEngine";
 import ReconciliationAgent from "./sections/ReconciliationAgent";
-import { TABS, DROPDOWN_OPTIONS } from "@/constants/DashboardData";
+import { TABS } from "@/constants/DashboardData";
 import { useRCMFlowsLogic } from "./RCMFlows.hook";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/DropdownMenu";
-import { Button } from "@/components/ui/Button";
-import { ChevronDown } from "lucide-react";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/DropdownMenu";
+// import { Button } from "@/components/ui/Button";
+// import { ChevronDown } from "lucide-react";
 
 const RCMFlows = () => {
   const {
     activeTab,
     setActiveTab,
-    open,
-    setOpen,
-    selectedRange,
-    setSelectedRange,
+    // open,
+    // setOpen,
+    // selectedRange,
+    // setSelectedRange,
   } = useRCMFlowsLogic();
 
   return (
@@ -51,7 +51,7 @@ const RCMFlows = () => {
               </TabsTrigger>
             ))}
           </TabsList>
-          <div className="flex items-center gap-1 decoration-[1.5px]  decoration-gray-800 cursor-pointer w-[10%] justify-end">
+          {/* <div className="flex items-center gap-1 decoration-[1.5px]  decoration-gray-800 cursor-pointer w-[10%] justify-end">
             <DropdownMenu onOpenChange={setOpen}>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -84,7 +84,7 @@ const RCMFlows = () => {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
+          </div> */}
         </div>
         <TabsContent value="rcm">
           <RCMCentralEngine setActiveTab={setActiveTab} />

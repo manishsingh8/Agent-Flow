@@ -13,7 +13,7 @@ export const useCashPostingQueueLogic = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [tableData, setTableData] = useState<Cash_Posting_Transaction[]>([]);
   const [tableLoading, setTableLoading] = useState(false);
 

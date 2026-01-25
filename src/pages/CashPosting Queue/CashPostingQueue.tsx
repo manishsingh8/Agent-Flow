@@ -1,7 +1,6 @@
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useCashPostingQueueLogic } from "./CashPostingQueue.hook";
-import { BRANDS } from "@/constants/TableData";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const CashPostingQueue = () => {
@@ -75,8 +74,8 @@ const CashPostingQueue = () => {
             searchEnabled
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
-            filtersEnabled
-            filterOptions={BRANDS}
+            // filtersEnabled
+            // filterOptions={BRANDS}
             selectedFilters={selectedBrands}
             onFilterChange={handleBrandToggle}
             exportEnabled

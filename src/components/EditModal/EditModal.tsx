@@ -15,7 +15,6 @@ export interface Column<T> {
 
 interface EditModalProps<T extends object> {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
   data: Partial<T>[];
   columns: Column<T>[];
   editableFields: (keyof T)[];
@@ -26,9 +25,15 @@ interface EditModalProps<T extends object> {
   title?: string;
 }
 
-export function EditModal<T extends object = Record<string, unknown>>({
+type WithMeta = {
+  history?: unknown;
+  comments?: string | null;
+};
+
+export function EditModal<
+  T extends WithMeta = Record<string, unknown> & WithMeta,
+>({
   open,
-  onOpenChange,
   data,
   columns,
   editableFields,
@@ -38,26 +43,30 @@ export function EditModal<T extends object = Record<string, unknown>>({
   idKey,
   title,
 }: EditModalProps<T>) {
-  const handleCancel = () => {
-    onCancel();
-    onOpenChange(false);
-  };
-
-  const handleSubmit = () => {
-    onSubmit();
-    onOpenChange(false);
-  };
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-auto max-h-[90vh] flex flex-col">
+    <Dialog open={open} onOpenChange={onCancel}>
+      <DialogContent
+        className="
+          w-full
+          max-w-[95vw]
+          sm:max-w-[90vw]
+          md:max-w-[80vw]
+          lg:max-w-[70vw]
+          xl:max-w-[60vw]
+          2xl:max-w-[50vw]
+          max-h-[90vh]
+          flex
+          flex-col
+        "
+      >
         <DialogHeader>
           <DialogTitle className="text-md">
             {title || `Edit Row${data.length > 1 ? "s" : ""}`}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto">
+        {/* 🔽 Scrollable Area */}
+        <div className="flex-1 overflow-y-auto pr-1">
           {data.map((row, rowIndex) => {
             const rowId = String(row[idKey]);
             const rowLabel =
@@ -80,77 +89,108 @@ export function EditModal<T extends object = Record<string, unknown>>({
                   </h3>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {editableFields.length > 0 ? (
-                    editableFields.map((field) => {
-                      const column = columns.find((col) => col.key === field);
-                      const label = column?.label || String(field);
-                      const value = row[field];
-                      const fieldType =
-                        typeof value === "number" ? "number" : "text";
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {columns.map((column) => {
+                    const field = column.key;
+                    const label = column.label;
+                    const value = row[field];
+                    const isEditable = editableFields.includes(field);
+                    const isCommentField = field === "comments";
+                    const fieldType =
+                      typeof value === "number" ? "number" : "text";
 
-                      return (
-                        <div key={String(field)} className="space-y-2">
-                          <label className="text-xs font-medium text-foreground">
-                            {label}
-                          </label>
+                    return (
+                      <div
+                        key={String(field)}
+                        className={`space-y-2 ${
+                          isCommentField ? "md:col-span-3" : ""
+                        }`}
+                      >
+                        <label className="text-xs font-medium text-foreground">
+                          {label}
+                        </label>
+
+                        {isCommentField ? (
+                          <>
+                            <textarea
+                              rows={2}
+                              value={(value as string) ?? ""}
+                              disabled={!isEditable}
+                              placeholder={
+                                value ? "" : "Write your comment here..."
+                              }
+                              onChange={(e) =>
+                                onFieldChange(rowIndex, field, e.target.value)
+                              }
+                              className="w-full border border-gray-300 rounded-md p-3
+                                resize-y text-sm focus:outline-none
+                                focus:ring-2 focus:ring-green-500"
+                            />
+                            <div className="mt-3">
+                              <div className="text-xs font-semibold text-[#0A0A0A]">
+                                History
+                              </div>
+
+                              {row.history ? (
+                                <div className="rounded-md border border-border mt-1 p-2 text-xs text-[#737373]  overflow-y-auto">
+                                  {typeof row.history === "string" && (
+                                    <div>{row.history}</div>
+                                  )}
+                                  {Array.isArray(row.history) &&
+                                    row.history.map((item: any, i: number) => (
+                                      <div key={i} className="mb-1">
+                                        {JSON.stringify(item)}
+                                      </div>
+                                    ))}
+                                </div>
+                              ) : (
+                                <div className="text-xs text-[#737373]">
+                                  No History Available
+                                </div>
+                              )}
+                            </div>
+                          </>
+                        ) : (
                           <Input
                             type={fieldType}
                             value={
                               fieldType === "number"
                                 ? String(value ?? "")
-                                : (value as string) ?? ""
+                                : ((value as string) ?? "")
                             }
+                            disabled={!isEditable}
                             onChange={(e) =>
                               onFieldChange(
                                 rowIndex,
                                 field,
                                 fieldType === "number"
                                   ? parseFloat(e.target.value) || 0
-                                  : e.target.value
+                                  : e.target.value,
                               )
                             }
                             className="w-full text-sm"
                           />
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div className="text-xs text-muted-foreground">
-                      No editable fields configured
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );
           })}
         </div>
-        <div className="flex flex-col">
-          <label className="text-sm text-[#0A0A0A] mb-1 font-semibold">
-            Comments
-          </label>
-          <textarea
-            rows={2} // adjust height
-            className="w-full border border-gray-300 rounded-md p-2 resize-y focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Write your comment here..."
-          />
-        </div>
 
-        <div className="mb-2">
-          <div className="text-sm text-[#0A0A0A] font-semibold">History</div>
-          <div className="text-xs text-[#737373]">No Data Available</div>
-        </div>
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={handleCancel}
+            onClick={onCancel}
             className="min-w-[100px]"
           >
             Cancel
           </Button>
           <Button
             variant="default"
-            onClick={handleSubmit}
+            onClick={onSubmit}
             className="bg-[#249563] hover:bg-green-700 min-w-[100px]"
           >
             Submit

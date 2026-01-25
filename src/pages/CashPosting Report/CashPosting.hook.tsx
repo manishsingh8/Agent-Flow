@@ -12,7 +12,7 @@ export const useCashPostingLogic = () => {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [tableData, setTableData] = useState<Cash_Posting_Transaction[]>([]);
   const [tableLoading, setTableLoading] = useState(false);
   const fetchTable = async () => {
@@ -49,7 +49,7 @@ export const useCashPostingLogic = () => {
   const filteredData = useMemo(() => {
     if (!searchTerm) return tableData;
     return tableData.filter((t) =>
-      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase())
+      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [tableData, searchTerm]);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -72,7 +72,7 @@ export const useCashPostingLogic = () => {
       setSelectedRows(new Set());
     } else {
       setSelectedRows(
-        new Set(paginatedData.map((row) => String(row.cashPostingId)))
+        new Set(paginatedData.map((row) => String(row.cashPostingId))),
       );
     }
   };
@@ -81,7 +81,7 @@ export const useCashPostingLogic = () => {
 
     const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
-      headers.map((key) => t[key as keyof Cash_Posting_Transaction])
+      headers.map((key) => t[key as keyof Cash_Posting_Transaction]),
     );
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -98,7 +98,7 @@ export const useCashPostingLogic = () => {
       bodyClassName?: string;
       conditionalClassName?: (
         value: unknown,
-        row: Cash_Posting_Transaction
+        row: Cash_Posting_Transaction,
       ) => string;
     }
   > = {
@@ -133,7 +133,7 @@ export const useCashPostingLogic = () => {
         amountFields: ["totalAmount", "postedAmount", "remittance"],
         // columnRules,
       }),
-    [tableData, columnRules]
+    [tableData, columnRules],
   );
 
   return {

@@ -27,6 +27,10 @@ export const API_ENDPOINTS = {
   ========================== */
   VARIANCE_WIDGET: `${BASE_URL}/varianceQueue/varianceWidget`,
   VARIANCE_TABLE: `${BASE_URL}/varianceQueue/getVarianceQueueData`,
+  UPDATE_VARIANCE_TABLE:`${BASE_URL}/varianceQueue/manual-update`,
+  BAI_DATA: `${BASE_URL}/varianceQueue/getBaiData`,
+  REMIT_DATA: `${BASE_URL}/varianceQueue/getRemitData`,
+  EMR_DATA: `${BASE_URL}/varianceQueue/getCashPostingData`,
 
   /* =========================
      CASH POSTING
@@ -41,7 +45,28 @@ export const API_ENDPOINTS = {
   REVENUE_WIDGETS: `${BASE_URL}/dashboard/revenueWidgets`,
   WORK_QUEUE_ACTIVITY: `${BASE_URL}/dashboard/workQueueActivityAnalysis`,
   OPERATIONAL_PERFORMANCE_VIEW: `${BASE_URL}/dashboard/operationalPerformanceView`,
-  BAI_PARSER:'https://api.revpulseapp.com/bai-processor/api/files/upload',
+  BAI_PARSER: "https://api.revpulseapp.com/bai-processor/api/files/upload",
+
+  HCD_DOCUMENT_PROCESSING: `${BASE_URL}/dashboard/documentProcessingDuration`,
+  HCD_DAILY_PROCESSING_VOLUME: `${BASE_URL}/dashboard/dailyProcessingVolumByCategory`,
+  HCD_DOCUMENT_STATUS_OVERVIEW: `${BASE_URL}/dashboard/getDocumentStatusOverview`,
+  HCD_DOCUMENT_INTELLIGENCE: `${BASE_URL}/dashboard/documentIntelligenceDashboard`,
+
+  /* ==========================
+      CDM SCREENS
+  ==============================
+  */
+
+  CLAIM_FILTERS: `${BASE_URL}/cdm/filters`,
+  FILTER_DOCS_LIST: `${BASE_URL}/cdm/fetchFilterDocsList`,
+  ASSIGN_USER: `${BASE_URL}/cdm/updateDocsAssignedUserAndTags`,
+  GET_CHILD_DATA: `${BASE_URL}/cdm/getChildData`,
+  GET_EOB_FILE: `${BASE_URL}/cdm/getEobFileLevelDataProd`,
+  SPLIT_FILE: `${BASE_URL}/cdm/splitFile`,
+  FETCH_EOB_PATIENT: `${BASE_URL}/cdm/fetchEobPatientAndLineLevelData`,
+  DELETE_SPLIT_FILE: `${BASE_URL}/cdm/deleteSplitFileWithLetterId`,
+  SHOW_ORIGINAL_FILE_PATH: `${BASE_URL}/cdm/showOriginalFilePath`,
+  SHOW_SPLITTED_FILE_PATH: `${BASE_URL}/cdm/showSplittedFilePath`,
 };
 
 export const CHATBOT_API_ENDPOINTS = {

@@ -15,6 +15,9 @@ export interface Transaction {
   statusName: string;
   nonReconciledDataId?: string;
   statusId?: string;
+  comments: string;
+  history: string;
+  userId: string;
 }
 export interface ReconciledTransaction {
   id: string;
@@ -32,14 +35,26 @@ export interface ReconciledTransaction {
   reconciledDataId?: string;
 }
 
+export const BANK_DEPOSIT_COLUMNS = [
+  { key: "transactionNumber", label: "Transaction Number" },
+  { key: "bankName", label: "Bank Name" },
+  { key: "payerName", label: "Payer Name" },
+  { key: "amountPaid", label: "Amount Paid" },
+  { key: "transactionType", label: "Transaction Type" },
+  { key: "fileReceivedDate", label: "File Received Date" },
+  { key: "fileName", label: "File Name" },
+  { key: "description", label: "Description" },
+];
+
 export const EDITABLE_FIELDS: (keyof Transaction)[] = [
-  "payer",
-  "account",
-  "bankDeposit",
+  // "payer",
+  // "account",
+  // "bankDeposit",
   "remittance",
   "emrAmount",
   "glAmount",
-  "statusName",
+  "comments",
+  // "statusName",
 ];
 export const EDITABLE_RECONCILED_FIELDS: (keyof ReconciledTransaction)[] = [
   "payer",
@@ -48,20 +63,6 @@ export const EDITABLE_RECONCILED_FIELDS: (keyof ReconciledTransaction)[] = [
   "remittance",
   "emrAmount",
   "glAmount",
-];
-
-export const BRANDS = [
-  "CH",
-  "ALT",
-  "BRK MA",
-  "BRK HA",
-  "CITC CA",
-  "CITC MA",
-  "CITC RI",
-  "CBT",
-  "DRK",
-  "FIT",
-  "HM II",
 ];
 
 export interface Cash_Posting_Transaction {

@@ -3,25 +3,21 @@ export const HCD_CARDS = [
     id: 1,
     headerText: "Total Document Processed",
     amount: "1432",
-    border: true,
   },
   {
     id: 2,
     headerText: "Auto-Classification Accuracy",
     amount: "43%",
-    border: true,
   },
   {
     id: 3,
     headerText: "Documents Awaiting Review",
     amount: "89",
-    border: true,
   },
   {
     id: 4,
     headerText: "Mean Processing Time",
     amount: "3.2 min",
-    border: true,
   },
 ];
 
@@ -50,30 +46,12 @@ export const DAILY_DOCS_CHART_DATA = [
   { date: "2025-10-09", authForm: 4, eob: 10, letter: 6, medicalRecord: 10 },
   { date: "2025-10-10", authForm: 3, eob: 8, letter: 3, medicalRecord: 6 },
   { date: "2025-10-11", authForm: 5, eob: 14, letter: 8, medicalRecord: 10 },
-  { date: "2025-10-12", authForm: 3, eob: 12, letter: 6, medicalRecord: 11 },
-  { date: "2025-10-13", authForm: 1, eob: 8, letter: 7, medicalRecord: 6 },
-  { date: "2025-10-14", authForm: 3, eob: 12, letter: 5, medicalRecord: 7 },
-  { date: "2025-10-15", authForm: 1, eob: 18, letter: 10, medicalRecord: 8 },
-  { date: "2025-10-16", authForm: 5, eob: 10, letter: 9, medicalRecord: 13 },
-  { date: "2025-10-17", authForm: 3, eob: 13, letter: 3, medicalRecord: 6 },
-  { date: "2025-10-18", authForm: 2, eob: 18, letter: 3, medicalRecord: 9 },
-  { date: "2025-10-19", authForm: 2, eob: 15, letter: 4, medicalRecord: 11 },
-  { date: "2025-10-20", authForm: 1, eob: 13, letter: 8, medicalRecord: 12 },
-  { date: "2025-10-21", authForm: 3, eob: 14, letter: 9, medicalRecord: 9 },
-  { date: "2025-10-22", authForm: 5, eob: 15, letter: 6, medicalRecord: 9 },
-  { date: "2025-10-23", authForm: 3, eob: 9, letter: 9, medicalRecord: 9 },
-  { date: "2025-10-24", authForm: 1, eob: 18, letter: 6, medicalRecord: 9 },
-  { date: "2025-10-25", authForm: 2, eob: 27, letter: 10, medicalRecord: 9 },
-  { date: "2025-10-26", authForm: 4, eob: 8, letter: 5, medicalRecord: 10 },
-  { date: "2025-10-27", authForm: 5, eob: 20, letter: 5, medicalRecord: 20 },
-  { date: "2025-10-28", authForm: 3, eob: 13, letter: 6, medicalRecord: 13 },
-  { date: "2025-10-29", authForm: 4, eob: 19, letter: 7, medicalRecord: 12 },
 ];
 export const DAILY_DOCS_SEGMENTS_DATA = [
-  { dataKey: "authForm", color: "#0047ba", label: "Authorization Form" }, 
-  { dataKey: "eob", color: "#e69f00", label: "EOB" }, 
-  { dataKey: "letter", color: "#009e73", label: "Letter - Appeal" }, 
-  { dataKey: "medicalRecord", color: "#d55e00", label: "Medical Record" }, 
+  { dataKey: "authForm", color: "#0047ba", label: "Authorization Form" },
+  { dataKey: "eob", color: "#e69f00", label: "EOB" },
+  { dataKey: "letter", color: "#009e73", label: "Letter - Appeal" },
+  { dataKey: "medicalRecord", color: "#d55e00", label: "Medical Record" },
 ];
 export const DOCUMENT_STATUS_CHART_DATA = [
   { label: "Completed", value: 120, color: "#1D4ED8" },
@@ -81,7 +59,6 @@ export const DOCUMENT_STATUS_CHART_DATA = [
   { label: "Ready", value: 30, color: "#249563" },
   { label: "Archived", value: 12, color: "#DC2626" },
 ];
-
 
 // 3. Data for Agent Performance Chart
 export const agentData = [

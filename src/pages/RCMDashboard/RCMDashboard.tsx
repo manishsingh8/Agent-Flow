@@ -82,6 +82,7 @@ const RCMDashboard = () => {
           </div>
         </div>
       </div>
+      {loading ? <Loader /> : <OperationalView data={operationalViewData} />}
       <div className="grid grid-cols-1 gap-4">
         {loading ? (
           <Loader />
@@ -97,7 +98,6 @@ const RCMDashboard = () => {
         )}
         {/* <WorkQueueVolumeChart /> */}
       </div>
-      {loading ? <Loader /> : <OperationalView data={operationalViewData} />}
       <Toaster />
     </div>
   );

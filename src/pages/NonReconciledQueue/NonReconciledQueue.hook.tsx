@@ -8,6 +8,7 @@ import {
   NON_RECONCILED_HEADER_TEXT,
 } from "@/constants/TableData";
 import { validateDateRange } from "@/utils/dateRangeValidator";
+import { showToast } from "@/lib/toast";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -23,7 +24,10 @@ type VarianceWidgetResponse = {
 export const usePaymentLogic: any = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
-  const [to, setTo] = useState("2025-10-30");
+  const [to, setTo] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [payerOptions, setPayerOptions] = useState([
@@ -40,11 +44,20 @@ export const usePaymentLogic: any = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedData, setEditedData] = useState<Partial<Transaction>[]>([]);
   const [widgetData, setWidgetData] = useState<VarianceWidgetResponse | null>(
-    null
+    null,
   );
   const [widgetLoading, setWidgetLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [tableData, setTableData] = useState<Transaction[]>([]);
+  const [comment, setComment] = useState("");
+  const [open, setOpen] = useState(false);
+  const [modalData, setModalData] = useState<{
+    type: any;
+    row: any;
+    details: any;
+  }>({ type: null, row: null, details: null });
+  const [loadingData, setLoadingData] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const fetchPayers = async () => {
     if (!validateDateRange({ from, to })) return;
@@ -104,8 +117,12 @@ export const usePaymentLogic: any = () => {
     return [selectedStatus];
   };
 
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
   const fetchVarianceWidget = async () => {
     if (!validateDateRange({ from, to })) return;
+
     const payload = {
       fromDate: from,
       toDate: to,
@@ -115,42 +132,45 @@ export const usePaymentLogic: any = () => {
       pageSize: rowsPerPage,
     };
 
+    const MIN_LOADER_TIME = 1000;
+    const startTime = Date.now();
+
     try {
       setWidgetLoading(true);
       setTableLoading(true);
       const [widgetRes, tableRes] = await Promise.allSettled([
         fetch(API_ENDPOINTS.VARIANCE_WIDGET, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-          },
+          headers: { "Content-Type": "application/json;charset=UTF-8" },
           body: JSON.stringify(payload),
         }),
         fetch(API_ENDPOINTS.VARIANCE_TABLE, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-          },
+          headers: { "Content-Type": "application/json;charset=UTF-8" },
           body: JSON.stringify(payload),
         }),
       ]);
+
       if (widgetRes.status === "fulfilled" && widgetRes.value.ok) {
-        const widgetData = await widgetRes.value.json();
-        setWidgetData(widgetData);
+        setWidgetData(await widgetRes.value.json());
       } else {
-        console.error("Widget API failed", widgetRes);
         setWidgetData(null);
       }
+
       if (tableRes.status === "fulfilled" && tableRes.value.ok) {
         const tableData = await tableRes.value.json();
         setTableData(tableData?.data || []);
       } else {
-        console.error("Table API failed", tableRes);
         setTableData([]);
       }
     } catch (error) {
       console.error("Variance API error:", error);
     } finally {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, MIN_LOADER_TIME - elapsed);
+
+      await delay(remaining);
+
       setWidgetLoading(false);
       setTableLoading(false);
     }
@@ -188,6 +208,44 @@ export const usePaymentLogic: any = () => {
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const paginatedData = filteredData;
+  const updateData = async () => {
+    try {
+      if (!editedData?.length) return false;
+      setIsUpdating(true);
+      const storedUserId = sessionStorage.getItem("userId");
+      const payload = {
+        ...editedData[0],
+        userId: storedUserId ? Number(storedUserId) : null,
+      };
+      const response = await fetch(API_ENDPOINTS.UPDATE_VARIANCE_TABLE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Update failed");
+      }
+      showToast({
+        message: "Details updated successfully",
+        severity: "success",
+        id: "update-variance",
+      });
+      return true;
+    } catch (e) {
+      console.error("Error while updating data", e);
+      showToast({
+        message: "Failed to update details",
+        severity: "error",
+        id: "update-variance",
+      });
+      return false;
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   const handleRowSelect = (id: string) => {
     const newSelected = new Set(selectedRows);
@@ -204,7 +262,7 @@ export const usePaymentLogic: any = () => {
       setSelectedRows(new Set());
     } else {
       setSelectedRows(
-        new Set(paginatedData.map((row) => String(row.nonReconciledDataId)))
+        new Set(paginatedData.map((row) => String(row.nonReconciledDataId))),
       );
     }
   };
@@ -213,7 +271,7 @@ export const usePaymentLogic: any = () => {
     setSelectedBrands((prev) =>
       prev.includes(region)
         ? prev.filter((b) => b !== region)
-        : [...prev, region]
+        : [...prev, region],
     );
     setCurrentPage(1);
   };
@@ -223,7 +281,7 @@ export const usePaymentLogic: any = () => {
 
     const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
-      headers.map((key) => t[key as keyof Transaction])
+      headers.map((key) => t[key as keyof Transaction]),
     );
 
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
@@ -238,14 +296,13 @@ export const usePaymentLogic: any = () => {
 
   const handleEditClick = () => {
     if (selectedRows.size > 0) {
-      // Get selected rows data and initialize edited data
       const selectedRowsData = paginatedData.filter((row) =>
-        selectedRows.has(String(row.id))
+        selectedRows.has(String(row.nonReconciledDataId)),
       );
       setEditedData(
         selectedRowsData.map((row) => ({
           ...row,
-        }))
+        })),
       );
       setIsEditModalOpen(true);
     }
@@ -254,7 +311,7 @@ export const usePaymentLogic: any = () => {
   const handleFieldChange = (
     rowIndex: number,
     field: keyof Transaction,
-    value: unknown
+    value: unknown,
   ) => {
     const updated = [...editedData];
     updated[rowIndex] = {
@@ -264,10 +321,12 @@ export const usePaymentLogic: any = () => {
     setEditedData(updated);
   };
 
-  const handleEditSubmit = () => {
-    console.log("Updated data:", editedData);
+  const handleEditSubmit = async () => {
+    if (isUpdating) return;
+    const success = await updateData();
+    if (!success) return;
+    await fetchVarianceWidget();
     setIsEditModalOpen(false);
-    setEditedData([]);
   };
 
   const handleEditCancel = () => {
@@ -275,11 +334,38 @@ export const usePaymentLogic: any = () => {
     setEditedData([]);
   };
 
+  const blueTextRule = {
+    conditionalClassName: () => "text-[#0090FF]",
+  };
+
+  const handleColumnClick = async (row: any, api: any, type: string) => {
+    try {
+      setLoadingData(true);
+      const transactionNo = row?.transactionNo;
+      const response = await fetch(`${api}?transactionNo=${transactionNo}`);
+      const data = await response.json();
+      setModalData({
+        type: type,
+        row,
+        details: data,
+      });
+
+      setOpen(true);
+    } catch (error) {
+      console.error("Failed to fetch bank deposit details", error);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
   const columnRules: Record<
     string,
     {
       bodyClassName?: string;
       conditionalClassName?: (value: unknown, row: Transaction) => string;
+      render?: (value: unknown, row: any) => React.ReactNode;
+      clickable?: boolean;
+      onClick?: (value: unknown, row: any) => void;
     }
   > = {
     region: {
@@ -288,18 +374,27 @@ export const usePaymentLogic: any = () => {
       },
     },
     statusName: {
-      conditionalClassName: (value) => {
-        if (typeof value !== "string") return "";
-        switch (value) {
-          case "Pending Approval":
-            return "text-[#FF9500] bg-yellow-100 px-2 py-1 rounded-[6px] inline-block mt-1";
-          case "Remit Missing":
-            return "text-[#34A255] bg-green-100 px-2 py-[2px] rounded-[6px] inline-block mt-1";
-          case "Exception":
-            return "text-[#E63435] bg-red-100 px-2 py-1 rounded-[6px] inline-block mt-1";
-          default:
-            return "";
-        }
+      render: (value: unknown) => {
+        if (typeof value !== "string") return "-";
+
+        const [primary, secondary] = value.split(",");
+
+        return (
+          <div className="flex flex-col items-center gap-1">
+            {/* Top status */}
+            <span className="text-[#34A255] bg-green-100 px-2 py-[2px] rounded-[6px] text-xs">
+              {primary}
+            </span>
+
+            {/* Divider */}
+            {secondary && (
+              <>
+                <hr className="w-full border-t border-gray-300 my-1" />
+                <span className="text-[#E63435] text-xs">{secondary}</span>
+              </>
+            )}
+          </div>
+        );
       },
     },
     amount: {
@@ -317,15 +412,33 @@ export const usePaymentLogic: any = () => {
     remittance: {
       conditionalClassName: (value) => {
         if (typeof value !== "number") return "";
-        return value <= 0 ? "text-[#EC7723]" : "text-[#0A0A0A]";
+        return "text-[#EC7723]";
+      },
+      clickable: true,
+      onClick: (_value: any, row: any) => {
+        handleColumnClick(row, API_ENDPOINTS?.REMIT_DATA, "Remmitance");
       },
     },
-    transactionNo: {
-      conditionalClassName: () => {
-        return "text-[#0090FF]";
+    bankDeposit: {
+      ...blueTextRule,
+      clickable: true,
+      onClick: (_value: any, row: any) => {
+        handleColumnClick(row, API_ENDPOINTS?.BAI_DATA, "Bank Deposit");
+      },
+    },
+    emrAmount: {
+      ...blueTextRule,
+      clickable: true,
+      onClick: (_value: any, row: any) => {
+        handleColumnClick(row, API_ENDPOINTS?.EMR_DATA, "Emr Amount");
       },
     },
     payVariance: {
+      conditionalClassName: () => {
+        return "text-[#E63435]";
+      },
+    },
+    postVariance: {
       conditionalClassName: () => {
         return "text-[#E63435]";
       },
@@ -335,22 +448,44 @@ export const usePaymentLogic: any = () => {
     },
   };
 
+  const baseExcludeKeys: (keyof Transaction)[] = [
+    "id",
+    "nonReconciledDataId",
+    "statusId",
+    "region",
+    "history",
+    "userId",
+  ];
+
+  const amountFields: (keyof Transaction)[] = [
+    "bankDeposit",
+    "remittance",
+    "emrAmount",
+    "payVariance",
+    "glAmount",
+  ];
+
   const columns = useMemo(
     () =>
       buildColumns<Transaction>({
         tableData,
         labelMap: NON_RECONCILED_COLUMN_LABELS,
-        excludeKeys: ["id", "nonReconciledDataId", "statusId", "region"],
-        amountFields: [
-          "bankDeposit",
-          "remittance",
-          "emrAmount",
-          "payVariance",
-          "glAmount",
-        ],
+        excludeKeys: [...baseExcludeKeys, "comments"],
+        amountFields,
         columnRules,
       }),
-    [tableData]
+    [tableData],
+  );
+  const edit_columns = useMemo(
+    () =>
+      buildColumns<Transaction>({
+        tableData,
+        labelMap: NON_RECONCILED_COLUMN_LABELS,
+        excludeKeys: baseExcludeKeys,
+        amountFields,
+        columnRules,
+      }),
+    [tableData],
   );
 
   return {
@@ -392,5 +527,12 @@ export const usePaymentLogic: any = () => {
     paymentCardsData,
     tableLoading,
     widgetLoading,
+    comment,
+    setComment,
+    open,
+    setOpen,
+    modalData,
+    loadingData,
+    edit_columns,
   };
 };
