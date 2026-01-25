@@ -29,24 +29,239 @@ export const mockFileLevelData = {
   letterName: "N/A"
 };
 
-export const mockPatientLevelData = [
+export interface PatientData {
+  id: string;
+  visitId: string;
+  patientName: string;
+  paidAmount: string;
+  payerName: string;
+  checkDate: string;
+  claimNumber: string;
+  checkNumber: string;
+}
+
+export interface LineLevelData {
+  id: string;
+  eobPatientLevelDataId: string;
+  serviceStartDate: string;
+  serviceEndDate: string;
+  procedureCode: string;
+  billedAmount: string;
+  allowedAmount: string;
+  coveredAmount: string;
+  notCoveredAmount: string;
+  discountAmount: string;
+  adjustmentAmount: string;
+  coPay: string;
+  coInsurance: string;
+  deductibleAmount: string;
+  patientResponsibility: string;
+  deniedAmount: string;
+  reasonCodes: string;
+  remarkCodes: string;
+  description: string;
+}
+
+export interface PatientsData {
+  patientLevelData: PatientData[];
+  lineLevelData: LineLevelData[];
+}
+
+
+export const mockPatientOptions = [
+  { id: "p1", patientName: "John Doe" },
+  { id: "p2", patientName: "Jane Smith" },
+  { id: "p3", patientName: "Robert Wilson" },
+];
+
+
+export const mockPatientLevelData: PatientData[] = [
   {
     id: "p1",
+    visitId: "VIS-001",
     patientName: "John Doe",
-    claimNumber: "CLM001",
-    serviceDate: "2023-10-01",
-    billedAmount: "$500.00",
-    paidAmount: "$350.00",
+    paidAmount: "350.00",
+    payerName: "UnitedHealthcare",
+    checkDate: "2023-10-15",
+    claimNumber: "CLM-2023-001",
+    checkNumber: "CHK-78901",
   },
   {
     id: "p2",
+    visitId: "VIS-002",
     patientName: "Jane Smith",
-    claimNumber: "CLM002",
-    serviceDate: "2023-10-05",
-    billedAmount: "$750.00",
-    paidAmount: "$900.00",
+    paidAmount: "900.00",
+    payerName: "Blue Cross Blue Shield",
+    checkDate: "2023-10-18",
+    claimNumber: "CLM-2023-002",
+    checkNumber: "CHK-78902",
+  },
+  {
+    id: "p3",
+    visitId: "VIS-003",
+    patientName: "Robert Wilson",
+    paidAmount: "1250.00",
+    payerName: "Aetna",
+    checkDate: "2023-10-20",
+    claimNumber: "CLM-2023-003",
+    checkNumber: "CHK-78903",
   },
 ];
+
+export const mockLineLevelData: LineLevelData[] = [
+  {
+    id: "ll1",
+    eobPatientLevelDataId: "p1",
+    serviceStartDate: "2023-09-01",
+    serviceEndDate: "2023-09-01",
+    procedureCode: "99213",
+    billedAmount: "150.00",
+    allowedAmount: "120.00",
+    coveredAmount: "100.00",
+    notCoveredAmount: "20.00",
+    discountAmount: "30.00",
+    adjustmentAmount: "10.00",
+    coPay: "25.00",
+    coInsurance: "10%",
+    deductibleAmount: "0.00",
+    patientResponsibility: "35.00",
+    deniedAmount: "0.00",
+    reasonCodes: "CO-45",
+    remarkCodes: "N362",
+    description: "Office visit - established patient",
+  },
+  {
+    id: "ll2",
+    eobPatientLevelDataId: "p1",
+    serviceStartDate: "2023-09-15",
+    serviceEndDate: "2023-09-15",
+    procedureCode: "99214",
+    billedAmount: "200.00",
+    allowedAmount: "180.00",
+    coveredAmount: "150.00",
+    notCoveredAmount: "30.00",
+    discountAmount: "20.00",
+    adjustmentAmount: "15.00",
+    coPay: "25.00",
+    coInsurance: "10%",
+    deductibleAmount: "0.00",
+    patientResponsibility: "40.00",
+    deniedAmount: "0.00",
+    reasonCodes: "CO-45",
+    remarkCodes: "N519",
+    description: "Office visit - detailed evaluation",
+  },
+  {
+    id: "ll3",
+    eobPatientLevelDataId: "p2",
+    serviceStartDate: "2023-09-10",
+    serviceEndDate: "2023-09-10",
+    procedureCode: "99215",
+    billedAmount: "300.00",
+    allowedAmount: "275.00",
+    coveredAmount: "250.00",
+    notCoveredAmount: "25.00",
+    discountAmount: "25.00",
+    adjustmentAmount: "20.00",
+    coPay: "30.00",
+    coInsurance: "15%",
+    deductibleAmount: "50.00",
+    patientResponsibility: "80.00",
+    deniedAmount: "0.00",
+    reasonCodes: "PR-1",
+    remarkCodes: "MA130",
+    description: "Office visit - comprehensive evaluation",
+  },
+  {
+    id: "ll4",
+    eobPatientLevelDataId: "p2",
+    serviceStartDate: "2023-09-22",
+    serviceEndDate: "2023-09-22",
+    procedureCode: "90837",
+    billedAmount: "450.00",
+    allowedAmount: "400.00",
+    coveredAmount: "350.00",
+    notCoveredAmount: "50.00",
+    discountAmount: "50.00",
+    adjustmentAmount: "25.00",
+    coPay: "40.00",
+    coInsurance: "20%",
+    deductibleAmount: "0.00",
+    patientResponsibility: "110.00",
+    deniedAmount: "0.00",
+    reasonCodes: "CO-97",
+    remarkCodes: "N56",
+    description: "Psychotherapy, 60 minutes",
+  },
+  {
+    id: "ll5",
+    eobPatientLevelDataId: "p3",
+    serviceStartDate: "2023-09-05",
+    serviceEndDate: "2023-09-05",
+    procedureCode: "99203",
+    billedAmount: "250.00",
+    allowedAmount: "225.00",
+    coveredAmount: "200.00",
+    notCoveredAmount: "25.00",
+    discountAmount: "25.00",
+    adjustmentAmount: "15.00",
+    coPay: "35.00",
+    coInsurance: "10%",
+    deductibleAmount: "100.00",
+    patientResponsibility: "145.00",
+    deniedAmount: "0.00",
+    reasonCodes: "PR-2",
+    remarkCodes: "N381",
+    description: "Office visit - new patient, low complexity",
+  },
+  {
+    id: "ll6",
+    eobPatientLevelDataId: "p3",
+    serviceStartDate: "2023-09-12",
+    serviceEndDate: "2023-09-12",
+    procedureCode: "99204",
+    billedAmount: "350.00",
+    allowedAmount: "320.00",
+    coveredAmount: "280.00",
+    notCoveredAmount: "40.00",
+    discountAmount: "30.00",
+    adjustmentAmount: "20.00",
+    coPay: "35.00",
+    coInsurance: "10%",
+    deductibleAmount: "0.00",
+    patientResponsibility: "55.00",
+    deniedAmount: "0.00",
+    reasonCodes: "CO-42",
+    remarkCodes: "M15",
+    description: "Office visit - new patient, moderate complexity",
+  },
+  {
+    id: "ll7",
+    eobPatientLevelDataId: "p3",
+    serviceStartDate: "2023-09-25",
+    serviceEndDate: "2023-09-25",
+    procedureCode: "99205",
+    billedAmount: "500.00",
+    allowedAmount: "450.00",
+    coveredAmount: "400.00",
+    notCoveredAmount: "50.00",
+    discountAmount: "50.00",
+    adjustmentAmount: "30.00",
+    coPay: "35.00",
+    coInsurance: "10%",
+    deductibleAmount: "0.00",
+    patientResponsibility: "65.00",
+    deniedAmount: "20.00",
+    reasonCodes: "CO-16, PR-96",
+    remarkCodes: "N115, MA01",
+    description: "Office visit - new patient, high complexity",
+  },
+];
+
+export const mockPatientsData: PatientsData = {
+  patientLevelData: mockPatientLevelData,
+  lineLevelData: mockLineLevelData,
+};
 
 export const documentSteps = [
   { label: 'Classification', isCompleted: true },
