@@ -363,9 +363,9 @@ export const usePaymentLogic: any = () => {
     {
       bodyClassName?: string;
       conditionalClassName?: (value: unknown, row: Transaction) => string;
-      render?: (value: unknown, row: T) => React.ReactNode;
+      render?: (value: unknown, row: any) => React.ReactNode;
       clickable?: boolean;
-      onClick?: (value: unknown, row: T) => void;
+      onClick?: (value: unknown, row: any) => void;
     }
   > = {
     region: {
