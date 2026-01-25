@@ -77,26 +77,30 @@ export const useHCDLogic = () => {
 
   const fetchHCDPostWidgets = async () => {
     if (!from || !to) return;
+    const query = buildDateQuery();
 
     try {
-      const payload = {
-        startDate: from,
-        endDate: to,
-      };
+      
       const [statusOverview, documentIntelligence] = await Promise.allSettled([
-        fetch(API_ENDPOINTS.HCD_DOCUMENT_STATUS_OVERVIEW, {
+        // fetch(API_ENDPOINTS.HCD_DOCUMENT_STATUS_OVERVIEW, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json;charset=UTF-8",
+        //   },
+        //   body: JSON.stringify(payload),
+        // }),
+        // fetch(API_ENDPOINTS.HCD_DOCUMENT_INTELLIGENCE, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json;charset=UTF-8",
+        //   },
+        //   body: JSON.stringify(payload),
+        // }),
+        fetch(`${API_ENDPOINTS.HCD_DOCUMENT_STATUS_OVERVIEW}?${query}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-          body: JSON.stringify(payload),
         }),
-        fetch(API_ENDPOINTS.HCD_DOCUMENT_INTELLIGENCE, {
+        fetch(`${API_ENDPOINTS.HCD_DOCUMENT_INTELLIGENCE}?${query}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-          body: JSON.stringify(payload),
         }),
       ]);
       console.log(statusOverview, documentIntelligence);

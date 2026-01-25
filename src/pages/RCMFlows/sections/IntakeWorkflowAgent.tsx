@@ -383,6 +383,7 @@ const IntakeWorkflowAgent = () => {
               status={item.status}
               image={image}
               colorClass={colorClass}
+              processingRate={item?.processingRate}
             />
           );
         })}

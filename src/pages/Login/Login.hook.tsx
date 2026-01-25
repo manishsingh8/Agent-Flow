@@ -18,7 +18,6 @@ export const useLoginLogic = () => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
-
     if (!value) {
       setEmailError("");
     } else if (!validateEmail(value)) {
@@ -61,6 +60,7 @@ export const useLoginLogic = () => {
       sessionStorage.setItem("tokenType", result.data.tokenType);
       sessionStorage.setItem("username", result.data.username);
       sessionStorage.setItem("fullName", result.data.fullName);
+      sessionStorage.setItem("userId", result.data.userId);
       navigate("/rcm-flows", { replace: true });
 
       return;

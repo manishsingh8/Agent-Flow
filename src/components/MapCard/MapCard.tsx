@@ -15,6 +15,7 @@ interface MapCardProps {
   };
   image?: any;
   status: string;
+  processingRate?: string;
 }
 
 const MapCard = ({
@@ -28,6 +29,7 @@ const MapCard = ({
   },
   image,
   status,
+  processingRate,
 }: MapCardProps) => {
   const isPositive = Number(percentage) >= 0;
 
@@ -80,8 +82,17 @@ const MapCard = ({
       </div>
 
       {/* Value */}
-      <div className="mb-4">
+      <div className="flex justify-between mb-4 items-center">
         <p className="text-2xl font-bold text-gray-900">{formattedValue}</p>
+        {processingRate ? (
+          <div
+            className={`w-10 h-5 flex items-center gap-1 px-1 py-0 rounded-full border ${colorClass.border} ${colorClass.text}`}
+          >
+            <span className="text-xs font-semibold">{processingRate}</span>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       {/* Image */}

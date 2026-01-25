@@ -27,6 +27,10 @@ export const API_ENDPOINTS = {
   ========================== */
   VARIANCE_WIDGET: `${BASE_URL}/varianceQueue/varianceWidget`,
   VARIANCE_TABLE: `${BASE_URL}/varianceQueue/getVarianceQueueData`,
+  UPDATE_VARIANCE_TABLE:`${BASE_URL}/varianceQueue/manual-update`,
+  BAI_DATA: `${BASE_URL}/varianceQueue/getBaiData`,
+  REMIT_DATA: `${BASE_URL}/varianceQueue/getRemitData`,
+  EMR_DATA: `${BASE_URL}/varianceQueue/getCashPostingData`,
 
   /* =========================
      CASH POSTING

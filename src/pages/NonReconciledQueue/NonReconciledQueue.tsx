@@ -5,6 +5,8 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
+import DataModal from "./DataModal";
+import { BANK_DEPOSIT_COLUMNS } from "@/constants/TableData";
 
 interface Task {
   id: string;
@@ -52,14 +54,6 @@ const mockTasks: Task[] = [
   },
 ];
 
-const mockUsers = [
-  { id: "user-1", name: "John Doe", avatar: undefined },
-  { id: "user-2", name: "Jane Smith", avatar: undefined },
-  { id: "user-3", name: "Bob Johnson", avatar: undefined },
-  { id: "user-4", name: "Alice Brown", avatar: undefined },
-  { id: "user-5", name: "Charlie Wilson", avatar: undefined },
-];
-
 const Payment = () => {
   const {
     toggle,
@@ -88,27 +82,22 @@ const Payment = () => {
     currentPage,
     setCurrentPage,
     rowsPerPage,
-    setIsEditModalOpen,
     editedData,
     paymentCardsData,
     tableLoading,
     widgetLoading,
-    searchTerm,
-    setSearchTerm,
+    // searchTerm,
+    // setSearchTerm,
+    handleEditClick,
+    comment,
+    setComment,
+    open,
+    setOpen,
+    modalData,
+    loadingData,
+    edit_columns,
   } = usePaymentLogic();
 
-  const handleAssign = (userId: string, selectedRowIds: string[]) => {
-    console.log(`Assigned user ${userId} to tasks:`, selectedRowIds);
-  };
-  const handleChangeStatus = (selectedRowIds: string[]) => {
-    console.log("Change status for tasks:", selectedRowIds);
-  };
-  const handleWatchOptions = (selectedRowIds: string[]) => {
-    console.log("Watch options for tasks:", selectedRowIds);
-  };
-  const handleDelete = (selectedRowIds: string[]) => {
-    console.log("Delete tasks:", selectedRowIds);
-  };
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] gap-4">
       <div className="w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px]">
@@ -176,14 +165,15 @@ const Payment = () => {
             <DataTable
               data={paginatedData}
               columns={columns}
+              handleEditClick={handleEditClick}
               selectable
               selectedRows={selectedRows}
               onRowSelect={handleRowSelect}
               onSelectAll={handleSelectAll}
               exportEnabled
-              searchEnabled
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
+              // searchEnabled
+              // searchTerm={searchTerm}
+              // onSearchChange={setSearchTerm}
               onExport={handleExport}
               idKey="nonReconciledDataId"
               pageInfo={{
@@ -193,15 +183,19 @@ const Payment = () => {
                 rowsPerPage,
                 onRowsPerPageChange: setRowsPerPage,
               }}
-              assignmentFeature={{
+              // assignmentFeature={{
+              //   enabled: true,
+              //   onAssign: handleAssign,
+              //   users: mockUsers,
+              //   quickActions: true,
+              //   currentUserId: "user-1",
+              //   onChangeStatus: handleChangeStatus,
+              //   onWatchOptions: handleWatchOptions,
+              //   onDelete: handleDelete,
+              // }}
+              editRow={{
                 enabled: true,
-                onAssign: handleAssign,
-                users: mockUsers,
-                quickActions: true,
-                currentUserId: "user-1",
-                onChangeStatus: handleChangeStatus,
-                onWatchOptions: handleWatchOptions,
-                onDelete: handleDelete,
+                onEditClick: handleEditClick,
               }}
             />
           </div>
@@ -210,15 +204,23 @@ const Payment = () => {
 
       <EditModal
         open={isEditModalOpen}
-        onOpenChange={setIsEditModalOpen}
         data={editedData}
-        columns={columns}
+        columns={edit_columns}
         editableFields={EDITABLE_FIELDS}
         onFieldChange={handleFieldChange}
         onSubmit={handleEditSubmit}
         onCancel={handleEditCancel}
         idKey="id"
-        title="Reconciliation Details - e875vned0"
+        title="Reconciliation Details"
+        comment={comment}
+        onCommentChange={setComment}
+      />
+      <DataModal
+        open={open}
+        setOpen={setOpen}
+        modalData={modalData}
+        columns={BANK_DEPOSIT_COLUMNS}
+        loading={loadingData}
       />
     </div>
   );
