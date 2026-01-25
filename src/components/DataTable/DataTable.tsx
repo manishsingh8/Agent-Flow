@@ -200,10 +200,17 @@ export function DataTable<T extends object = Record<string, unknown>>({
 
     doc.text("Report", 40, 30);
 
-    const head = [columns.map((col) => col.label)];
+    const toText = (value: unknown): string => {
+      if (value === null || value === undefined) return "";
+      if (typeof value === "string" || typeof value === "number")
+        return String(value);
+      return String(value);
+    };
+
+    const head = [columns.map((col) => toText(col.label))];
 
     const body = data.map((row) =>
-      columns.map((col) => getCellValue(row, col)),
+      columns.map((col) => toText(getCellValue(row, col))),
     );
 
     autoTable(doc, {

@@ -363,6 +363,9 @@ export const usePaymentLogic: any = () => {
     {
       bodyClassName?: string;
       conditionalClassName?: (value: unknown, row: Transaction) => string;
+      render?: (value: unknown, row: T) => React.ReactNode;
+      clickable?: boolean;
+      onClick?: (value: unknown, row: T) => void;
     }
   > = {
     region: {
@@ -412,21 +415,21 @@ export const usePaymentLogic: any = () => {
         return "text-[#EC7723]";
       },
       clickable: true,
-      onClick: (value, row) => {
+      onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.REMIT_DATA, "Remmitance");
       },
     },
     bankDeposit: {
       ...blueTextRule,
       clickable: true,
-      onClick: (_value, row) => {
+      onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.BAI_DATA, "Bank Deposit");
       },
     },
     emrAmount: {
       ...blueTextRule,
       clickable: true,
-      onClick: (_value, row) => {
+      onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.EMR_DATA, "Emr Amount");
       },
     },

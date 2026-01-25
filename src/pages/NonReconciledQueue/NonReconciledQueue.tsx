@@ -212,8 +212,8 @@ const Payment = () => {
         onCancel={handleEditCancel}
         idKey="id"
         title="Reconciliation Details"
-        comment={comment}
-        onCommentChange={setComment}
+        // comment={comment}
+        // onCommentChange={setComment}
       />
       <DataModal
         open={open}

@@ -48,7 +48,7 @@ const DataModal = ({ open, setOpen, modalData, columns, loading }: any) => {
             {modalData?.type
               ? `${modalData.type
                   .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (str) => str.toUpperCase())} Details`
+                  .replace(/^./, (str: string) => str.toUpperCase())} Details`
               : "Details"}
           </DialogTitle>
         </DialogHeader>
