@@ -38,11 +38,6 @@ export const SIDEBAR_DATA = {
   ],
   navMain: [
     {
-      title: "RCM Operational Flows",
-      url: "/rcm-flows",
-      icon: WavesLadder,
-    },
-    {
       title: "Dashboard",
       url: "#",
       icon: House,
@@ -56,6 +51,11 @@ export const SIDEBAR_DATA = {
           url: "/dashboard/hcd-dashboard",
         },
       ],
+    },
+    {
+      title: "RCM Operational Flows",
+      url: "/rcm-flows",
+      icon: WavesLadder,
     },
     {
       title: "Reconciliation",

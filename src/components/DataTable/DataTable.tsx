@@ -46,8 +46,10 @@ interface TableRow {
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
+  stackHeaderText?: boolean;
   selectable?: boolean;
   selectedRows?: Set<string>;
+  setSelectedRows?: any;
   onRowSelect?: (id: string) => void;
   onSelectAll?: () => void;
   searchEnabled?: boolean;
@@ -104,8 +106,10 @@ const formatAmount = (value: unknown) => {
 export function DataTable<T extends object = Record<string, unknown>>({
   data,
   columns,
+  stackHeaderText = false,
   selectable = false,
   selectedRows = new Set(),
+  setSelectedRows,
   onRowSelect,
   onSelectAll,
   searchEnabled = false,
@@ -202,23 +206,90 @@ export function DataTable<T extends object = Record<string, unknown>>({
 
     const toText = (value: unknown): string => {
       if (value === null || value === undefined) return "";
-      if (typeof value === "string" || typeof value === "number")
-        return String(value);
+      if (typeof value === "number") return value.toString();
+      if (typeof value === "string") return value;
       return String(value);
     };
 
-    const head = [columns.map((col) => toText(col.label))];
+    // ✅ Date formatter
+    const formatDateMMDDYYYY = (date: string) => {
+      if (!date) return "";
+      const d = new Date(date);
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      return `${mm}-${dd}-${yyyy}`;
+    };
+
+    // ✅ Currency formatter
+    const formatCurrency = (value: unknown) => {
+      if (value === null || value === undefined || value === "") return "";
+      const num = Number(value);
+      if (Number.isNaN(num)) return toText(value);
+      return `$${num}`;
+    };
+
+    const currencyFields = new Set([
+      "bankDeposit",
+      "remittance",
+      "emrAmount",
+      "glAmount",
+      "payVariance",
+    ]);
+
+    // ✅ Rename Deposit Date header to "Ddate"
+    const head = [
+      columns.map((col) =>
+        col.key === "depositDate" ? "Deposit-date" : toText(col.label),
+      ),
+    ];
 
     const body = data.map((row) =>
-      columns.map((col) => toText(getCellValue(row, col))),
+      columns.map((col) => {
+        const value = getCellValue(row, col);
+
+        if (col.key === "depositDate") {
+          return formatDateMMDDYYYY(String(value));
+        }
+
+        if (currencyFields.has(String(col.key))) {
+          return formatCurrency(value);
+        }
+
+        return toText(value);
+      }),
+    );
+
+    const depositDateColumnIndex = columns.findIndex(
+      (col) => col.key === "depositDate",
     );
 
     autoTable(doc, {
       head,
       body,
-      startY: 50,
       styles: { fontSize: 8 },
-      margin: { left: 20, right: 20 },
+
+      // Default header alignment
+      headStyles: {
+        halign: "center",
+      },
+
+      // Column alignment
+      columnStyles: {
+        [depositDateColumnIndex]: {
+          halign: "left",
+        },
+      },
+
+      // ✅ Left-align Deposit Date header
+      didParseCell: (data) => {
+        if (
+          data.section === "head" &&
+          data.column.index === depositDateColumnIndex
+        ) {
+          data.cell.styles.halign = "left";
+        }
+      },
     });
 
     doc.save("table-data.pdf");
@@ -313,7 +384,17 @@ export function DataTable<T extends object = Record<string, unknown>>({
                     col.className || ""
                   }`}
                 >
-                  {col.label}
+                  {stackHeaderText ? (
+                    <div className="flex flex-col items-center justify-center leading-tight">
+                      {typeof col.label === "string"
+                        ? col.label
+                            .split(" ")
+                            .map((word, idx) => <span key={idx}>{word}</span>)
+                        : col.label}
+                    </div>
+                  ) : (
+                    col.label
+                  )}
                 </TableHead>
               ))}
             </TableRow>
@@ -395,9 +476,10 @@ export function DataTable<T extends object = Record<string, unknown>>({
               </span>
               <select
                 value={pageInfo.rowsPerPage}
-                onChange={(e) =>
-                  pageInfo.onRowsPerPageChange(Number(e.target.value))
-                }
+                onChange={(e) => {
+                  pageInfo.onRowsPerPageChange(Number(e.target.value));
+                  setSelectedRows(new Set());
+                }}
                 className="border border-border rounded px-2 py-1 text-xs bg-background cursor-pointer"
                 data-testid="select-rows-per-page"
               >
@@ -417,9 +499,10 @@ export function DataTable<T extends object = Record<string, unknown>>({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  pageInfo.onPageChange(Math.max(1, pageInfo.currentPage - 1))
-                }
+                onClick={() => {
+                  pageInfo.onPageChange(Math.max(1, pageInfo.currentPage - 1));
+                  setSelectedRows(new Set());
+                }}
                 disabled={pageInfo.currentPage === 1}
                 data-testid="button-prev-page"
               >
@@ -428,7 +511,10 @@ export function DataTable<T extends object = Record<string, unknown>>({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => pageInfo.onPageChange(pageInfo.currentPage + 1)}
+                onClick={() => {
+                  pageInfo.onPageChange(pageInfo.currentPage + 1);
+                  setSelectedRows(new Set());
+                }}
                 disabled={false}
               >
                 {">"}

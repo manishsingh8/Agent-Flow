@@ -15,14 +15,14 @@ const PaymentCard = ({
 }: PaymentCardProps) => {
   return (
     <div
-      className="w-60 rounded-xl p-4"
+      className="w-50 rounded-xl p-4"
       style={{
         backgroundColor: bgColor,
         border: border ? `1px solid ${borderColor}` : "none",
       }}
     >
       <div className="text-sm text-[#737373]">{headerText}</div>
-      <div className="text-2xl font-semibold text-[#0A0A0A]">{amount}</div>
+      <div className="text-xl font-semibold text-[#0A0A0A]">{amount}</div>
     </div>
   );
 };

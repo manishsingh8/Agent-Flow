@@ -17,11 +17,19 @@ import CDMDashboard from "@/pages/CDM/CDMDashboard";
 import DocumentPage from "@/pages/CDM/documentsDetails/DocumentPage";
 import BAIParser from "@/pages/BAIParser/BAIParser";
 
+const RootRedirect = () => {
+  const token = sessionStorage.getItem("authToken");
+  return token ? (
+    <Navigate to="/dashboard/rcm-dashboard" replace />
+  ) : (
+    <Navigate to="/login" replace />
+  );
+};
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Default Redirect */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      {/* Root */}
+      <Route path="/" element={<RootRedirect />} />
 
       {/* Public Routes */}
       <Route element={<PublicRoute />}>
@@ -47,8 +55,8 @@ export const AppRoutes = () => {
         </Route>
       </Route>
 
-      {/* Catch-All */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

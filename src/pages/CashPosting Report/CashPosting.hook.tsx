@@ -146,6 +146,7 @@ export const useCashPostingLogic = () => {
     paginatedData,
     columns,
     selectedRows,
+    setSelectedRows,
     handleRowSelect,
     handleSelectAll,
     searchTerm,

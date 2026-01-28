@@ -14,6 +14,7 @@ const CashPostingPage = () => {
     paginatedData,
     columns,
     selectedRows,
+    setSelectedRows,
     handleRowSelect,
     handleSelectAll,
     searchTerm,
@@ -71,6 +72,7 @@ const CashPostingPage = () => {
             columns={columns}
             selectable
             selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
             onRowSelect={handleRowSelect}
             onSelectAll={handleSelectAll}
             searchEnabled

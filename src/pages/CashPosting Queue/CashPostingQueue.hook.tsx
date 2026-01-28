@@ -8,7 +8,10 @@ import { validateDateRange } from "@/utils/dateRangeValidator";
 export const useCashPostingQueueLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
-  const [to, setTo] = useState("2025-10-30");
+  const [to, setTo] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
@@ -53,7 +56,7 @@ export const useCashPostingQueueLogic = () => {
   const filteredData = useMemo(() => {
     if (!searchTerm) return tableData;
     return tableData.filter((t) =>
-      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase())
+      t.payerName?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [tableData, selectedBrands, searchTerm]);
 
@@ -76,7 +79,7 @@ export const useCashPostingQueueLogic = () => {
       setSelectedRows(new Set());
     } else {
       setSelectedRows(
-        new Set(paginatedData.map((row) => String(row.cashPostingId)))
+        new Set(paginatedData.map((row) => String(row.cashPostingId))),
       );
     }
   };
@@ -85,7 +88,7 @@ export const useCashPostingQueueLogic = () => {
     setSelectedBrands((prev) =>
       prev.includes(region)
         ? prev.filter((b) => b !== region)
-        : [...prev, region]
+        : [...prev, region],
     );
     setCurrentPage(1);
   };
@@ -95,7 +98,7 @@ export const useCashPostingQueueLogic = () => {
 
     const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
-      headers.map((key) => t[key as keyof Cash_Posting_Transaction])
+      headers.map((key) => t[key as keyof Cash_Posting_Transaction]),
     );
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -113,7 +116,7 @@ export const useCashPostingQueueLogic = () => {
       bodyClassName?: string;
       conditionalClassName?: (
         value: unknown,
-        row: Cash_Posting_Transaction
+        row: Cash_Posting_Transaction,
       ) => string;
     }
   > = {
@@ -153,7 +156,7 @@ export const useCashPostingQueueLogic = () => {
         amountFields: ["totalAmount", "postedAmount", "remittance"],
         // columnRules,
       }),
-    [tableData, columnRules]
+    [tableData, columnRules],
   );
 
   return {
@@ -166,6 +169,7 @@ export const useCashPostingQueueLogic = () => {
     paginatedData,
     columns,
     selectedRows,
+    setSelectedRows,
     handleRowSelect,
     handleSelectAll,
     searchTerm,

@@ -25,7 +25,6 @@ export function buildColumns<T extends Record<string, any>>({
     .map((key) => {
       const rule = columnRules[String(key)] || {};
       const isAmount = amountFields.includes(key);
-
       const isFirstVisibleColumn = !firstColumnAssigned;
       if (isFirstVisibleColumn) firstColumnAssigned = true;
 
@@ -59,7 +58,7 @@ export function buildColumns<T extends Record<string, any>>({
           if (!hasHistory) return baseContent;
 
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-center">
               <span>{baseContent}</span>
               <TooltipProvider>
                 <Tooltip>
@@ -71,11 +70,10 @@ export function buildColumns<T extends Record<string, any>>({
                       />
                     </span>
                   </TooltipTrigger>
-
                   <TooltipContent
                     className=" text-xs whitespace-pre-wrap 
                  bg-gray-200 text-black 
-                 border border-gray-300 shadow-md"
+                 border border-gray-300 shadow-md  max-w-[360px]"
                   >
                     {Array.isArray(history)
                       ? history.map((h: any, i: number) => (
@@ -90,7 +88,6 @@ export function buildColumns<T extends Record<string, any>>({
             </div>
           );
         },
-
         bodyClassName: rule.bodyClassName ?? "",
         conditionalClassName: rule.conditionalClassName,
         clickable: rule.clickable ?? false,

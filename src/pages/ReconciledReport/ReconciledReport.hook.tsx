@@ -23,7 +23,10 @@ type VarianceWidgetResponse = {
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
-  const [to, setTo] = useState("2025-12-24");
+  const [to, setTo] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
@@ -349,6 +352,7 @@ export const useReconciledReportLogic = () => {
     setRowsPerPage,
     paginatedData,
     selectedRows,
+    setSelectedRows,
     searchTerm,
     selectedBrands,
     currentPage,

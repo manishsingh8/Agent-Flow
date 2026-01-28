@@ -14,6 +14,7 @@ const CashPostingQueue = () => {
     paginatedData,
     columns,
     selectedRows,
+    setSelectedRows,
     handleRowSelect,
     handleSelectAll,
     searchTerm,
@@ -69,6 +70,7 @@ const CashPostingQueue = () => {
             columns={columns}
             selectable
             selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
             onRowSelect={handleRowSelect}
             onSelectAll={handleSelectAll}
             searchEnabled

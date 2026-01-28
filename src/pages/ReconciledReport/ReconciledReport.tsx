@@ -33,6 +33,7 @@ const ReconciledReport = () => {
     setRowsPerPage,
     paginatedData,
     selectedRows,
+    setSelectedRows,
     searchTerm,
     currentPage,
     setCurrentPage,
@@ -114,6 +115,7 @@ const ReconciledReport = () => {
             columns={columns}
             selectable
             selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
             onRowSelect={handleRowSelect}
             onSelectAll={handleSelectAll}
             exportEnabled
