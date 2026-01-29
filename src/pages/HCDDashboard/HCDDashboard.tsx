@@ -1,4 +1,3 @@
-import { HCD_CARDS } from "@/constants/ChartsData";
 import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import CustomDoughnutChart from "@/components/CustomDoughnutChart/CustomDoughnutChart";
 import CustomBarChart from "@/components/CustomBarChart/CustomBarChart";
@@ -18,6 +17,8 @@ import {
   // slaSegments,
 } from "@/constants/ChartsData";
 import { useHCDLogic } from "./HCDDashboard.hook";
+import Logo from "@/assets/icons/rp-logo-icon.svg";
+
 const DATE_OPTIONS = [
   { value: "today", label: "Today" },
   { value: "lastMonth", label: "Last Month" },
@@ -33,6 +34,10 @@ const Dashboard2 = () => {
     dateFilterText,
     dateFilter,
     handleDateOptionChange,
+    statusOverview,
+    documentIntelligence,
+    loading,
+    error,
   } = useHCDLogic();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -71,15 +76,25 @@ const Dashboard2 = () => {
         </div>
       </div>
       <div className="flex lg:justify-between items-center flex-wrap gap-4">
-        {HCD_CARDS.map((card) => (
-          <PaymentCard
-            key={card.id}
-            headerText={card.headerText}
-            amount={card.amount}
-            border
-            borderColor="#E5E5E5"
-          />
-        ))}
+        {loading ? (
+          <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+            <span className="flex items-center gap-2 text-gray-500">
+              Loading...
+              <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+            </span>
+          </div>
+        ) : (
+          documentIntelligence?.map((card: any) => (
+            <PaymentCard
+              key={card?.id}
+              headerText={card?.headerText}
+              amount={card?.value}
+              border
+              borderColor="#E5E5E5"
+              containerWidth="medium"
+            />
+          ))
+        )}
       </div>
       <div className="flex flex-col lg:flex-row gap-4">
         <CustomBarChart

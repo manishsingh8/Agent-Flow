@@ -1,25 +1,25 @@
-export const HCD_CARDS = [
+export const HCD_CARD_MAPPER = [
   {
     id: 1,
+    key: "totalDocumentsProcessed",
     headerText: "Total Document Processed",
-    amount: "1432",
   },
   {
     id: 2,
+    key: "autoClassificationAccuracy",
     headerText: "Auto-Classification Accuracy",
-    amount: "43%",
   },
   {
     id: 3,
+    key: "documentsAwaitingReview",
     headerText: "Documents Awaiting Review",
-    amount: "89",
   },
   {
     id: 4,
+    key: "meanProcessingTime",
     headerText: "Mean Processing Time",
-    amount: "3.2 min",
   },
-];
+] as const;
 
 export const AVG_TIME_CHART_DATA = [
   { workflow: "Referrals", time: 25 },

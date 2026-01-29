@@ -1,5 +1,23 @@
 import { useState, useCallback, useEffect } from "react";
 import { API_ENDPOINTS } from "@/config/api";
+import { HCD_CARD_MAPPER } from "@/constants/ChartsData";
+
+interface StatusOverviewResponse {
+  totalDocumentsProcessed: number;
+  autoClassificationAccuracy: string;
+  documentsAwaitingReview: number;
+  meanProcessingTime: string;
+}
+interface HCDBackendResponse {
+  totalDocumentsProcessed: number;
+  autoClassificationAccuracy: string;
+  documentsAwaitingReview: number;
+  meanProcessingTime: string;
+}
+
+interface DocumentIntelligenceResponse {
+  [key: string]: any;
+}
 
 export const useHCDLogic = () => {
   const [from, setFrom] = useState("2025-10-01");
@@ -9,6 +27,23 @@ export const useHCDLogic = () => {
     "Showing records for today.",
   );
   const [customDate, setCustomDate] = useState(false);
+  const [statusOverview, setStatusOverview] =
+    useState<StatusOverviewResponse | null>(null);
+
+  const [documentIntelligence, setDocumentIntelligence] =
+    useState<DocumentIntelligenceResponse | null>(null);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const buildHCDCards = (data: HCDBackendResponse) => {
+    return HCD_CARD_MAPPER.map((card) => ({
+      id: card.id,
+      headerText: card.headerText,
+      value: data[card.key as keyof HCDBackendResponse],
+    }));
+  };
+
   const handleDateOptionChange = useCallback((value: string) => {
     setDateFilter(value);
     setCustomDate(false);
@@ -74,6 +109,9 @@ export const useHCDLogic = () => {
   const fetchHCDPostWidgets = async () => {
     if (!from || !to) return;
 
+    setLoading(true);
+    setError(null);
+
     const query = buildDateQuery();
 
     try {
@@ -86,36 +124,33 @@ export const useHCDLogic = () => {
             method: "POST",
           }),
         ]);
-
-      let statusOverviewData = null;
-      let documentIntelligenceData = null;
-
       if (statusOverviewResult.status === "fulfilled") {
-        statusOverviewData = await statusOverviewResult.value.json();
+        const statusData = await statusOverviewResult.value.json();
+        setStatusOverview(statusData);
       } else {
         console.error(
           "Status overview API failed:",
           statusOverviewResult.reason,
         );
+        setStatusOverview(null);
       }
-
       if (documentIntelligenceResult.status === "fulfilled") {
-        documentIntelligenceData =
-          await documentIntelligenceResult.value.json();
+        const intelligenceData =
+          await documentIntelligenceResult?.value?.json();
+        const cardsArray = buildHCDCards(intelligenceData?.data);
+        setDocumentIntelligence(cardsArray);
       } else {
         console.error(
           "Document intelligence API failed:",
           documentIntelligenceResult.reason,
         );
+        setDocumentIntelligence(null);
       }
-
-      console.log(
-        statusOverviewData,
-        documentIntelligenceData,
-        "dashboard data",
-      );
-    } catch (error) {
-      console.error("POST dashboard API error:", error);
+    } catch (err) {
+      console.error("HCD dashboard error:", err);
+      setError("Failed to load dashboard data");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,5 +170,9 @@ export const useHCDLogic = () => {
     setDateFilter,
     handleDateOptionChange,
     customDate,
+    statusOverview,
+    documentIntelligence,
+    loading,
+    error,
   };
 };
