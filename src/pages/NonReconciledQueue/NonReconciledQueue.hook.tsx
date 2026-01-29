@@ -58,7 +58,7 @@ export const usePaymentLogic: any = () => {
     type: any;
     row: any;
     details: any;
-  }>({ type: null, row: null, details: null, error: null });
+  }>({ type: null, row: null, details: null });
   const [loadingData, setLoadingData] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
