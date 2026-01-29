@@ -79,6 +79,7 @@ const Payment = () => {
     setRowsPerPage,
     paginatedData,
     selectedRows,
+    setSelectedRows,
     currentPage,
     setCurrentPage,
     rowsPerPage,
@@ -165,9 +166,11 @@ const Payment = () => {
             <DataTable
               data={paginatedData}
               columns={columns}
+              stackHeaderText
               handleEditClick={handleEditClick}
               selectable
               selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
               onRowSelect={handleRowSelect}
               onSelectAll={handleSelectAll}
               exportEnabled

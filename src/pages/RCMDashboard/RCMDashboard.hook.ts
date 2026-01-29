@@ -15,22 +15,26 @@ interface WorkQueueBarChartData {
 
 export default function useRCMDashboard() {
   const [operationalMetrics, setOperationalMetrics] = useState<BackendKpi[]>(
-    []
+    [],
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error] = useState<string | null>(null);
   // const today = new Date().toISOString().split("T")[0];
   const [from, setFrom] = useState("2025-10-01");
-  const [to, setTo] = useState("2025-12-24");
+  const [to, setTo] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+
   const [dateFilter, setDateFilter] = useState("custom");
   const [customDate, setCustomDate] = useState(false);
   const [dateFilterText, setDateFilterText] = useState(
-    "Showing records for today."
+    "Showing records for today.",
   );
   const [workQueueData, setWorkQueueData] =
     useState<WorkQueueBarChartData | null>(null);
-  const [operationalViewData, setOperationalViewData] =
-    useState<any | null>(null);
+  const [operationalViewData, setOperationalViewData] = useState<any | null>(
+    null,
+  );
 
   const kpiCards = useMemo(() => {
     return buildKpiCards(operationalMetrics);

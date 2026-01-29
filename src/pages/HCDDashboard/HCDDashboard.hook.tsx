@@ -52,9 +52,7 @@ export const useHCDLogic = () => {
 
   const fetchHCDWidgets = async () => {
     if (!from || !to) return;
-
     const query = buildDateQuery();
-
     try {
       const [docRes, volumeRes] = await Promise.all([
         fetch(`${API_ENDPOINTS.HCD_DOCUMENT_PROCESSING}?${query}`, {
@@ -64,10 +62,8 @@ export const useHCDLogic = () => {
           method: "GET",
         }),
       ]);
-
       const docData = await docRes.json();
       const volumeData = await volumeRes.json();
-
       console.log("Document Processing:", docData);
       console.log("Daily Processing Volume:", volumeData);
     } catch (error) {
@@ -77,33 +73,47 @@ export const useHCDLogic = () => {
 
   const fetchHCDPostWidgets = async () => {
     if (!from || !to) return;
+
     const query = buildDateQuery();
 
     try {
-      
-      const [statusOverview, documentIntelligence] = await Promise.allSettled([
-        // fetch(API_ENDPOINTS.HCD_DOCUMENT_STATUS_OVERVIEW, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json;charset=UTF-8",
-        //   },
-        //   body: JSON.stringify(payload),
-        // }),
-        // fetch(API_ENDPOINTS.HCD_DOCUMENT_INTELLIGENCE, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json;charset=UTF-8",
-        //   },
-        //   body: JSON.stringify(payload),
-        // }),
-        fetch(`${API_ENDPOINTS.HCD_DOCUMENT_STATUS_OVERVIEW}?${query}`, {
-          method: "POST",
-        }),
-        fetch(`${API_ENDPOINTS.HCD_DOCUMENT_INTELLIGENCE}?${query}`, {
-          method: "POST",
-        }),
-      ]);
-      console.log(statusOverview, documentIntelligence);
+      const [statusOverviewResult, documentIntelligenceResult] =
+        await Promise.allSettled([
+          fetch(`${API_ENDPOINTS.HCD_DOCUMENT_STATUS_OVERVIEW}?${query}`, {
+            method: "POST",
+          }),
+          fetch(`${API_ENDPOINTS.HCD_DOCUMENT_INTELLIGENCE}?${query}`, {
+            method: "POST",
+          }),
+        ]);
+
+      let statusOverviewData = null;
+      let documentIntelligenceData = null;
+
+      if (statusOverviewResult.status === "fulfilled") {
+        statusOverviewData = await statusOverviewResult.value.json();
+      } else {
+        console.error(
+          "Status overview API failed:",
+          statusOverviewResult.reason,
+        );
+      }
+
+      if (documentIntelligenceResult.status === "fulfilled") {
+        documentIntelligenceData =
+          await documentIntelligenceResult.value.json();
+      } else {
+        console.error(
+          "Document intelligence API failed:",
+          documentIntelligenceResult.reason,
+        );
+      }
+
+      console.log(
+        statusOverviewData,
+        documentIntelligenceData,
+        "dashboard data",
+      );
     } catch (error) {
       console.error("POST dashboard API error:", error);
     }

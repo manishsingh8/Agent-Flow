@@ -9,6 +9,9 @@ import {
 } from "@/constants/TableData";
 import { validateDateRange } from "@/utils/dateRangeValidator";
 import { showToast } from "@/lib/toast";
+import { formatDate } from "@/utils/formate";
+import { truncateWithTooltip } from "@/utils/truncatedTooltipRenderer";
+import { valueWithInfoIcon } from "@/utils/valueWithInfoIcon";
 
 type VarianceWidgetResponse = {
   data?: {
@@ -339,20 +342,30 @@ export const usePaymentLogic: any = () => {
   };
 
   const handleColumnClick = async (row: any, api: any, type: string) => {
+    const transactionNo = row?.transactionNo;
+    setOpen(true);
+    setLoadingData(true);
+    setModalData({
+      type,
+      row,
+      details: null,
+    });
+
     try {
-      setLoadingData(true);
-      const transactionNo = row?.transactionNo;
       const response = await fetch(`${api}?transactionNo=${transactionNo}`);
       const data = await response.json();
       setModalData({
-        type: type,
+        type,
         row,
         details: data,
       });
-
-      setOpen(true);
     } catch (error) {
       console.error("Failed to fetch bank deposit details", error);
+      setModalData({
+        type,
+        row,
+        details: null,
+      });
     } finally {
       setLoadingData(false);
     }
@@ -376,20 +389,15 @@ export const usePaymentLogic: any = () => {
     statusName: {
       render: (value: unknown) => {
         if (typeof value !== "string") return "-";
-
         const [primary, secondary] = value.split(",");
-
         return (
           <div className="flex flex-col items-center gap-1">
-            {/* Top status */}
             <span className="text-[#34A255] bg-green-100 px-2 py-[2px] rounded-[6px] text-xs">
               {primary}
             </span>
-
-            {/* Divider */}
             {secondary && (
               <>
-                <hr className="w-full border-t border-gray-300 my-1" />
+                <hr className="w-[70%] border-t border-gray-300 my-1" />
                 <span className="text-[#E63435] text-xs">{secondary}</span>
               </>
             )}
@@ -409,19 +417,31 @@ export const usePaymentLogic: any = () => {
         return value <= 0 ? "text-[#EC7723]" : "text-[#0A0A0A]";
       },
     },
+    transactionType: {
+      bodyClassName: "max-w-[100px]",
+      render: (value: unknown) => truncateWithTooltip(value, { limit: 4 }),
+    },
+    payer: {
+      bodyClassName: "max-w-[120px]",
+      render: (value: unknown) => truncateWithTooltip(value, { limit: 6 }),
+    },
     remittance: {
       conditionalClassName: (value) => {
         if (typeof value !== "number") return "";
-        return "text-[#EC7723]";
+        return value === 0 ? "text-[#EC7723]" : "text-[#0090FF]";
       },
+      render: (value) =>
+        valueWithInfoIcon(value, { tooltipText: "View Remittance Details" }),
       clickable: true,
-      onClick: (_value: any, row: any) => {
+      onClick: (_value, row) => {
         handleColumnClick(row, API_ENDPOINTS?.REMIT_DATA, "Remmitance");
       },
     },
     bankDeposit: {
       ...blueTextRule,
       clickable: true,
+      render: (value) =>
+        valueWithInfoIcon(value, { tooltipText: "View BankDeposit Details" }),
       onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.BAI_DATA, "Bank Deposit");
       },
@@ -429,6 +449,8 @@ export const usePaymentLogic: any = () => {
     emrAmount: {
       ...blueTextRule,
       clickable: true,
+      render: (value) =>
+        valueWithInfoIcon(value, { tooltipText: "View EMR Details" }),
       onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.EMR_DATA, "Emr Amount");
       },
@@ -437,6 +459,9 @@ export const usePaymentLogic: any = () => {
       conditionalClassName: () => {
         return "text-[#E63435]";
       },
+    },
+    depositDate: {
+      render: (value: unknown) => formatDate(value as string),
     },
     postVariance: {
       conditionalClassName: () => {
@@ -517,6 +542,7 @@ export const usePaymentLogic: any = () => {
     setRowsPerPage,
     paginatedData,
     selectedRows,
+    setSelectedRows,
     searchTerm,
     selectedBrands,
     currentPage,
