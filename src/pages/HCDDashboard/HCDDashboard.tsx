@@ -34,10 +34,10 @@ const Dashboard2 = () => {
     dateFilterText,
     dateFilter,
     handleDateOptionChange,
-    statusOverview,
+    // statusOverview,
     documentIntelligence,
     loading,
-    error,
+    // error,
   } = useHCDLogic();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
