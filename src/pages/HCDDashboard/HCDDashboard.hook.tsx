@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { API_ENDPOINTS } from "@/config/api";
 import { HCD_CARD_MAPPER } from "@/constants/ChartsData";
+import { transformBarData } from "@/utils/transformBarChartData";
 
 interface StatusOverviewResponse {
   totalDocumentsProcessed: number;
@@ -29,10 +30,11 @@ export const useHCDLogic = () => {
   const [customDate, setCustomDate] = useState(false);
   const [statusOverview, setStatusOverview] =
     useState<StatusOverviewResponse | null>(null);
-
   const [documentIntelligence, setDocumentIntelligence] =
     useState<DocumentIntelligenceResponse | null>(null);
-
+  const [docChartData, setDocChartData] = useState<any[]>([]);
+  const [volumeChartData, setVolumeChartData] = useState<any[]>([]);
+  const [volumeSegments, setVolumeSegments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,13 +49,10 @@ export const useHCDLogic = () => {
   const handleDateOptionChange = useCallback((value: string) => {
     setDateFilter(value);
     setCustomDate(false);
-    console.log(value, "val");
-
     const today = new Date();
     const format = (d: Date) => d.toISOString().split("T")[0];
 
     if (value === "today") {
-      console.log("called");
       const t = format(today);
       setFrom(t);
       setTo(t);
@@ -73,6 +72,7 @@ export const useHCDLogic = () => {
       setDateFilterText("Showing records for the selected date range.");
     }
   }, []);
+
   useEffect(() => {
     if (dateFilter === "custom" && from && to) {
       setDateFilterText(`Showing records from ${from} to ${to}.`);
@@ -88,32 +88,30 @@ export const useHCDLogic = () => {
   const fetchHCDWidgets = async () => {
     if (!from || !to) return;
     const query = buildDateQuery();
+    setLoading(true);
     try {
       const [docRes, volumeRes] = await Promise.all([
-        fetch(`${API_ENDPOINTS.HCD_DOCUMENT_PROCESSING}?${query}`, {
-          method: "GET",
-        }),
-        fetch(`${API_ENDPOINTS.HCD_DAILY_PROCESSING_VOLUME}?${query}`, {
-          method: "GET",
-        }),
+        fetch(`${API_ENDPOINTS.HCD_DOCUMENT_PROCESSING}?${query}`),
+        fetch(`${API_ENDPOINTS.HCD_DAILY_PROCESSING_VOLUME}?${query}`),
       ]);
       const docData = await docRes.json();
       const volumeData = await volumeRes.json();
-      console.log("Document Processing:", docData);
-      console.log("Daily Processing Volume:", volumeData);
+      setDocChartData(docData?.data);
+      const volumeResult = transformBarData(volumeData?.data);
+      setVolumeChartData(volumeResult?.chartData);
+      setVolumeSegments(volumeResult?.segments);
     } catch (error) {
       console.error("HCD API error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchHCDPostWidgets = async () => {
     if (!from || !to) return;
-
     setLoading(true);
     setError(null);
-
     const query = buildDateQuery();
-
     try {
       const [statusOverviewResult, documentIntelligenceResult] =
         await Promise.allSettled([
@@ -125,8 +123,8 @@ export const useHCDLogic = () => {
           }),
         ]);
       if (statusOverviewResult.status === "fulfilled") {
-        const statusData = await statusOverviewResult.value.json();
-        setStatusOverview(statusData);
+        const statusData = await statusOverviewResult?.value?.json();
+        setStatusOverview(statusData?.data);
       } else {
         console.error(
           "Status overview API failed:",
@@ -174,5 +172,8 @@ export const useHCDLogic = () => {
     documentIntelligence,
     loading,
     error,
+    volumeChartData,
+    volumeSegments,
+    docChartData,
   };
 };
