@@ -5,7 +5,7 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import { EditModal } from "@/components/EditModal/EditModal";
 import { EDITABLE_FIELDS } from "@/constants/TableData";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
-import DataModal from "./DataModal";
+import DataModal from "../../components/DataModal/DataModal";
 import { BANK_DEPOSIT_COLUMNS } from "@/constants/TableData";
 
 interface Task {

@@ -5,17 +5,17 @@ import { AlertTriangle } from "lucide-react";
 // import CustomAreaChart from "@/components/CustomAreaChart/CustomAreaChart";
 import { CustomDropdown } from "@/components";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
-import {
-  AVG_TIME_CHART_DATA,
-  TOP_EXCEPTION_CHART_DATA,
-  DAILY_DOCS_CHART_DATA,
-  DOCUMENT_STATUS_CHART_DATA,
-  DAILY_DOCS_SEGMENTS_DATA,
-  // agentData,
-  // processingTimeData,
-  // slaComplianceData,
-  // slaSegments,
-} from "@/constants/ChartsData";
+// import {
+// AVG_TIME_CHART_DATA,
+// TOP_EXCEPTION_CHART_DATA,
+// DAILY_DOCS_CHART_DATA,
+// DOCUMENT_STATUS_CHART_DATA,
+// DAILY_DOCS_SEGMENTS_DATA,
+// agentData,
+// processingTimeData,
+// slaComplianceData,
+// slaSegments,
+// } from "@/constants/ChartsData";
 import { useHCDLogic } from "./HCDDashboard.hook";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 
@@ -34,10 +34,13 @@ const Dashboard2 = () => {
     dateFilterText,
     dateFilter,
     handleDateOptionChange,
-    // statusOverview,
+    statusOverview,
     documentIntelligence,
     loading,
     // error,
+    volumeChartData,
+    volumeSegments,
+    docChartData,
   } = useHCDLogic();
   return (
     <div className="p-4 flex flex-col h-[calc(100vh-64px)] overflow-auto gap-4">
@@ -96,41 +99,53 @@ const Dashboard2 = () => {
           ))
         )}
       </div>
-      <div className="flex flex-col lg:flex-row gap-4">
-        <CustomBarChart
-          title="Document Processing Duration (min)"
-          description="Processing duration trends across documents types."
-          data={AVG_TIME_CHART_DATA}
-          xKey="workflow"
-          dataKey="time"
-          color="#249563"
-          barSize={40}
-          tooltipLabel="Processing Time"
-        />
-        <CustomDoughnutChart
-          title="Exception Category Overview"
-          description="Categorization of to exception types in document workflows."
-          icon={AlertTriangle}
-          data={TOP_EXCEPTION_CHART_DATA}
-          legendPosition="right"
-        />
-      </div>
-      <div className="flex flex-col lg:flex-row gap-4">
-        <CustomBarChart
-          title="Daily Processing Volume by Category"
-          description="Daily distribution of processed document types"
-          data={DAILY_DOCS_CHART_DATA}
-          xKey="date"
-          segments={DAILY_DOCS_SEGMENTS_DATA}
-          barSize={20}
-        />
-        <CustomDoughnutChart
+      {loading ? (
+        <div className="flex align-center justify-center w-full border border-[#E6ECF0] p-4 pt-2.5 rounded-[14px] h-20">
+          <span className="flex items-center gap-2 text-gray-500">
+            Loading...
+            <img src={Logo} className="w-5 h-6 animate-spin" alt="logo" />
+          </span>
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col lg:flex-row gap-4">
+            <CustomBarChart
+              title="Document Processing Duration (min)"
+              description="Processing duration trends across documents types."
+              data={docChartData}
+              xKey="classificationType"
+              dataKey="processingTimeMin"
+              color="#249563"
+              barSize={40}
+              tooltipLabel="Processing Time"
+            />
+            <CustomDoughnutChart
+              title="Exception Category Overview"
+              description="Categorization of to exception types in document workflows."
+              icon={AlertTriangle}
+              data={statusOverview}
+              legendPosition="right"
+              valueKey="percentage"
+            />
+          </div>
+          <div className="flex flex-col lg:flex-row gap-4">
+            <CustomBarChart
+              title="Daily Processing Volume by Category"
+              description="Daily distribution of processed document types"
+              data={volumeChartData}
+              xKey="date"
+              segments={volumeSegments}
+              barSize={30}
+            />
+            {/* <CustomDoughnutChart
           title="Document Status Overview"
           description=""
           data={DOCUMENT_STATUS_CHART_DATA}
           legendPosition="right"
-        />
-      </div>
+        /> */}
+          </div>
+        </>
+      )}
       {/* <div className="flex flex-col lg:flex-row gap-4">
         <div className="w-[50%]">
           <CustomBarChart

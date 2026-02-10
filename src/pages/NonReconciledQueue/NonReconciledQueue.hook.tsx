@@ -487,6 +487,7 @@ export const usePaymentLogic: any = () => {
     "remittance",
     "emrAmount",
     "payVariance",
+    "postVariance",
     "glAmount",
   ];
 

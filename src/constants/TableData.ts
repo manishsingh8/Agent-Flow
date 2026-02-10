@@ -18,6 +18,7 @@ export interface Transaction {
   comments: string;
   history: string;
   userId: string;
+  postVariance?: number | string;
 }
 export interface ReconciledTransaction {
   id: string;

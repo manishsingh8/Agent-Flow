@@ -2,6 +2,7 @@ import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useCashPostingQueueLogic } from "./CashPostingQueue.hook";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
+// import DataModal from "@/components/DataModal/DataModal";
 
 const CashPostingQueue = () => {
   const {
@@ -69,6 +70,7 @@ const CashPostingQueue = () => {
             data={paginatedData}
             columns={columns}
             selectable
+            // stackHeaderText
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             onRowSelect={handleRowSelect}
@@ -93,6 +95,7 @@ const CashPostingQueue = () => {
           />
         </div>
       )}
+      {/* <DataModal /> */}
     </div>
   );
 };
