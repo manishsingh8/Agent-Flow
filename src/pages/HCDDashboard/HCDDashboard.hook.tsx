@@ -3,12 +3,12 @@ import { API_ENDPOINTS } from "@/config/api";
 import { HCD_CARD_MAPPER } from "@/constants/ChartsData";
 import { transformBarData } from "@/utils/transformBarChartData";
 
-interface StatusOverviewResponse {
-  totalDocumentsProcessed: number;
-  autoClassificationAccuracy: string;
-  documentsAwaitingReview: number;
-  meanProcessingTime: string;
-}
+// interface StatusOverviewResponse {
+//   totalDocumentsProcessed: number;
+//   autoClassificationAccuracy: string;
+//   documentsAwaitingReview: number;
+//   meanProcessingTime: string;
+// }
 interface HCDBackendResponse {
   totalDocumentsProcessed: number;
   autoClassificationAccuracy: string;
@@ -28,8 +28,7 @@ export const useHCDLogic = () => {
     "Showing records for today.",
   );
   const [customDate, setCustomDate] = useState(false);
-  const [statusOverview, setStatusOverview] =
-    useState<StatusOverviewResponse | null>(null);
+  const [statusOverview, setStatusOverview] = useState([]);
   const [documentIntelligence, setDocumentIntelligence] =
     useState<DocumentIntelligenceResponse | null>(null);
   const [docChartData, setDocChartData] = useState<any[]>([]);
@@ -130,7 +129,7 @@ export const useHCDLogic = () => {
           "Status overview API failed:",
           statusOverviewResult.reason,
         );
-        setStatusOverview(null);
+        setStatusOverview([]);
       }
       if (documentIntelligenceResult.status === "fulfilled") {
         const intelligenceData =
