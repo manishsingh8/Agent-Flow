@@ -50,6 +50,7 @@ const DataModal = ({
 
   const descriptionColumn = columns.find((c: any) => c.key === "description");
   const otherColumns = columns.filter((c: any) => c.key !== "description");
+  console.log(modalData, "modalData");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -116,12 +117,14 @@ const DataModal = ({
                       </label>
 
                       <div className="w-full rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground break-words">
-                        {column.key === "fileName" && value ? (
+                        {column.key === "fileName" &&
+                        value &&
+                        modalData?.type !== "Bank Deposit" ? (
                           <a
                             href={value}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className=" text-blue-600 "
+                            className="text-blue-600 hover:text-blue-800 underline"
                           >
                             {value}
                           </a>
