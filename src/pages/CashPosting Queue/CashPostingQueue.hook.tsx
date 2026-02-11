@@ -125,7 +125,7 @@ export const useCashPostingQueueLogic = () => {
   };
   const handleColumnClick = (row: any, type: any) => {
     setOpen(true);
-    // setLoadingData(true);
+    setLoadingData(false);
     setModalData({
       row,
       type,
