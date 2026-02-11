@@ -35,6 +35,7 @@ const DataModal = ({
   loading,
   link,
 }: DataModalProps) => {
+  console.log(modalData, "mdata");
   const rawDetails = modalData?.details;
 
   const extractedData = Array.isArray(rawDetails?.data)
@@ -115,13 +116,14 @@ const DataModal = ({
                       <label className="text-xs font-medium text-foreground">
                         {column.label}
                       </label>
-
                       <div className="w-full rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground break-words">
-                        {column.key === "fileName" &&
-                        value &&
-                        modalData?.type !== "Bank Deposit" ? (
+                        {column.key === "fileName" && value ? (
                           <a
-                            href={value}
+                            href={
+                              modalData?.type === "Remmitance"
+                                ? `https://api.revpulseapp.com/claim-service/api/varianceQueue/downloadRemitFile?transactionNo=${data?.transactionNo}`
+                                : value
+                            }
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:text-blue-800 underline"
