@@ -22,7 +22,13 @@ export const useCashPostingQueueLogic = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [tableData, setTableData] = useState<Cash_Posting_Transaction[]>([]);
   const [tableLoading, setTableLoading] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [modalData, setModalData] = useState<{
+    row: any;
+    type: any;
+    details: null;
+  }>({ row: null, type: null, details: null });
+  const [loadingData, setLoadingData] = useState(false);
   const fetchTable = async () => {
     if (!validateDateRange({ from, to })) return;
     try {
@@ -117,8 +123,14 @@ export const useCashPostingQueueLogic = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   };
-  const handleColumnClick = (row: any, text: any) => {
-    console.log("handle column click", row, text);
+  const handleColumnClick = (row: any, type: any) => {
+    setOpen(true);
+    // setLoadingData(true);
+    setModalData({
+      row,
+      type,
+      details: row,
+    });
   };
   const blueTextRule = {
     conditionalClassName: () => "text-[#0090FF]",
@@ -188,5 +200,9 @@ export const useCashPostingQueueLogic = () => {
     setRowsPerPage,
     tableLoading,
     tableData,
+    open,
+    setOpen,
+    modalData,
+    loadingData,
   };
 };
