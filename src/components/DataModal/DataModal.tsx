@@ -9,21 +9,32 @@ import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const formatValue = (key: string, value: any) => {
   if (value === null || value === undefined) return "-";
-
   const lowerKey = key.toLowerCase();
-
   if (lowerKey.includes("date")) {
     return formatDate(value);
   }
-
   if (lowerKey.includes("amount") || lowerKey.includes("paid")) {
     return formatAmount(value);
   }
-
   return value;
 };
+interface DataModalProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modalData: any;
+  columns: any;
+  loading: boolean;
+  link?: string;
+}
 
-const DataModal = ({ open, setOpen, modalData, columns, loading }: any) => {
+const DataModal = ({
+  open,
+  setOpen,
+  modalData,
+  columns,
+  loading,
+  link,
+}: DataModalProps) => {
   const rawDetails = modalData?.details;
 
   const extractedData = Array.isArray(rawDetails?.data)
@@ -39,6 +50,7 @@ const DataModal = ({ open, setOpen, modalData, columns, loading }: any) => {
 
   const descriptionColumn = columns.find((c: any) => c.key === "description");
   const otherColumns = columns.filter((c: any) => c.key !== "description");
+  console.log(modalData, "modalData");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -65,6 +77,18 @@ const DataModal = ({ open, setOpen, modalData, columns, loading }: any) => {
               : "Details"}
           </DialogTitle>
         </DialogHeader>
+        {link ? (
+          <div className="flex items-center justify-center text-md font-semibold">
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800"
+            >
+              {link}
+            </a>
+          </div>
+        ) : null}
 
         <div className="flex-1 overflow-y-auto space-y-6">
           {loading && (
@@ -81,26 +105,26 @@ const DataModal = ({ open, setOpen, modalData, columns, loading }: any) => {
               No record found
             </div>
           )}
-
           {!loading && !isEmptyData && data && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {otherColumns.map((column: any) => {
                   const value = data[column.key];
-
                   return (
                     <div key={column.key} className="space-y-2">
                       <label className="text-xs font-medium text-foreground">
                         {column.label}
                       </label>
 
-                      <div className="w-full rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground">
-                        {column.key === "fileName" && value ? (
+                      <div className="w-full rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground break-words">
+                        {column.key === "fileName" &&
+                        value &&
+                        modalData?.type !== "Bank Deposit" ? (
                           <a
                             href={value}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className=" text-blue-600 "
+                            className="text-blue-600 hover:text-blue-800 underline"
                           >
                             {value}
                           </a>
