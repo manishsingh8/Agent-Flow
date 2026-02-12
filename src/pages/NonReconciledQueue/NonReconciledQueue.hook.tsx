@@ -444,18 +444,31 @@ export const usePaymentLogic: any = () => {
         if (typeof value !== "number") return "";
         return value === 0 ? "text-[#EC7723]" : "text-[#0090FF]";
       },
-      render: (value) =>
-        valueWithInfoIcon(value, { tooltipText: "View Remittance Details" }),
+      render: (value) => {
+        const formatted =
+          typeof value === "number" ? `$${value.toFixed(2)}` : "-";
+
+        return valueWithInfoIcon(formatted, {
+          tooltipText: "View Remittance Details",
+        });
+      },
       clickable: true,
       onClick: (_value, row) => {
         handleColumnClick(row, API_ENDPOINTS?.REMIT_DATA, "Remmitance");
       },
     },
+
     bankDeposit: {
       ...blueTextRule,
       clickable: true,
-      render: (value) =>
-        valueWithInfoIcon(value, { tooltipText: "View BankDeposit Details" }),
+      render: (value) => {
+        const formatted =
+          typeof value === "number" ? `$${value.toFixed(2)}` : "-";
+
+        return valueWithInfoIcon(formatted, {
+          tooltipText: "View BankDeposit Details",
+        });
+      },
       onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.BAI_DATA, "Bank Deposit");
       },
@@ -463,8 +476,14 @@ export const usePaymentLogic: any = () => {
     emrAmount: {
       ...blueTextRule,
       clickable: true,
-      render: (value) =>
-        valueWithInfoIcon(value, { tooltipText: "View EMR Details" }),
+      render: (value) => {
+        const formatted =
+          typeof value === "number" ? `$${value.toFixed(2)}` : "-";
+
+        return valueWithInfoIcon(formatted, {
+          tooltipText: "View EMR Details",
+        });
+      },
       onClick: (_value: any, row: any) => {
         handleColumnClick(row, API_ENDPOINTS?.EMR_DATA, "Emr Amount");
       },
