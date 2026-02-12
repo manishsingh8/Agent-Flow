@@ -1,4 +1,4 @@
-import { X, Mic, Send } from "lucide-react";
+import { X, Mic, Send, Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -6,6 +6,12 @@ import { TypingIndicator } from "./TypingIndicator";
 import { useChatbot } from "./chatbot.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
 import ChatbotImg from "../../assets/images/chatbot.png";
+import { cn } from "@/lib/utils";
+interface ChatbotProps {
+  onClose: () => void;
+  view: "dock" | "fullscreen";
+  onToggleView: () => void;
+}
 
 function DynamicTableFromRows({ rows }: { rows: Record<string, unknown>[] }) {
   if (!rows || rows.length === 0) return null;
@@ -34,7 +40,7 @@ interface ChatbotProps {
   onClose: () => void;
 }
 
-export function Chatbot({ onClose }: ChatbotProps) {
+export function Chatbot({ onClose, view, onToggleView }: ChatbotProps) {
   const {
     messages,
     inputValue,
@@ -49,19 +55,47 @@ export function Chatbot({ onClose }: ChatbotProps) {
     handleKeyPress,
   } = useChatbot();
 
+  console.log(view, "v");
+
   return (
-    <Card className="fixed inset-0 z-10000 flex w-full min-w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
+    // <Card className="fixed inset-0 z-10000 flex w-full min-w-80 flex-col border-0 border-r rounded-none p-0 h-screen">
+    <Card
+      className={cn(
+        "fixed z-[10000] flex flex-col border-0 bg-white transition-all duration-300 p-0",
+        view === "fullscreen"
+          ? "inset-0 h-screen w-screen rounded-none"
+          : "right-0  h-screen w-[380px]  shadow-2xl",
+      )}
+    >
       {/* Header */}
-      <div className="shrink-0 flex items-center justify-between border-b bg-white p-4 h-16">
+      <div className="shrink-0 flex items-center justify-between border-b p-4 h-16">
         <h2 className="font-semibold text-foreground">AI Assistant</h2>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          className="h-6 w-6 p-0 hover:bg-gray-100"
-        >
-          <X className="h-4 w-4" />
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onToggleView}
+            className="h-6 w-6 p-0"
+            title={view === "fullscreen" ? "Minimize" : "Maximize"}
+          >
+            {view === "fullscreen" ? (
+              <Minimize2 className="h-4 w-4" />
+            ) : (
+              <Maximize2 className="h-4 w-4" />
+            )}
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="h-6 w-6 p-0"
+            title="Close"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Messages Area */}
@@ -78,7 +112,12 @@ export function Chatbot({ onClose }: ChatbotProps) {
             You can talk to me, ask questions and perform tasks with text
             commands.
           </div>
-          <ul className="list-disc pl-4 ml-20 text-[#171717] marker:text-[#171717]">
+          <ul
+            className={cn(
+              "list-disc pl-4 text-[#171717] marker:text-[#171717]",
+              view === "fullscreen" ? "ml-20" : "ml-0",
+            )}
+          >
             <li>
               <p className="text-xs text-muted-foreground text-left">
                 I can generate dynamic data analytics dashboards customized to
@@ -108,7 +147,12 @@ export function Chatbot({ onClose }: ChatbotProps) {
               message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <div className="flex w-full md:w-[50%]">
+            <div
+              className={cn(
+                "flex w-full",
+                view === "fullscreen" && "md:w-[50%]",
+              )}
+            >
               {message.role === "assistant" && (
                 <div className="shrink-0 h-8 w-8 rounded-full bg-linear-to-br from-cyan-400 to-green-400 flex items-center justify-center text-sm">
                   🤖
@@ -116,9 +160,11 @@ export function Chatbot({ onClose }: ChatbotProps) {
               )}
             </div>
             <div
-              className={`flex items-end justify-end w-full md:w-[50%] min-w-0 ${
-                message.role === "user" ? "justify-end" : "justify-start"
-              }`}
+              className={cn(
+                "flex items-end w-full min-w-0",
+                message.role === "user" ? "justify-end" : "justify-start",
+                view === "fullscreen" && "md:w-[50%]",
+              )}
             >
               <div
                 className={`rounded-lg px-4 py-2 min-w-0 ${
@@ -161,7 +207,7 @@ export function Chatbot({ onClose }: ChatbotProps) {
           </div>
         ))}
         <div className="flex justify-center">
-          <div className="w-full md:w-[50%]">
+          <div className={cn("w-full", view === "fullscreen" && "md:w-[50%]")}>
             {isTyping && <TypingIndicator />}
           </div>
         </div>
@@ -170,7 +216,12 @@ export function Chatbot({ onClose }: ChatbotProps) {
 
       {/* Input Area */}
       <div className="flex justify-center">
-        <div className="w-full md:w-[50%] shrink-0  bg-white p-4 space-y-3">
+        <div
+          className={cn(
+            "w-full shrink-0 bg-white p-4 space-y-3",
+            view === "fullscreen" && "md:w-[50%]",
+          )}
+        >
           <div className="flex gap-2">
             <Input
               type="text"

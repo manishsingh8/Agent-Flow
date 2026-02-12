@@ -1,7 +1,6 @@
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { useCashPostingLogic } from "./CashPosting.hook";
-import { BRANDS } from "@/constants/TableData";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const CashPostingPage = () => {
@@ -15,6 +14,7 @@ const CashPostingPage = () => {
     paginatedData,
     columns,
     selectedRows,
+    setSelectedRows,
     handleRowSelect,
     handleSelectAll,
     searchTerm,
@@ -72,13 +72,14 @@ const CashPostingPage = () => {
             columns={columns}
             selectable
             selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
             onRowSelect={handleRowSelect}
             onSelectAll={handleSelectAll}
             searchEnabled
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
-            filtersEnabled
-            filterOptions={BRANDS}
+            // filtersEnabled
+            // filterOptions={BRANDS}
             // selectedFilters={selectedBrands}
             // onFilterChange={handleBrandToggle}
             exportEnabled

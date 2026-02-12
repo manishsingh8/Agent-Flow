@@ -9,8 +9,17 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
-import { X, Search, User, Zap, UserCircle, Edit } from "lucide-react";
+import { X, Search, User, UserCircle, Edit } from "lucide-react";
 import { useState } from "react";
+import CustomDropdown from "../CustomDropdown/CustomDropdown";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
+
+const exportOptions = [
+  { label: "CSV", value: "csv" },
+  { label: "PDF", value: "pdf" },
+];
 
 export interface Column<T> {
   key: keyof T;
@@ -20,6 +29,8 @@ export interface Column<T> {
   bodyClassName?: string;
   conditionalClassName?: (value: unknown, row: T) => string;
   isAmount?: boolean;
+  clickable?: boolean;
+  onClick?: (value: any, row: T) => void;
 }
 
 export interface AssignmentUser {
@@ -35,8 +46,10 @@ interface TableRow {
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
+  stackHeaderText?: boolean;
   selectable?: boolean;
   selectedRows?: Set<string>;
+  setSelectedRows?: any;
   onRowSelect?: (id: string) => void;
   onSelectAll?: () => void;
   searchEnabled?: boolean;
@@ -71,11 +84,10 @@ interface DataTableProps<T> {
     onWatchOptions?: (selectedRowIds: string[]) => void;
     onDelete?: (selectedRowIds: string[]) => void;
   };
+  clickable?: boolean;
+  onClick?: (row: T) => void;
+  handleEditClick?: () => void;
 }
-
-// ------------------------------
-// ⭐ NEW FORMATTER FUNCTION ⭐
-// ------------------------------
 const formatAmount = (value: unknown) => {
   if (value === null || value === undefined || value === "") return "$0.00";
 
@@ -94,38 +106,43 @@ const formatAmount = (value: unknown) => {
 export function DataTable<T extends object = Record<string, unknown>>({
   data,
   columns,
+  stackHeaderText = false,
   selectable = false,
   selectedRows = new Set(),
+  setSelectedRows,
   onRowSelect,
   onSelectAll,
   searchEnabled = false,
   filtersEnabled = false,
   exportEnabled = false,
-  onExport,
+  // onExport,
   idKey = "",
   pageInfo,
   editRow,
   assignmentFeature,
-  searchTerm = "",
-  onSearchChange,
+  handleEditClick,
+  // searchTerm = "",
+  // onSearchChange,
 }: DataTableProps<T>) {
   const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
+  const [exportType, setExportType] = useState("");
+
+  // const [showPromptSearchInput, setShowPromptSearchInput] = useState(false);
   const hasSelectedRows = selectedRows.size > 0;
   const showEditButton = editRow?.enabled && selectable && hasSelectedRows;
   const showActionBar =
     assignmentFeature?.enabled && selectable && hasSelectedRows;
-  const handleEditClick = () => {
-    if (selectedRows.size > 0) {
-      if (editRow?.onEditClick) {
-        editRow.onEditClick();
-      }
-      if (assignmentFeature?.enabled) {
-        setIsAssignmentModalOpen(true);
-      }
-    }
-  };
+  // const handleEditClick = () => {
+  //   if (selectedRows.size > 0) {
+  //     if (editRow?.onEditClick) {
+  //       editRow.onEditClick();
+  //     }
+  //     if (assignmentFeature?.enabled) {
+  //       setIsAssignmentModalOpen(true);
+  //     }
+  //   }
+  // };
 
   const handleAssignUser = (userId: string) => {
     if (assignmentFeature?.onAssign) {
@@ -135,15 +152,9 @@ export function DataTable<T extends object = Record<string, unknown>>({
     setSearchQuery("");
   };
 
-  const handleChangeStatus = () => {
-    if (assignmentFeature?.onChangeStatus) {
-      assignmentFeature.onChangeStatus(Array.from(selectedRows));
-    }
-  };
-
   const filteredUsers =
     assignmentFeature?.users?.filter((user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase())
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()),
     ) || [];
 
   const getInitials = (name: string) => {
@@ -155,12 +166,156 @@ export function DataTable<T extends object = Record<string, unknown>>({
       .slice(0, 2);
   };
 
+  const getCellValue = (row: any, column: any) => {
+    const value = row[column.key];
+    if (value === null || value === undefined) return "";
+    if (typeof value === "object") return "";
+
+    return String(value);
+  };
+
+  const handleCSVExport = () => {
+    if (!data?.length || !columns?.length) return;
+
+    const headers = columns.map((col) => col.label).join(",");
+
+    const rows = data.map((row) =>
+      columns.map((col) => `"${getCellValue(row, col)}"`).join(","),
+    );
+
+    const csv = [headers, ...rows].join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "table-data.csv";
+    link.click();
+  };
+
+  const handlePDFExport = () => {
+    if (!data?.length || !columns?.length) return;
+
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "pt",
+    });
+
+    doc.text("Report", 40, 30);
+
+    const toText = (value: unknown): string => {
+      if (value === null || value === undefined) return "";
+      if (typeof value === "number") return value.toString();
+      if (typeof value === "string") return value;
+      return String(value);
+    };
+
+    // ✅ Date formatter
+    const formatDateMMDDYYYY = (date: string) => {
+      if (!date) return "";
+      const d = new Date(date);
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      return `${mm}-${dd}-${yyyy}`;
+    };
+
+    // ✅ Currency formatter
+    const formatCurrency = (value: unknown) => {
+      if (value === null || value === undefined || value === "") return "";
+      const num = Number(value);
+      if (Number.isNaN(num)) return toText(value);
+      return `$${num}`;
+    };
+
+    const currencyFields = new Set([
+      "bankDeposit",
+      "remittance",
+      "emrAmount",
+      "glAmount",
+      "payVariance",
+    ]);
+
+    // ✅ Rename Deposit Date header to "Ddate"
+    const head = [
+      columns.map((col) =>
+        col.key === "depositDate" ? "Deposit-date" : toText(col.label),
+      ),
+    ];
+
+    const body = data.map((row) =>
+      columns.map((col) => {
+        const value = getCellValue(row, col);
+
+        if (col.key === "depositDate") {
+          return formatDateMMDDYYYY(String(value));
+        }
+
+        if (currencyFields.has(String(col.key))) {
+          return formatCurrency(value);
+        }
+
+        return toText(value);
+      }),
+    );
+
+    const depositDateColumnIndex = columns.findIndex(
+      (col) => col.key === "depositDate",
+    );
+
+    autoTable(doc, {
+      head,
+      body,
+      styles: { fontSize: 8 },
+
+      // Default header alignment
+      headStyles: {
+        halign: "center",
+      },
+
+      // Column alignment
+      columnStyles: {
+        [depositDateColumnIndex]: {
+          halign: "left",
+        },
+      },
+
+      // ✅ Left-align Deposit Date header
+      didParseCell: (data) => {
+        if (
+          data.section === "head" &&
+          data.column.index === depositDateColumnIndex
+        ) {
+          data.cell.styles.halign = "left";
+        }
+      },
+    });
+
+    doc.save("table-data.pdf");
+  };
+
+  const handleExportChange = (value: string) => {
+    setExportType(value);
+
+    if (value === "csv") {
+      handleCSVExport();
+    }
+
+    if (value === "pdf") {
+      handlePDFExport();
+    }
+
+    // Reset so button text stays "Export"
+    setTimeout(() => setExportType(""), 0);
+  };
+
   return (
     <div className="space-y-6 relative min-w-0 max-w-full overflow-hidden">
       {/* TOP BAR */}
       {(searchEnabled || exportEnabled || filtersEnabled) && (
         <div className="flex items-center justify-end gap-4">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -181,7 +336,7 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 onChange={(e) => onSearchChange(e.target.value)}
               />
             </div>
-          )}
+          )} */}
 
           <div className="flex gap-2">
             {showEditButton && !showActionBar && (
@@ -189,23 +344,18 @@ export function DataTable<T extends object = Record<string, unknown>>({
                 variant="outline"
                 onClick={handleEditClick}
                 data-testid="button-edit"
-                className="gap-2"
+                className="gap-2 cursor-pointer text-xs h-8"
               >
-                <Edit className="w-4 h-4" />
+                <Edit style={{ width: 14, height: 14 }} />
                 Edit
               </Button>
             )}
-
-            {exportEnabled && onExport && (
-              <Button
-                variant="default"
-                className="bg-[#249563] hover:bg-green-700 cursor-pointer"
-                onClick={onExport}
-                data-testid="button-export"
-              >
-                Export
-              </Button>
-            )}
+            <CustomDropdown
+              options={exportOptions}
+              value={exportType}
+              onChange={handleExportChange}
+              placeholder="Export"
+            />
           </div>
         </div>
       )}
@@ -234,7 +384,17 @@ export function DataTable<T extends object = Record<string, unknown>>({
                     col.className || ""
                   }`}
                 >
-                  {col.label}
+                  {stackHeaderText ? (
+                    <div className="flex flex-col items-center justify-center leading-tight">
+                      {typeof col.label === "string"
+                        ? col.label
+                            .split(" ")
+                            .map((word, idx) => <span key={idx}>{word}</span>)
+                        : col.label}
+                    </div>
+                  ) : (
+                    col.label
+                  )}
                 </TableHead>
               ))}
             </TableRow>
@@ -269,19 +429,22 @@ export function DataTable<T extends object = Record<string, unknown>>({
                       return (
                         <TableCell
                           key={String(col.key)}
-                          className={`text-xs text-center align-middle ${
-                            col.bodyClassName || ""
-                          } ${
-                            col.conditionalClassName
-                              ? col.conditionalClassName(cellValue, row)
-                              : ""
-                          }`}
+                          className={`text-xs text-center align-middle
+                            ${col.bodyClassName || ""}
+                            ${col.clickable ? "cursor-pointer text-green-600 hover:underline" : ""}
+                            ${col.conditionalClassName ? col.conditionalClassName(cellValue, row) : ""}
+                          `}
+                          onClick={() => {
+                            if (col.clickable && col.onClick) {
+                              col.onClick(cellValue, row);
+                            }
+                          }}
                         >
                           {col.render
                             ? col.render(cellValue, row)
                             : col.isAmount
-                            ? formatAmount(cellValue)
-                            : String(cellValue ?? "-")}
+                              ? formatAmount(cellValue)
+                              : String(cellValue ?? "-")}
                         </TableCell>
                       );
                     })}
@@ -301,9 +464,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
           </TableBody>
         </Table>
       </div>
-
-      {/* ----- Pagination, Action Bar & Assignment Modal Code Remains Same ----- */}
-      {/* (Keeping untouched to avoid breaking existing behavior) */}
       {pageInfo && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-border">
           <div className="text-xs text-muted-foreground">
@@ -316,9 +476,10 @@ export function DataTable<T extends object = Record<string, unknown>>({
               </span>
               <select
                 value={pageInfo.rowsPerPage}
-                onChange={(e) =>
-                  pageInfo.onRowsPerPageChange(Number(e.target.value))
-                }
+                onChange={(e) => {
+                  pageInfo.onRowsPerPageChange(Number(e.target.value));
+                  setSelectedRows(new Set());
+                }}
                 className="border border-border rounded px-2 py-1 text-xs bg-background cursor-pointer"
                 data-testid="select-rows-per-page"
               >
@@ -335,21 +496,13 @@ export function DataTable<T extends object = Record<string, unknown>>({
               Page {pageInfo.currentPage} of {pageInfo.totalPages || 1}
             </div>
             <div className="flex gap-2 mr-8">
-              {/* <Button
-                variant="outline"
-                size="sm"
-                onClick={() => pageInfo.onPageChange(1)}
-                disabled={pageInfo.currentPage === 1}
-                data-testid="button-first-page"
-              >
-                {"<<"}
-              </Button> */}
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  pageInfo.onPageChange(Math.max(1, pageInfo.currentPage - 1))
-                }
+                onClick={() => {
+                  pageInfo.onPageChange(Math.max(1, pageInfo.currentPage - 1));
+                  setSelectedRows(new Set());
+                }}
                 disabled={pageInfo.currentPage === 1}
                 data-testid="button-prev-page"
               >
@@ -358,21 +511,14 @@ export function DataTable<T extends object = Record<string, unknown>>({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => pageInfo.onPageChange(pageInfo.currentPage + 1)}
+                onClick={() => {
+                  pageInfo.onPageChange(pageInfo.currentPage + 1);
+                  setSelectedRows(new Set());
+                }}
                 disabled={false}
               >
                 {">"}
               </Button>
-
-              {/* <Button
-                variant="outline"
-                size="sm"
-                onClick={() => pageInfo.onPageChange(pageInfo.totalPages)}
-                disabled={pageInfo.currentPage === pageInfo.totalPages}
-                data-testid="button-last-page"
-              >
-                {">>"}
-              </Button> */}
             </div>
           </div>
         </div>
@@ -402,36 +548,6 @@ export function DataTable<T extends object = Record<string, unknown>>({
                   <Edit className="w-4 h-4" />
                   Edit fields
                 </Button>
-                <Button
-                  variant="outline"
-                  size="default"
-                  onClick={handleChangeStatus}
-                  className="gap-2"
-                  data-testid="button-change-status"
-                >
-                  <Zap className="w-4 h-4" />
-                  Change status
-                </Button>
-                {/* <Button
-                  variant="outline"
-                  size="default"
-                  onClick={handleWatchOptions}
-                  className="gap-2"
-                  data-testid="button-watch-options"
-                >
-                  <Eye className="w-4 h-4" />
-                  Watch options
-                </Button> */}
-                {/* <Button
-                  variant="outline"
-                  size="default"
-                  onClick={handleDelete}
-                  className="gap-2 text-destructive border-destructive hover:bg-destructive/10"
-                  data-testid="button-delete"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Delete
-                </Button> */}
                 <Button
                   variant="ghost"
                   size="icon"
