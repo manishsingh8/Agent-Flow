@@ -1,4 +1,10 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface BulkAssignProps {
   bulkAssignDialogOpen: boolean;
@@ -9,7 +15,11 @@ interface BulkAssignProps {
   loading: boolean;
 }
 
-export const BulkAssign = ({ bulkAssignDialogOpen, bulkAssignDialogClose, letterIds }: BulkAssignProps) => {
+export const BulkAssign = ({
+  bulkAssignDialogOpen,
+  bulkAssignDialogClose,
+  letterIds,
+}: BulkAssignProps) => {
   return (
     <Dialog open={bulkAssignDialogOpen} onOpenChange={bulkAssignDialogClose}>
       <DialogContent>
@@ -20,8 +30,8 @@ export const BulkAssign = ({ bulkAssignDialogOpen, bulkAssignDialogClose, letter
           </DialogDescription>
         </DialogHeader>
         <div>
-           {/* User selection logic */}
-           Placeholder for User Selection
+          {/* User selection logic */}
+          Placeholder for Assignee Selection
         </div>
       </DialogContent>
     </Dialog>

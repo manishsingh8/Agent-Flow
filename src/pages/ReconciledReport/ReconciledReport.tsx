@@ -2,8 +2,8 @@ import PaymentCard from "@/components/PaymentCard/PaymentCard";
 import { FilterSearchBar } from "@/components/FilterSearchBar/FilterSearchBar";
 import { useReconciledReportLogic } from "./ReconciledReport.hook";
 import { DataTable } from "@/components/DataTable/DataTable";
-import { EditModal } from "@/components/EditModal/EditModal";
-import { EDITABLE_RECONCILED_FIELDS } from "@/constants/TableData";
+// import { EditModal } from "@/components/EditModal/EditModal";
+// import { EDITABLE_RECONCILED_FIELDS } from "@/constants/TableData";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 
 const ReconciledReport = () => {
@@ -21,24 +21,25 @@ const ReconciledReport = () => {
     setFrom,
     setTo,
     columns,
-    handleEditCancel,
-    handleEditSubmit,
-    handleFieldChange,
+    // handleEditCancel,
+    // handleEditSubmit,
+    // handleFieldChange,
     handleExport,
     handleSelectAll,
     handleRowSelect,
     totalPages,
-    isEditModalOpen,
+    // isEditModalOpen,
     setSearchTerm,
     setRowsPerPage,
     paginatedData,
     selectedRows,
+    setSelectedRows,
     searchTerm,
     currentPage,
     setCurrentPage,
     rowsPerPage,
-    setIsEditModalOpen,
-    editedData,
+    // setIsEditModalOpen,
+    // editedData,
     widgetLoading,
     tableLoading,
     reconciledCardsData,
@@ -114,6 +115,7 @@ const ReconciledReport = () => {
             columns={columns}
             selectable
             selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
             onRowSelect={handleRowSelect}
             onSelectAll={handleSelectAll}
             exportEnabled
@@ -137,7 +139,7 @@ const ReconciledReport = () => {
           />
         </div>
       )}
-      <EditModal
+      {/* <EditModal
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}
         data={editedData}
@@ -148,7 +150,7 @@ const ReconciledReport = () => {
         onCancel={handleEditCancel}
         idKey="id"
         title="Reconciliation Details - e875vned0"
-      />
+      /> */}
     </div>
   );
 };

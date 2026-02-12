@@ -1,32 +1,32 @@
 export const RCM_CENTRAL_ENGINE_DATA = [
   {
-    headerText: "RCM Engine uptime",
+    headerText: "Total Files Ingested",
     percentage: 5,
     value: 126,
     status: "positive",
   },
   {
-    headerText: "Jobs scheduled vs completed",
+    headerText: "BAI Amount",
     percentage: 8,
-    value: 118,
+    value: "$118",
     status: "positive",
   },
   {
-    headerText: "Active workflows running",
+    headerText: "Remittance Amount",
     percentage: -1,
-    value: "12",
+    value: "$120",
     status: "moderate",
   },
   {
-    headerText: "Errors in last 24 hours",
+    headerText: "Cash Posting Amount",
     percentage: 3,
-    value: "34",
+    value: "$34",
     status: "positive",
   },
   {
-    headerText: "Average processing time per workflow",
+    headerText: "Average File Processing time/File",
     percentage: 6,
-    value: "52",
+    value: "52 Min",
     status: "positive",
   },
 ];
@@ -43,29 +43,34 @@ export const INTAKE_ORCHESTRATOR_DATA = [
     percentage: "9",
     value: "870",
     status: "positive",
+    processingRate: "33%",
   },
   {
     headerText: "EDI Files and Success Rate",
     percentage: "-4",
     value: "112",
+    processingRate: "23%",
     status: "moderate",
   },
   {
     headerText: "Correspondence Files and Success Rate",
     percentage: "-2",
     value: "25",
+    processingRate: "53%",
     status: "moderate",
   },
   {
     headerText: "Payment Posting files and Success Rate",
     percentage: "6",
     value: "14",
+    processingRate: "40%",
     status: "positive",
   },
   {
     headerText: "Average File Processing time",
     percentage: "-15",
     value: "16 Min",
+    processingRate: "30%",
     status: "negative",
   },
 ];
@@ -86,25 +91,25 @@ export const RECONCILIATION_DATA = [
   {
     headerText: "Matching Accuracy",
     percentage: "-1",
-    value: "$14,50,236",
+    value: "65%",
     status: "moderate",
   },
   {
     headerText: "Exceptions Detected",
     percentage: "3",
-    value: "$2,819.11",
+    value: "23",
     status: "positive",
   },
   {
     headerText: "Validations Performed",
     percentage: "3",
-    value: "$2,819.11",
+    value: "11",
     status: "positive",
   },
   {
-    headerText: "Transactions Generated for Posting",
+    headerText: "Ready for Posting",
     percentage: "3",
-    value: "$2,819.11",
+    value: "2",
     status: "positive",
   },
 ];
@@ -113,7 +118,7 @@ export const CASH_POSTING_DATA = [
   {
     headerText: "Auto Posting Rate",
     percentage: "5",
-    value: "$8,20,345",
+    value: "23%",
     status: "positive",
   },
   {
@@ -143,7 +148,7 @@ export const CASH_POSTING_DATA = [
   {
     headerText: "Average Posting Time per Payment",
     percentage: "-6",
-    value: "8",
+    value: "13 Min",
     status: "positive",
   },
 ];

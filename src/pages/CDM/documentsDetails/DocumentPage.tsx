@@ -7,10 +7,9 @@ import { Separator } from "@/components/ui/Separator";
 import { HorizontalStepper } from "@/components/CDM/DocumentDetails/HorizontalStepper";
 import { FileLevelMetaData } from "@/components/CDM/DocumentDetails/FileLevelMetaData";
 import { ModifyDocumentSheet } from "@/components/CDM/DocumentDetails/ModifyDocumentSheet";
-// import { PatientLevelData } from "@/components/CDM/DocumentDetails/PatientLevelData";
+import { PatientLevelData } from "@/components/CDM/DocumentDetails/PatientLevelData";
 import {
   mockFileLevelData,
-  // mockPatientLevelData,
   documentSteps,
 } from "@/constants/CDMData";
 
@@ -58,11 +57,11 @@ export default function DocumentPage() {
             className="w-full space-y-6"
           >
             <div className="flex items-center justify-between border-b pb-4">
-              <TabsList className="bg-transparent p-0 h-auto">
+              <TabsList className=" h-auto">
                 <TabsTrigger value="file-metadata" className="">
                   File-level MetaData
                 </TabsTrigger>
-                {/* <TabsTrigger value="patient-data">Patient-level Data</TabsTrigger> */}
+                <TabsTrigger value="patient-data">Patient-level Data</TabsTrigger>
               </TabsList>
 
               <div className="flex gap-2">
@@ -80,9 +79,9 @@ export default function DocumentPage() {
             <TabsContent value="file-metadata" className="m-0 pt-2">
               <FileLevelMetaData data={fileData} />
             </TabsContent>
-            {/* <TabsContent value="patient-data" className="m-0 pt-2">
-              <PatientLevelData data={mockPatientLevelData} />
-            </TabsContent> */}
+            <TabsContent value="patient-data" className="m-0 pt-2">
+              <PatientLevelData />
+            </TabsContent>
           </Tabs>
         </div>
 

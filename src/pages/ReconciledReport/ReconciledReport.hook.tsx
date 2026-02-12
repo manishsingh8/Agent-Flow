@@ -23,14 +23,17 @@ type VarianceWidgetResponse = {
 export const useReconciledReportLogic = () => {
   const [toggle, setToggle] = useState("dateRange");
   const [from, setFrom] = useState("2025-01-01");
-  const [to, setTo] = useState("2025-12-24");
+  const [to, setTo] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+
   const [selectedPayer, setSelectedPayer] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["CH"]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedData, setEditedData] = useState<
     Partial<ReconciledTransaction>[]
@@ -39,7 +42,7 @@ export const useReconciledReportLogic = () => {
     { value: "all", label: "All Payers" },
   ]);
   const [widgetData, setWidgetData] = useState<VarianceWidgetResponse | null>(
-    null
+    null,
   );
   const [widgetLoading, setWidgetLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
@@ -159,7 +162,7 @@ export const useReconciledReportLogic = () => {
     if (!widgetData?.data) return [];
     return mapPaymentCardsWithBg(
       widgetData?.data,
-      RECONCILED_REPORT_HEADER_TEXT
+      RECONCILED_REPORT_HEADER_TEXT,
     );
   }, [widgetData]);
 
@@ -178,7 +181,7 @@ export const useReconciledReportLogic = () => {
       setSelectedRows(new Set());
     } else {
       setSelectedRows(
-        new Set(paginatedData.map((row) => String(row.reconciledDataId)))
+        new Set(paginatedData.map((row) => String(row.reconciledDataId))),
       );
     }
   };
@@ -187,7 +190,7 @@ export const useReconciledReportLogic = () => {
     setSelectedBrands((prev) =>
       prev.includes(region)
         ? prev.filter((b) => b !== region)
-        : [...prev, region]
+        : [...prev, region],
     );
     setCurrentPage(1);
   };
@@ -195,7 +198,7 @@ export const useReconciledReportLogic = () => {
   const handleExport = () => {
     const headers = Object.keys(tableData[0]);
     const rows = filteredData.map((t) =>
-      headers.map((key) => t[key as keyof typeof t])
+      headers.map((key) => t[key as keyof typeof t]),
     );
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -210,12 +213,12 @@ export const useReconciledReportLogic = () => {
   const handleEditClick = () => {
     if (selectedRows.size > 0) {
       const selectedRowsData = paginatedData.filter((row) =>
-        selectedRows.has(String(row.id))
+        selectedRows.has(String(row.id)),
       );
       setEditedData(
         selectedRowsData.map((row) => ({
           ...row,
-        }))
+        })),
       );
       setIsEditModalOpen(true);
     }
@@ -224,7 +227,7 @@ export const useReconciledReportLogic = () => {
   const handleFieldChange = (
     rowIndex: number,
     field: keyof ReconciledTransaction,
-    value: unknown
+    value: unknown,
   ) => {
     const updated = [...editedData];
     updated[rowIndex] = {
@@ -251,7 +254,7 @@ export const useReconciledReportLogic = () => {
       bodyClassName?: string;
       conditionalClassName?: (
         value: unknown,
-        row: ReconciledTransaction
+        row: ReconciledTransaction,
       ) => string;
     }
   > = {
@@ -313,10 +316,11 @@ export const useReconciledReportLogic = () => {
       buildColumns<ReconciledTransaction>({
         tableData,
         labelMap: RECONCILED_REPORT_COLUMN_LABELS,
-        excludeKeys: ["id", "reconciledDataId"],
+        excludeKeys: ["id", "reconciledDataId", "region"],
         amountFields: ["bankDeposit", "remittance", "emrAmount", "glAmount"],
+        columnRules,
       }),
-    [tableData]
+    [tableData],
   );
 
   return {
@@ -348,6 +352,7 @@ export const useReconciledReportLogic = () => {
     setRowsPerPage,
     paginatedData,
     selectedRows,
+    setSelectedRows,
     searchTerm,
     selectedBrands,
     currentPage,

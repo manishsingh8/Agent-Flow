@@ -15,22 +15,26 @@ interface WorkQueueBarChartData {
 
 export default function useRCMDashboard() {
   const [operationalMetrics, setOperationalMetrics] = useState<BackendKpi[]>(
-    []
+    [],
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error] = useState<string | null>(null);
   // const today = new Date().toISOString().split("T")[0];
   const [from, setFrom] = useState("2025-10-01");
-  const [to, setTo] = useState("2025-12-24");
+  const [to, setTo] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+
   const [dateFilter, setDateFilter] = useState("custom");
   const [customDate, setCustomDate] = useState(false);
   const [dateFilterText, setDateFilterText] = useState(
-    "Showing records for today."
+    "Showing records for today.",
   );
   const [workQueueData, setWorkQueueData] =
     useState<WorkQueueBarChartData | null>(null);
-  const [operationalViewData, setOperationalViewData] =
-    useState<any | null>(null);
+  const [operationalViewData, setOperationalViewData] = useState<any | null>(
+    null,
+  );
 
   const kpiCards = useMemo(() => {
     return buildKpiCards(operationalMetrics);
@@ -39,17 +43,14 @@ export default function useRCMDashboard() {
   const handleDateOptionChange = useCallback((value: string) => {
     setDateFilter(value);
     setCustomDate(false);
-
     const today = new Date();
     const format = (d: Date) => d.toISOString().split("T")[0];
-
     if (value === "today") {
       const t = format(today);
       setFrom(t);
       setTo(t);
       setDateFilterText("Showing records for today.");
     }
-
     if (value === "lastMonth") {
       const start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
       const end = new Date(today.getFullYear(), today.getMonth(), 0);
@@ -57,7 +58,6 @@ export default function useRCMDashboard() {
       setTo(format(end));
       setDateFilterText("Showing records from last month.");
     }
-
     if (value === "custom") {
       setCustomDate(true);
       setDateFilterText("Showing records for the selected date range.");
