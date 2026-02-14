@@ -4,8 +4,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useState } from "react";
 import { formatDate, formatAmount } from "@/utils/formate";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
+import { showToast } from "@/lib/toast";
 
 const formatValue = (key: string, value: any) => {
   if (value === null || value === undefined) return "-";
@@ -35,7 +37,7 @@ const DataModal = ({
   loading,
   link,
 }: DataModalProps) => {
-  console.log(modalData, "mdata");
+  const [isRemitFileDownloading, setIsRemitFileDownloading] = useState(false);
   const rawDetails = modalData?.details;
 
   const extractedData = Array.isArray(rawDetails?.data)
@@ -51,7 +53,59 @@ const DataModal = ({
 
   const descriptionColumn = columns.find((c: any) => c.key === "description");
   const otherColumns = columns.filter((c: any) => c.key !== "description");
-  console.log(modalData, "modalData");
+
+  const handleRemitFileClick = async (
+    e: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    e.preventDefault();
+
+    if (isRemitFileDownloading) return;
+
+    const transactionNo = data?.transactionNo;
+
+    if (!transactionNo) {
+      showToast({
+        message: "No file exists",
+        severity: "warning",
+      });
+      return;
+    }
+    setIsRemitFileDownloading(true);
+    try {
+      const url = `https://api.revpulseapp.com/claim-service/api/varianceQueue/downloadRemitFile?transactionNo=${transactionNo}`;
+      const res = await fetch(url, { method: "GET" });
+
+      if (!res.ok) {
+        showToast({
+          message: "No file exists",
+          severity: "warning",
+        });
+        return;
+      }
+
+      const blob = await res.blob();
+
+      if (!blob || blob.size === 0) {
+        showToast({
+          message: "No file exists",
+          severity: "warning",
+        });
+        return;
+      }
+
+      const objectUrl = URL.createObjectURL(blob);
+      window.open(objectUrl, "_blank", "noopener,noreferrer");
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+    } catch (error) {
+      console.error(error);
+      showToast({
+        message: "Unable to download file",
+        severity: "error",
+      });
+    } finally {
+      setIsRemitFileDownloading(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -80,6 +134,7 @@ const DataModal = ({
         </DialogHeader>
         {link ? (
           <div className="flex items-center justify-center text-md font-semibold">
+            ERA:
             <a
               href={link}
               target="_blank"
@@ -123,15 +178,47 @@ const DataModal = ({
                           ) : (
                             <a
                               href={
-                                modalData?.type === "Remmitance"
-                                  ? `https://api.revpulseapp.com/claim-service/api/varianceQueue/downloadRemitFile?transactionNo=${data?.transactionNo}`
-                                  : value
+                                modalData?.type === "Remmitance" ? "#" : value
                               }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 underline"
+                              target={
+                                modalData?.type === "Remmitance"
+                                  ? undefined
+                                  : "_blank"
+                              }
+                              rel={
+                                modalData?.type === "Remmitance"
+                                  ? undefined
+                                  : "noopener noreferrer"
+                              }
+                              onClick={
+                                modalData?.type === "Remmitance"
+                                  ? handleRemitFileClick
+                                  : undefined
+                              }
+                              className={
+                                modalData?.type === "Remmitance"
+                                  ? `text-blue-600 hover:text-blue-800 underline ${
+                                      isRemitFileDownloading
+                                        ? "pointer-events-none opacity-60"
+                                        : ""
+                                    }`
+                                  : "text-blue-600 hover:text-blue-800 underline"
+                              }
                             >
-                              {value}
+                              {isRemitFileDownloading &&
+                              modalData?.type === "Remmitance" ? (
+                                <div className="flex items-center justify-center">
+                                  <span className="flex items-center gap-2 text-gray-500">
+                                    <img
+                                      src={Logo}
+                                      className="w-5 h-6 animate-spin"
+                                      alt="logo"
+                                    />
+                                  </span>
+                                </div>
+                              ) : (
+                                value
+                              )}
                             </a>
                           )
                         ) : (
