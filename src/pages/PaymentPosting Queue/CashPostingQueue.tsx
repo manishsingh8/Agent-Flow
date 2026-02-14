@@ -105,7 +105,7 @@ const CashPostingQueue = () => {
         modalData={modalData}
         columns={columns}
         loading={loadingData}
-        link=""
+        link="ERA"
       />
     </div>
   );
