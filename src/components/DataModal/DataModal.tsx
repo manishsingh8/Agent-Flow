@@ -8,6 +8,7 @@ import { useState } from "react";
 import { formatDate, formatAmount } from "@/utils/formate";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 import { showToast } from "@/lib/toast";
+import { openRemitPdfByTransactionNo } from "@/utils/remitFile";
 
 const formatValue = (key: string, value: any) => {
   if (value === null || value === undefined) return "-";
@@ -62,40 +63,9 @@ const DataModal = ({
     if (isRemitFileDownloading) return;
 
     const transactionNo = data?.transactionNo;
-
-    if (!transactionNo) {
-      showToast({
-        message: "No file exists",
-        severity: "warning",
-      });
-      return;
-    }
     setIsRemitFileDownloading(true);
     try {
-      const url = `https://api.revpulseapp.com/claim-service/api/varianceQueue/downloadRemitFile?transactionNo=${transactionNo}`;
-      const res = await fetch(url, { method: "GET" });
-
-      if (!res.ok) {
-        showToast({
-          message: "No file exists",
-          severity: "warning",
-        });
-        return;
-      }
-
-      const blob = await res.blob();
-
-      if (!blob || blob.size === 0) {
-        showToast({
-          message: "No file exists",
-          severity: "warning",
-        });
-        return;
-      }
-
-      const objectUrl = URL.createObjectURL(blob);
-      window.open(objectUrl, "_blank", "noopener,noreferrer");
-      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+      await openRemitPdfByTransactionNo(transactionNo);
     } catch (error) {
       console.error(error);
       showToast({
