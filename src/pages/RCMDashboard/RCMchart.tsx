@@ -44,21 +44,21 @@ export default function OperationalView() {
     },
     {
       title: "Avg Posting Time",
-      minutes: 7.4,
+      minutes: 2.25,
       icon: Clock,
     },
   ];
 
   /* ---------------- CHART DATA ---------------- */
   const postingTypeData = [
-    { type: "Auto", count: 1800, amount: 450000 },
-    { type: "Manual", count: 485, amount: 120000 },
+    // { type: "Auto", count: 1800, amount: 450000 },
+    // { type: "Manual", count: 485, amount: 120000 },
     { type: "EFT", count: 232, amount: 1214000 },
     { type: "PIP", count: 325, amount: 1250000 },
     { type: "Adjustments", count: 478, amount: 1200000 },
     { type: "Patient Posting", count: 48, amount: 1270000 },
     { type: "Log Box", count: 985, amount: 1980000 },
-    { type: "Zero Posting", count: 546, amount: 2120000 },
+    { type: "Zero Posting", count: 0, amount: 0 },
     { type: "Denial Posting", count: 600, amount: 1230000 },
   ];
 
