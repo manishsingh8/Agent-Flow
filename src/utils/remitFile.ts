@@ -1,4 +1,5 @@
 import { showToast } from "@/lib/toast";
+import { API_ENDPOINTS } from "@/config/api";
 
 export const openRemitPdfByTransactionNo = async (
   transactionNo: string | undefined | null,
@@ -12,7 +13,7 @@ export const openRemitPdfByTransactionNo = async (
   }
 
   try {
-    const url = `https://api.revpulseapp.com/claim-service/api/varianceQueue/downloadRemitFile?transactionNo=${transactionNo}`;
+    const url = `${API_ENDPOINTS.DOWNLOAD_REMIT_FILE}?transactionNo=${transactionNo}`;
     const res = await fetch(url, { method: "GET" });
 
     if (!res.ok) {

@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
   BAI_DATA: `${BASE_URL}/varianceQueue/getBaiData`,
   REMIT_DATA: `${BASE_URL}/varianceQueue/getRemitData`,
   EMR_DATA: `${BASE_URL}/varianceQueue/getCashPostingData`,
+  DOWNLOAD_REMIT_FILE: `${BASE_URL}/varianceQueue/downloadRemitFile`,
 
   /* =========================
      CASH POSTING

@@ -9,6 +9,7 @@ import { formatDate, formatAmount } from "@/utils/formate";
 import Logo from "@/assets/icons/rp-logo-icon.svg";
 import { showToast } from "@/lib/toast";
 import { openRemitPdfByTransactionNo } from "@/utils/remitFile";
+import ReactMarkdown from "react-markdown";
 
 const formatValue = (key: string, value: any) => {
   if (value === null || value === undefined) return "-";
@@ -207,6 +208,17 @@ const DataModal = ({
                   </label>
                   <div className="w-full rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground whitespace-pre-wrap">
                     {data.description || "-"}
+                  </div>
+                </div>
+              )}
+
+              {modalData?.type === "Remmitance" && data?.llmInsights && (
+                <div className="space-y-2 w-full">
+                  <label className="text-sm font-semibold text-foreground">
+                    AI Insights
+                  </label>
+                  <div className="w-full rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground prose prose-sm max-w-none prose-headings:text-foreground prose-h2:text-base prose-h3:text-sm prose-strong:text-foreground prose-li:text-foreground prose-p:text-foreground">
+                    <ReactMarkdown>{data?.llmInsights}</ReactMarkdown>
                   </div>
                 </div>
               )}
